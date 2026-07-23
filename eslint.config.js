@@ -15,6 +15,15 @@ export default [
     },
   },
   {
-    ignores: ['eslint.config.js', 'prettier.config.js', '.worktrees'],
+    ignores: [
+      'eslint.config.js',
+      'prettier.config.js',
+      '.worktrees',
+      // Playwright E2E + config live outside the typed tsconfig project
+      // (excluded so vitest/build ignore them); they are validated by running
+      // the suite, not by the typed lint.
+      'e2e/**',
+      'playwright.config.ts',
+    ],
   },
 ]
