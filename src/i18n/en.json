@@ -1,4 +1,70 @@
 {
   "appName": "Match CV",
-  "start": "Start"
+  "start": "Start",
+  "step": {
+    "jd": "Job Description",
+    "cv": "CV / Resume",
+    "review": "Review",
+    "result": "Result"
+  },
+  "stepper": {
+    "progress": "Step {{n}} of 4"
+  },
+  "wizard": {
+    "stepJd": {
+      "title": "Input Job Description",
+      "description": "Start by providing the details of the position you are hiring for."
+    },
+    "stepCv": {
+      "title": "Candidate CV / Resume",
+      "description": "Provide the experience details for the candidate you're analyzing."
+    },
+    "comingSoon": "Coming in Plan 2"
+  },
+  "input": {
+    "tab": {
+      "upload": "Upload file",
+      "paste": "Paste text"
+    }
+  },
+  "dropzone": {
+    "title": "Drop your file here or <highlight>browse</highlight>",
+    "hint": "Supports PDF, DOCX (Max {{max}})"
+  },
+  "paste": {
+    "placeholder": "Paste the text content here"
+  },
+  "reuse": {
+    "jd": {
+      "title": "Or reuse a saved job description"
+    },
+    "cv": {
+      "title": "Or reuse a saved CV"
+    },
+    "empty": {
+      "jd": "No saved job descriptions yet",
+      "cv": "No saved CVs yet",
+      "hint": "Items you save will appear here."
+    }
+  },
+  "save": {
+    "jd": "Save this JD for later reuse",
+    "cv": "Save this CV for later reuse",
+    "title": {
+      "placeholder": "Enter a title for this document"
+    }
+  },
+  "action": {
+    "next": "Next",
+    "back": "Back",
+    "runMatch": "Run match",
+    "startOver": "Start over",
+    "saveReport": "Save report"
+  },
+  "err": {
+    "fileType": "Only PDF or DOCX files are allowed",
+    "fileSize": "File exceeds the {{max}} limit",
+    "empty": "Please provide a {{kind}} to continue",
+    "parseFailed": "We couldn't read this file. Try another."
+  }
 }

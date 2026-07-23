@@ -1,11 +1,46 @@
 import { StyleProvider } from '@ant-design/cssinjs'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, theme } from 'antd'
+import { useEffect, useState } from 'react'
 import type { PropsWithChildren } from 'react'
 
+/**
+ * Tracks `prefers-color-scheme` so antd's algorithm/token follow the same
+ * light/dark switch Tailwind's `dark:` variant already reacts to (no class
+ * toggle wired yet — see .claude/uiux/frontend-reference.md §6).
+ */
+function usePrefersDark() {
+  const [isDark, setIsDark] = useState(false)
+
+  useEffect(() => {
+    // Effect only runs client-side, so `window` is always available here.
+    const mql = window.matchMedia('(prefers-color-scheme: dark)')
+    setIsDark(mql.matches)
+    const listener = (event: MediaQueryListEvent) => setIsDark(event.matches)
+    mql.addEventListener('change', listener)
+    return () => mql.removeEventListener('change', listener)
+  }, [])
+
+  return isDark
+}
+
 export function AntdProvider({ children }: PropsWithChildren) {
+  const isDark = usePrefersDark()
+
   return (
     <StyleProvider hashPriority="high">
-      <ConfigProvider theme={{ cssVar: true }}>{children}</ConfigProvider>
+      <ConfigProvider
+        theme={{
+          cssVar: true,
+          algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+          token: {
+            colorPrimary: isDark ? '#4f46e5' : '#2563eb',
+            borderRadius: 12,
+            fontFamily: "'Switzer', Inter, ui-sans-serif, system-ui, sans-serif",
+          },
+        }}
+      >
+        {children}
+      </ConfigProvider>
     </StyleProvider>
   )
 }
