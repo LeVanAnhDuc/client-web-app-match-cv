@@ -1,5 +1,7 @@
 import { Wand2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { StepCV } from './StepCV'
+import { StepJD } from './StepJD'
 import { Stepper } from './Stepper'
 import { useWizardStore } from './store'
 
@@ -42,7 +44,9 @@ export function WizardPage() {
 
         <Stepper current={step} />
 
-        <ComingSoonStep />
+        {step === 1 && <StepJD />}
+        {step === 2 && <StepCV />}
+        {(step === 3 || step === 4) && <ComingSoonStep />}
       </section>
     </div>
   )
