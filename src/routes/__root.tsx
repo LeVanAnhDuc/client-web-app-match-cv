@@ -1,3 +1,4 @@
+import '@ant-design/v5-patch-for-react-19'
 import {
   HeadContent,
   Scripts,
@@ -29,7 +30,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Match CV',
       },
     ],
     links: [

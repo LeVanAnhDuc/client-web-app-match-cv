@@ -1,4 +1,75 @@
 {
   "appName": "Ghép CV",
-  "start": "Bắt đầu"
+  "start": "Bắt đầu",
+  "step": {
+    "jd": "Mô tả công việc",
+    "cv": "CV / Hồ sơ",
+    "review": "Xem lại",
+    "result": "Kết quả"
+  },
+  "stepper": {
+    "progress": "Bước {{n}}/4"
+  },
+  "wizard": {
+    "stepJd": {
+      "title": "Nhập mô tả công việc",
+      "description": "Bắt đầu bằng cách cung cấp thông tin về vị trí bạn đang tuyển."
+    },
+    "stepCv": {
+      "title": "CV / Hồ sơ ứng viên",
+      "description": "Cung cấp thông tin kinh nghiệm của ứng viên bạn đang phân tích."
+    },
+    "comingSoon": "Sẽ có ở Plan 2"
+  },
+  "input": {
+    "tab": {
+      "upload": "Tải file",
+      "paste": "Dán văn bản"
+    }
+  },
+  "dropzone": {
+    "title": "Kéo thả file vào đây hoặc <highlight>chọn file</highlight>",
+    "hint": "Hỗ trợ PDF, DOCX (tối đa {{max}})"
+  },
+  "paste": {
+    "placeholder": "Dán nội dung văn bản vào đây"
+  },
+  "format": {
+    "pdf": "PDF",
+    "docx": "Word",
+    "text": "Văn bản"
+  },
+  "reuse": {
+    "jd": {
+      "title": "Hoặc chọn JD đã lưu"
+    },
+    "cv": {
+      "title": "Hoặc chọn CV đã lưu"
+    },
+    "empty": {
+      "jd": "Chưa có JD nào được lưu",
+      "cv": "Chưa có CV nào được lưu",
+      "hint": "Tài liệu bạn lưu sẽ hiện ở đây."
+    }
+  },
+  "save": {
+    "jd": "Lưu JD này để dùng lại",
+    "cv": "Lưu CV này để dùng lại",
+    "title": {
+      "placeholder": "Đặt tiêu đề cho tài liệu này"
+    }
+  },
+  "action": {
+    "next": "Tiếp",
+    "back": "Quay lại",
+    "runMatch": "Chạy so khớp",
+    "startOver": "Làm lại",
+    "saveReport": "Lưu báo cáo"
+  },
+  "err": {
+    "fileType": "Chỉ chấp nhận file PDF hoặc DOCX",
+    "fileSize": "File vượt quá giới hạn {{max}}",
+    "empty": "Vui lòng nhập {{kind}} để tiếp tục",
+    "parseFailed": "Không đọc được file này. Thử file khác."
+  }
 }

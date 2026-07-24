@@ -10,11 +10,21 @@ cp .env.example .env   # fill in values, .env is git-ignored
 yarn dev                # http://localhost:5300
 ```
 
+The matching wizard is at **`/wizard`** (step 1 JD + step 2 CV; step 3–4 land in Plan 2). Needs the API server running (see `server/`).
+
 **Env vars** — see `.env.example`:
 - `VITE_API_BASE_URL` — server API base URL (default `http://localhost:5200/api/v1`)
 - `VITE_DEFAULT_LOCALE` — default i18n locale (`en` | `vi`)
+- `E2E_DATABASE_URL` — Postgres URL used by the Playwright DB cleanup (real value in `.env`, gitignored)
 
-**Scripts**: `yarn dev` · `yarn build` · `yarn preview` · `yarn test` (Vitest) · `yarn lint` · `yarn format`
+**Scripts**: `yarn dev` · `yarn build` · `yarn preview` · `yarn test` (Vitest unit) · `yarn lint` · `yarn format`
+
+**E2E (Playwright)** — dual-gate §4.3. Requires **both** servers running (`server` :5200 + `client` :5300) and `E2E_DATABASE_URL` set:
+
+```bash
+npx playwright install chromium   # first time
+npx playwright test               # e2e/cv-jd-matching-wizard/*.e2e.ts (serial)
+```
 
 ---
 
