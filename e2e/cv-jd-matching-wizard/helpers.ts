@@ -33,16 +33,23 @@ export async function pasteText(page: Page, text: string): Promise<void> {
   await page.getByPlaceholder('Paste the text content here').fill(text)
 }
 
-export async function fillTitle(page: Page, title: string): Promise<void> {
-  await page.getByPlaceholder('Enter a title for this document').fill(title)
+/**
+ * Save the current input as a reusable doc via the explicit button + modal
+ * (name required). Replaces the old inline save toggle + title input.
+ */
+export async function saveForReuse(page: Page, name: string): Promise<void> {
+  await page.getByRole('button', { name: 'Save for reuse' }).click()
+  const dialog = page.getByRole('dialog')
+  await expect(dialog).toBeVisible()
+  await dialog.getByPlaceholder('Enter a title for this document').fill(name)
+  await dialog.getByRole('button', { name: 'Save' }).click()
+  await expect(dialog).toBeHidden()
 }
 
-/** SaveToggle defaults to ON; call this to turn it off when a test doesn't need persistence. */
-export async function turnSaveOff(page: Page): Promise<void> {
-  const toggle = page.getByRole('switch')
-  await expect(toggle).toHaveAttribute('aria-checked', 'true')
-  await toggle.click()
-  await expect(toggle).toHaveAttribute('aria-checked', 'false')
+/** No-op: saving is now OFF by default (Next creates a transient save:false doc);
+ * persistence is opt-in via `saveForReuse`. Kept so existing callers still compile. */
+export async function turnSaveOff(_page: Page): Promise<void> {
+  // intentionally empty
 }
 
 export function nextButton(page: Page) {

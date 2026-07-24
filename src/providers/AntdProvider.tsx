@@ -33,9 +33,10 @@ export function AntdProvider({ children }: PropsWithChildren) {
           cssVar: true,
           algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
           token: {
-            colorPrimary: isDark ? '#4f46e5' : '#2563eb',
-            borderRadius: 12,
-            fontFamily: "'Switzer', Inter, ui-sans-serif, system-ui, sans-serif",
+            colorPrimary: isDark ? '#6366f1' : '#2563eb',
+            borderRadius: 8,
+            fontFamily:
+              'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
           },
         }}
       >

@@ -67,6 +67,15 @@
   "save": {
     "jd": "Lưu JD này để dùng lại",
     "cv": "Lưu CV này để dùng lại",
+    "button": "Lưu để dùng lại",
+    "saved": "Đã lưu để dùng lại: {{title}}",
+    "nameRequired": "Vui lòng nhập tên",
+    "modal": {
+      "title": "Lưu tài liệu để dùng lại",
+      "description": "Tài liệu đã lưu sẽ xuất hiện ở danh sách chọn lại của bước này — lần sau bạn chỉ cần chọn, khỏi import lại. Đặt tên dễ hiểu để nhận ra sau này.",
+      "nameLabel": "Tên tài liệu",
+      "confirm": "Lưu"
+    },
     "title": {
       "placeholder": "Đặt tiêu đề cho tài liệu này"
     }
@@ -74,6 +83,7 @@
   "action": {
     "next": "Tiếp",
     "back": "Quay lại",
+    "cancel": "Huỷ",
     "runMatch": "Chạy so khớp",
     "startOver": "Làm lại",
     "saveReport": "Lưu báo cáo"
@@ -89,6 +99,7 @@
     "disclaimer": "Nội dung AI tạo. CV/JD được gửi tới Google Gemini để phân tích — hãy tự kiểm chứng kết quả."
   },
   "err": {
+    "saveFailed": "Không lưu được. Vui lòng thử lại.",
     "fileType": "Chỉ chấp nhận file PDF hoặc DOCX",
     "fileSize": "File vượt quá giới hạn {{max}}",
     "empty": "Vui lòng nhập {{kind}} để tiếp tục",

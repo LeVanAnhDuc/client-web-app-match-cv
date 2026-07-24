@@ -1,9 +1,10 @@
 import { expect, test } from '@playwright/test'
+import { cleanDocuments } from '../db-cleanup'
 import {
-  fillTitle,
   gotoWizard,
   nextButton,
   pasteText,
+  saveForReuse,
   switchToPasteTab,
   uniqueTitle,
 } from './helpers'
@@ -11,6 +12,10 @@ import {
 // design.md §7 row 12 (Accessibility) — selectors below are role/label based
 // throughout the whole suite; this file additionally asserts the structural
 // a11y properties (roles, aria-current, radiogroup) explicitly.
+test.beforeEach(async () => {
+  await cleanDocuments()
+})
+
 test.describe('accessibility', () => {
   test('Next/Back are real buttons with accessible names', async ({ page }) => {
     await gotoWizard(page)
@@ -30,7 +35,7 @@ test.describe('accessibility', () => {
     await gotoWizard(page)
     await switchToPasteTab(page)
     await pasteText(page, 'JD text for the accessibility radiogroup check.')
-    await fillTitle(page, title)
+    await saveForReuse(page, title)
     await nextButton(page).click()
     await expect(page.getByRole('heading', { name: 'Candidate CV / Resume' })).toBeVisible()
 

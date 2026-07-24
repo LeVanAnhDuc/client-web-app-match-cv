@@ -96,7 +96,7 @@ export function StepReview() {
   // so without this the spinner below would hang forever. Offer a way back.
   if (!jdDocId || !cvDocId) {
     return (
-      <div className="bg-white dark:bg-slate-800/50 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-2xl border border-slate-100 dark:border-slate-700/50 p-16 flex flex-col items-center justify-center gap-4">
+      <div className="h-full bg-white dark:bg-slate-800/50 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700/50 p-16 flex flex-col items-center justify-center gap-4">
         <p role="alert" className="text-slate-500 dark:text-slate-400 font-medium">
           {t('review.missingDocs')}
         </p>
@@ -109,7 +109,7 @@ export function StepReview() {
 
   if (isLoadingDocs) {
     return (
-      <div className="bg-white dark:bg-slate-800/50 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-2xl border border-slate-100 dark:border-slate-700/50 p-16 flex items-center justify-center gap-3">
+      <div className="h-full bg-white dark:bg-slate-800/50 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700/50 p-16 flex items-center justify-center gap-3">
         <Loader2 className="animate-spin text-slate-400 dark:text-slate-500" size={20} />
         <p className="text-slate-400 dark:text-slate-500 font-medium">{t('review.loading')}</p>
       </div>
@@ -117,8 +117,8 @@ export function StepReview() {
   }
 
   return (
-    <div className="bg-white dark:bg-slate-800/50 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-2xl border border-slate-100 dark:border-slate-700/50 overflow-hidden">
-      <div className="p-8 border-b border-slate-100 dark:border-slate-700/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="h-full flex flex-col bg-white dark:bg-slate-800/50 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700/50 overflow-hidden">
+      <div className="shrink-0 p-6 border-b border-slate-100 dark:border-slate-700/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-1">
             {t('wizard.stepReview.title')}
@@ -132,28 +132,30 @@ export function StepReview() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-100 dark:divide-slate-700/50">
-        <div className="p-8">
-          <h3 className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">
+      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-100 dark:divide-slate-700/50">
+        <div className="p-6 flex flex-col min-h-0">
+          <h3 className="shrink-0 text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">
             {t('step.jd')}
           </h3>
           <TextArea
             value={jdText}
             onChange={(e) => setJdText(e.target.value)}
-            rows={14}
-            className="!rounded-xl"
+            autoSize={false}
+            style={{ height: '100%' }}
+            className="!flex-1 !resize-none !rounded-xl"
             aria-label={t('step.jd')}
           />
         </div>
-        <div className="p-8">
-          <h3 className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">
+        <div className="p-6 flex flex-col min-h-0">
+          <h3 className="shrink-0 text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">
             {t('step.cv')}
           </h3>
           <TextArea
             value={cvText}
             onChange={(e) => setCvText(e.target.value)}
-            rows={14}
-            className="!rounded-xl"
+            autoSize={false}
+            style={{ height: '100%' }}
+            className="!flex-1 !resize-none !rounded-xl"
             aria-label={t('step.cv')}
           />
         </div>
@@ -165,7 +167,7 @@ export function StepReview() {
         </p>
       )}
 
-      <div className="p-6 bg-slate-50/50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700/50 flex justify-between items-center">
+      <div className="shrink-0 p-6 bg-slate-50/50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700/50 flex justify-between items-center">
         <Button
           type="text"
           icon={<ArrowLeft size={16} />}
