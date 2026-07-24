@@ -7,7 +7,7 @@ export type SourceFormat = 'pdf' | 'docx' | 'text'
 export interface DocumentDto {
   id: string
   kind: DocumentKind
-  title: string | null
+  title: string
   sourceFormat: SourceFormat
   rawText: string
   isSaved: boolean
@@ -17,7 +17,7 @@ export interface DocumentDto {
 export interface DocumentSummaryDto {
   id: string
   kind: DocumentKind
-  title: string | null
+  title: string
   sourceFormat: SourceFormat
   createdAt: string
 }

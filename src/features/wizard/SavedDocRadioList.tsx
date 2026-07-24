@@ -59,7 +59,7 @@ export function SavedDocRadioList({ kind, selectedId, onSelect }: SavedDocRadioL
             </span>
             <span className="flex items-center gap-2 mt-1">
               <span className="text-[10px] px-1.5 py-0.5 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded font-bold uppercase tracking-tight">
-                {doc.sourceFormat}
+                {t(`format.${doc.sourceFormat}`)}
               </span>
             </span>
           </span>

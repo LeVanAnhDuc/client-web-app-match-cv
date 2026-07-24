@@ -34,6 +34,11 @@
   "paste": {
     "placeholder": "Paste the text content here"
   },
+  "format": {
+    "pdf": "PDF",
+    "docx": "Word",
+    "text": "Text"
+  },
   "reuse": {
     "jd": {
       "title": "Or reuse a saved job description"

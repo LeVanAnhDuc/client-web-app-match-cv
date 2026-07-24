@@ -1,3 +1,4 @@
+import 'dotenv/config' // load client/.env (E2E_DATABASE_URL for db-cleanup) into node process
 import { defineConfig, devices } from '@playwright/test'
 
 // Gate A of the §4.3 dual-gate (docs/specs/cv-jd-matching-wizard/e2e.md).

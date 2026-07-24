@@ -64,9 +64,12 @@ test.describe('reuse list — saved doc appears + radio-select flow', () => {
     const radio = page.getByRole('radio', { name: new RegExp(title) })
     await expect(radio).toBeVisible()
 
-    // Data rendering: sourceFormat label (not raw enum), no JSON dump.
+    // Data rendering (design.md §7 row 8): sourceFormat must render as the
+    // mapped label ("Text"), NOT the raw enum ("text"). Case-sensitive so the
+    // two are actually distinguished (the old /text/i matched both).
     const radioContainer = page.locator('label', { hasText: title })
-    await expect(radioContainer).toContainText(/text/i)
+    await expect(radioContainer).toContainText('Text')
+    await expect(radioContainer).not.toContainText('text')
 
     // Selecting the saved item enables Next without any new input.
     await radio.check()

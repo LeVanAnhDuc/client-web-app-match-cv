@@ -1,11 +1,12 @@
 import { Client } from 'pg'
 
-// Dev DB only — matches server/.env DATABASE_URL (server/CLAUDE.md TBD; see
-// docs/specs/cv-jd-matching-wizard/plan.md Global Constraints: no Docker,
-// local PostgreSQL, dev DB `matchcv`). No DELETE endpoint exists yet, so the
-// E2E suite cleans up the rows it creates directly via `pg` to stay
-// idempotent and safe to re-run.
-const CONNECTION_STRING = 'postgresql://postgres:123456@localhost:5432/matchcv'
+// Dev DB only. Connection is sourced from E2E_DATABASE_URL (loaded from
+// client/.env by playwright.config.ts via dotenv) so no credential is
+// committed. Falls back to the local placeholder from client/.env.example.
+// No DELETE endpoint exists yet, so the E2E suite cleans the rows it creates
+// directly via `pg` to stay idempotent and safe to re-run.
+const CONNECTION_STRING =
+  process.env.E2E_DATABASE_URL ?? 'postgresql://postgres:postgres@localhost:5432/matchcv'
 
 export async function cleanDocuments(): Promise<void> {
   const client = new Client({ connectionString: CONNECTION_STRING })
