@@ -56,7 +56,7 @@ describe('useRunMatch', () => {
     })
   })
 
-  it('rejects with the server message on a non-2xx response (e.g. 503 Gemini unavailable)', async () => {
+  it('rejects with the server message on a non-2xx response (e.g. 503 OpenRouter unavailable)', async () => {
     const fetchMock = vi.fn(
       async () =>
         ({
