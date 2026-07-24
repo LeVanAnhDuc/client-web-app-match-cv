@@ -112,9 +112,9 @@ export function StepResult() {
           <Lightbulb size={18} /> {t('result.suggestions')}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {data.report.suggestions.map((suggestion) => (
+          {data.report.suggestions.map((suggestion, index) => (
             <div
-              key={suggestion}
+              key={index}
               className="flex items-start gap-3 p-4 bg-white dark:bg-slate-900/50 rounded-xl shadow-sm border border-blue-100 dark:border-slate-700/30"
             >
               <Lightbulb
@@ -126,6 +126,10 @@ export function StepResult() {
           ))}
         </div>
       </div>
+
+      <p className="px-10 pb-2 text-xs text-slate-400 dark:text-slate-500 text-center">
+        {t('result.disclaimer')}
+      </p>
 
       <div className="p-6 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700/50 flex justify-between items-center">
         <Button
@@ -179,8 +183,8 @@ function ReportList({
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{title}</h3>
       </div>
       <ul className="space-y-4">
-        {items.map((item) => (
-          <li key={item} className="flex gap-3">
+        {items.map((item, index) => (
+          <li key={index} className="flex gap-3">
             {itemIcon}
             <p className="text-sm text-slate-700 dark:text-slate-300">{item}</p>
           </li>

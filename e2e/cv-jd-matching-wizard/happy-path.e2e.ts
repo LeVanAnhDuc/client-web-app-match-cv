@@ -10,9 +10,11 @@ import {
 } from './helpers'
 
 // design.md §7 row 1 (Happy path, paste-text variant) + row 6 (wizard step
-// guard: no Back on step 1, step 3/4 disabled placeholders).
+// guard: no Back on step 1). Step 3+ real-content coverage (Plan 2) lives in
+// review-and-result.e2e.ts; this file stays step 1-2 (Plan 1 scope) plus the
+// step-3 arrival smoke below.
 test.describe('happy path — paste JD then paste CV', () => {
-  test('advances step 1 -> 2 -> 3 (placeholder) via paste text', async ({ page }) => {
+  test('advances step 1 -> 2 -> 3 (Review) via paste text', async ({ page }) => {
     await gotoWizard(page)
 
     // Step 1 (JD): first-step guard — no Back available.
@@ -39,10 +41,9 @@ test.describe('happy path — paste JD then paste CV', () => {
     await expect(nextButton(page)).toBeEnabled()
     await nextButton(page).click()
 
-    // Step 3 (Review) is a disabled placeholder until Plan 2.
-    await expect(page.getByText('Coming in Plan 2')).toBeVisible()
-    await expect(stepperStep(page, 3)).toHaveAttribute('aria-disabled', 'true')
-    await expect(stepperStep(page, 4)).toHaveAttribute('aria-disabled', 'true')
+    // Step 3 (Review, Plan 2): both panes prefilled from the just-created docs.
+    await expect(page.getByRole('heading', { name: 'Review Parsed Data' })).toBeVisible()
     await expect(stepperStep(page, 3)).toHaveAttribute('data-status', 'active')
+    await expect(stepperStep(page, 4)).toHaveAttribute('data-status', 'idle')
   })
 })

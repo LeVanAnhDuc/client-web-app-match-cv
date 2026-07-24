@@ -30,7 +30,8 @@
   },
   "review": {
     "hint": "Data is editable. Fix any mistakes before running the match.",
-    "loading": "Loading document…"
+    "loading": "Loading document…",
+    "missingDocs": "No document selected. Go back to add a CV and a JD."
   },
   "input": {
     "tab": {
@@ -84,7 +85,8 @@
     "strengths": "Matched strengths",
     "gaps": "Gaps / Missing",
     "suggestions": "How to improve your CV",
-    "loading": "Running the match…"
+    "loading": "Running the match…",
+    "disclaimer": "AI-generated. CV/JD content is sent to Google Gemini for analysis — verify results independently."
   },
   "err": {
     "fileType": "Only PDF or DOCX files are allowed",

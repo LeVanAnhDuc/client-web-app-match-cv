@@ -91,6 +91,22 @@ export function StepReview() {
     }
   }
 
+  // Guard: reaching step 3 without a JD/CV id (e.g. corrupted persisted state
+  // or a direct setStep) → useDocument(null) is disabled and never resolves,
+  // so without this the spinner below would hang forever. Offer a way back.
+  if (!jdDocId || !cvDocId) {
+    return (
+      <div className="bg-white dark:bg-slate-800/50 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-2xl border border-slate-100 dark:border-slate-700/50 p-16 flex flex-col items-center justify-center gap-4">
+        <p role="alert" className="text-slate-500 dark:text-slate-400 font-medium">
+          {t('review.missingDocs')}
+        </p>
+        <Button icon={<ArrowLeft size={16} />} onClick={goBack}>
+          {t('action.back')}
+        </Button>
+      </div>
+    )
+  }
+
   if (isLoadingDocs) {
     return (
       <div className="bg-white dark:bg-slate-800/50 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-2xl border border-slate-100 dark:border-slate-700/50 p-16 flex items-center justify-center gap-3">
