@@ -76,12 +76,12 @@ describe('StepResult', () => {
     expect(screen.getByText(/running the match/i)).toBeInTheDocument()
   })
 
-  it('shows a friendly error message on 503 (Gemini unavailable)', () => {
+  it('shows a friendly error message on 503 (OpenRouter unavailable)', () => {
     vi.spyOn(matchQueries, 'useMatchResult').mockReturnValue({
       data: undefined,
       isLoading: false,
       isError: true,
-      error: new ApiError(503, 'Gemini API is down'),
+      error: new ApiError(503, 'OpenRouter API is down'),
     } as unknown as ReturnType<typeof matchQueries.useMatchResult>)
 
     renderStep()

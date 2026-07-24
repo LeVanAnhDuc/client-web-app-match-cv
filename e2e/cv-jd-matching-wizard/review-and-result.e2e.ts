@@ -14,14 +14,14 @@ import {
 
 // design.md §7 (Plan 2 extension) — step 3 (Review) + step 4 (Result).
 // `POST /match` and `GET /match/:id` are route-stubbed throughout this file:
-// the matching engine calls Google Gemini and no GEMINI_API_KEY is configured
+// the matching engine calls OpenRouter and no OPENROUTER_API_KEY is configured
 // here (and there is no runtime mock by design), so a real call would either
 // fail (503) or cost real API credits. Step 1-2 document creation still hits
-// the REAL backend (no Gemini dependency there), giving StepReview real
+// the REAL backend (no OpenRouter dependency there), giving StepReview real
 // jdDocId/cvDocId to fetch via GET /documents/:id.
 //
-// LIVE (real-Gemini) smoke of this same flow is a deferred gate-B item,
-// pending GEMINI_API_KEY — see e2e.md "Deferred / notes".
+// LIVE (real-OpenRouter) smoke of this same flow is a deferred gate-B item,
+// pending OPENROUTER_API_KEY — see e2e.md "Deferred / notes".
 test.beforeEach(async () => {
   await cleanDocuments()
 })

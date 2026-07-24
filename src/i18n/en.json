@@ -96,7 +96,7 @@
     "gaps": "Gaps / Missing",
     "suggestions": "How to improve your CV",
     "loading": "Running the match…",
-    "disclaimer": "AI-generated. CV/JD content is sent to Google Gemini for analysis — verify results independently."
+    "disclaimer": "AI-generated. CV/JD content is sent to OpenRouter for analysis — verify results independently."
   },
   "err": {
     "saveFailed": "Couldn't save. Please try again.",

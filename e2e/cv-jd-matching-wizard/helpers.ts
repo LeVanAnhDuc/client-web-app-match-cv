@@ -71,7 +71,7 @@ export function uniqueTitle(label: string): string {
 
 /**
  * Fixed MatchResultDto used to stub the matching engine in E2E (see
- * `stubMatchApi`). No GEMINI_API_KEY is configured for this environment, so
+ * `stubMatchApi`). No OPENROUTER_API_KEY is configured for this environment, so
  * step 3/4 tests MUST intercept the network rather than hit the real engine.
  */
 export const STUB_MATCH_RESULT: MatchResultDto = {
@@ -92,7 +92,7 @@ export const STUB_MATCH_RESULT: MatchResultDto = {
 /**
  * Route-stub `POST /api/v1/match` and `GET /api/v1/match/:id` so step 3 "Run
  * match" / step 4 "Result" are deterministic and never call the real
- * matching engine (which calls Google Gemini — no GEMINI_API_KEY configured
+ * matching engine (which calls OpenRouter — no OPENROUTER_API_KEY configured
  * here). Register BEFORE navigating so the intercept is active in time.
  */
 export async function stubMatchApi(
