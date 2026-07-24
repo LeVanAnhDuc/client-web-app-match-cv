@@ -19,7 +19,19 @@
       "title": "CV / Hồ sơ ứng viên",
       "description": "Cung cấp thông tin kinh nghiệm của ứng viên bạn đang phân tích."
     },
+    "stepReview": {
+      "title": "Xem lại dữ liệu đã trích xuất",
+      "description": "Xem lại và chỉnh sửa nội dung trước khi chạy thuật toán so khớp."
+    },
+    "stepResult": {
+      "badge": "Đã hoàn tất so khớp"
+    },
     "comingSoon": "Sẽ có ở Plan 2"
+  },
+  "review": {
+    "hint": "Dữ liệu có thể chỉnh sửa. Sửa lỗi trước khi chạy so khớp.",
+    "loading": "Đang tải tài liệu…",
+    "missingDocs": "Chưa chọn tài liệu. Quay lại để thêm CV và JD."
   },
   "input": {
     "tab": {
@@ -66,10 +78,22 @@
     "startOver": "Làm lại",
     "saveReport": "Lưu báo cáo"
   },
+  "result": {
+    "overall": "Mức khớp tổng",
+    "semantic": "Khớp ngữ nghĩa",
+    "keyword": "Khớp từ khoá / kỹ năng",
+    "strengths": "Điểm mạnh khớp",
+    "gaps": "Điểm thiếu",
+    "suggestions": "Cách cải thiện CV",
+    "loading": "Đang chạy so khớp…",
+    "disclaimer": "Nội dung AI tạo. CV/JD được gửi tới Google Gemini để phân tích — hãy tự kiểm chứng kết quả."
+  },
   "err": {
     "fileType": "Chỉ chấp nhận file PDF hoặc DOCX",
     "fileSize": "File vượt quá giới hạn {{max}}",
     "empty": "Vui lòng nhập {{kind}} để tiếp tục",
-    "parseFailed": "Không đọc được file này. Thử file khác."
+    "parseFailed": "Không đọc được file này. Thử file khác.",
+    "matchUnavailable": "Tính năng so khớp AI tạm thời không khả dụng. Vui lòng thử lại sau.",
+    "matchFailed": "Không thể chạy so khớp. Vui lòng thử lại."
   }
 }

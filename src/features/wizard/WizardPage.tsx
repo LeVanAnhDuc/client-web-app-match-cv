@@ -2,24 +2,15 @@ import { Wand2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { StepCV } from './StepCV'
 import { StepJD } from './StepJD'
+import { StepResult } from './StepResult'
+import { StepReview } from './StepReview'
 import { Stepper } from './Stepper'
 import { useWizardStore } from './store'
 
-/** Placeholder body for steps not yet implemented (Review/Result → Plan 2). */
-function ComingSoonStep() {
-  const { t } = useTranslation()
-
-  return (
-    <div className="bg-white dark:bg-slate-800/50 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-2xl border border-slate-100 dark:border-slate-700/50 p-16 flex items-center justify-center">
-      <p className="text-slate-400 dark:text-slate-500 font-medium">{t('wizard.comingSoon')}</p>
-    </div>
-  )
-}
-
 /**
  * Wizard shell: brand header + step badge + 4-step Stepper + current step body.
- * Step 1 (JD) and 2 (CV) are wired in DocumentInputStep-based components;
- * steps 3–4 (Review/Result) are placeholders until Plan 2.
+ * Step 1 (JD) and 2 (CV) use DocumentInputStep; step 3 (Review) and step 4
+ * (Result) are wired to the matching engine (Plan 2).
  */
 export function WizardPage() {
   const { t } = useTranslation()
@@ -46,7 +37,8 @@ export function WizardPage() {
 
         {step === 1 && <StepJD />}
         {step === 2 && <StepCV />}
-        {(step === 3 || step === 4) && <ComingSoonStep />}
+        {step === 3 && <StepReview />}
+        {step === 4 && <StepResult />}
       </section>
     </div>
   )

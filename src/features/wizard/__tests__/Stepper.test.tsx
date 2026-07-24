@@ -30,11 +30,10 @@ describe('Stepper', () => {
     expect(doneDot.getAttribute('data-status')).toBe('done')
   })
 
-  it('marks step 3 (Review) and step 4 (Result) as disabled placeholders', () => {
+  it('does not mark any step as disabled (Review/Result are implemented in Plan 2)', () => {
     render(<Stepper current={1} />)
 
-    expect(screen.getByTestId('stepper-step-3').getAttribute('aria-disabled')).toBe('true')
-    expect(screen.getByTestId('stepper-step-4').getAttribute('aria-disabled')).toBe('true')
-    expect(screen.getByTestId('stepper-step-1').getAttribute('aria-disabled')).toBeNull()
+    expect(screen.getByTestId('stepper-step-3').getAttribute('aria-disabled')).toBeNull()
+    expect(screen.getByTestId('stepper-step-4').getAttribute('aria-disabled')).toBeNull()
   })
 })

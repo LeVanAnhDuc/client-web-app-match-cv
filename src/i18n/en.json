@@ -19,7 +19,19 @@
       "title": "Candidate CV / Resume",
       "description": "Provide the experience details for the candidate you're analyzing."
     },
+    "stepReview": {
+      "title": "Review Parsed Data",
+      "description": "Review and edit the content before running the matching algorithm."
+    },
+    "stepResult": {
+      "badge": "Matching complete"
+    },
     "comingSoon": "Coming in Plan 2"
+  },
+  "review": {
+    "hint": "Data is editable. Fix any mistakes before running the match.",
+    "loading": "Loading document…",
+    "missingDocs": "No document selected. Go back to add a CV and a JD."
   },
   "input": {
     "tab": {
@@ -66,10 +78,22 @@
     "startOver": "Start over",
     "saveReport": "Save report"
   },
+  "result": {
+    "overall": "Overall match",
+    "semantic": "Semantic match",
+    "keyword": "Keyword / Skills match",
+    "strengths": "Matched strengths",
+    "gaps": "Gaps / Missing",
+    "suggestions": "How to improve your CV",
+    "loading": "Running the match…",
+    "disclaimer": "AI-generated. CV/JD content is sent to Google Gemini for analysis — verify results independently."
+  },
   "err": {
     "fileType": "Only PDF or DOCX files are allowed",
     "fileSize": "File exceeds the {{max}} limit",
     "empty": "Please provide a {{kind}} to continue",
-    "parseFailed": "We couldn't read this file. Try another."
+    "parseFailed": "We couldn't read this file. Try another.",
+    "matchUnavailable": "AI matching is temporarily unavailable. Please try again in a moment.",
+    "matchFailed": "We couldn't run the match. Please try again."
   }
 }

@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { renderHook, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { PropsWithChildren } from 'react'
-import { useCreateDocument, useSavedDocuments } from '../queries'
+import { useCreateDocument, useDocument, useSavedDocuments } from '../queries'
 import type { DocumentDto, DocumentSummaryDto } from '../types'
 
 function createWrapper() {
@@ -137,5 +137,39 @@ describe('useCreateDocument', () => {
     expect((result.current.error as Error).message).toBe(
       'Only PDF or DOCX files are allowed',
     )
+  })
+})
+
+describe('useDocument', () => {
+  it('GETs /documents/:id and returns the DocumentDto (rawText included)', async () => {
+    const dto: DocumentDto = {
+      id: 'jd-1',
+      kind: 'JD',
+      title: 'Senior Product Designer',
+      sourceFormat: 'pdf',
+      rawText: 'We are hiring a senior product designer.',
+      isSaved: true,
+      createdAt: '2023-10-12T00:00:00.000Z',
+    }
+    const fetchMock = vi.fn(
+      async () => ({ ok: true, status: 200, json: async () => dto }) as Response,
+    )
+    vi.stubGlobal('fetch', fetchMock)
+
+    const { result } = renderHook(() => useDocument('jd-1'), { wrapper: createWrapper() })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    expect(result.current.data).toEqual(dto)
+    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/documents/jd-1'), undefined)
+  })
+
+  it('stays disabled (no fetch) when id is null', () => {
+    const fetchMock = vi.fn()
+    vi.stubGlobal('fetch', fetchMock)
+
+    const { result } = renderHook(() => useDocument(null), { wrapper: createWrapper() })
+
+    expect(result.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
   })
 })

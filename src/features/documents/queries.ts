@@ -11,6 +11,19 @@ export function savedDocumentsQueryKey(kind: DocumentKind) {
   return ['documents', kind, 'saved'] as const
 }
 
+export function documentQueryKey(id: string) {
+  return ['documents', id] as const
+}
+
+/** GET /documents/:id — fetch rawText for the wizard's step 3 Review prefill. */
+export function useDocument(id: string | null) {
+  return useQuery({
+    queryKey: documentQueryKey(id ?? ''),
+    queryFn: () => apiFetch<DocumentDto>(`/documents/${id}`),
+    enabled: id !== null,
+  })
+}
+
 /** GET /documents?kind=..&saved=true — reuse list for the wizard's radio picker. */
 export function useSavedDocuments(kind: DocumentKind) {
   return useQuery({

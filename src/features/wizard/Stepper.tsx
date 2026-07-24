@@ -7,15 +7,14 @@ interface StepDef {
   step: WizardStep
   icon: ComponentType<{ size?: number }>
   labelKey: string
-  disabled?: boolean
 }
 
 // Icon mapping per .claude/uiux/icon-map.md §1 (wizard/navigation).
 const STEPS: Array<StepDef> = [
   { step: 1, icon: FileText, labelKey: 'step.jd' },
   { step: 2, icon: User, labelKey: 'step.cv' },
-  { step: 3, icon: Eye, labelKey: 'step.review', disabled: true },
-  { step: 4, icon: CheckCircle, labelKey: 'step.result', disabled: true },
+  { step: 3, icon: Eye, labelKey: 'step.review' },
+  { step: 4, icon: CheckCircle, labelKey: 'step.result' },
 ]
 
 interface StepperProps {
@@ -40,7 +39,6 @@ export function Stepper({ current }: StepperProps) {
                 data-testid={`stepper-step-${s.step}`}
                 data-status={isActive ? 'active' : isDone ? 'done' : 'idle'}
                 aria-current={isActive ? 'step' : undefined}
-                aria-disabled={s.disabled ? 'true' : undefined}
                 className={[
                   'w-10 h-10 rounded-full flex items-center justify-center font-bold z-10 transition-colors',
                   isActive
@@ -48,7 +46,6 @@ export function Stepper({ current }: StepperProps) {
                     : isDone
                       ? 'bg-blue-100 text-blue-600 border border-blue-200 dark:bg-indigo-600/20 dark:text-indigo-400 dark:border-indigo-600/50'
                       : 'bg-white border-2 border-slate-200 text-slate-400 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-600',
-                  s.disabled ? 'cursor-not-allowed' : '',
                 ].join(' ')}
               >
                 <Icon size={18} />

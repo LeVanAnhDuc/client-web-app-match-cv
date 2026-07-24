@@ -10,7 +10,7 @@ cp .env.example .env   # fill in values, .env is git-ignored
 yarn dev                # http://localhost:5300
 ```
 
-The matching wizard is at **`/wizard`** (step 1 JD + step 2 CV; step 3–4 land in Plan 2). Needs the API server running (see `server/`).
+The matching wizard is at **`/wizard`** — all 4 steps: 1 JD · 2 CV · 3 Review · 4 Result. Needs the API server running (see `server/`); **step 4 (match) requires `GEMINI_API_KEY` set on the server** (else 503).
 
 **Env vars** — see `.env.example`:
 - `VITE_API_BASE_URL` — server API base URL (default `http://localhost:5200/api/v1`)
