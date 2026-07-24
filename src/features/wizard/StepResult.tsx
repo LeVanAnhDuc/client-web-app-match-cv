@@ -22,7 +22,7 @@ export function StepResult() {
 
   if (isLoading) {
     return (
-      <div className="bg-white dark:bg-slate-800/50 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-2xl border border-slate-100 dark:border-slate-700/50 p-16 flex items-center justify-center gap-3">
+      <div className="h-full bg-white dark:bg-slate-800/50 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700/50 p-16 flex items-center justify-center gap-3">
         <Loader2 className="animate-spin text-slate-400 dark:text-slate-500" size={20} />
         <p className="text-slate-400 dark:text-slate-500 font-medium">{t('result.loading')}</p>
       </div>
@@ -36,7 +36,7 @@ export function StepResult() {
         : t('err.matchFailed')
 
     return (
-      <div className="bg-white dark:bg-slate-800/50 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-2xl border border-slate-100 dark:border-slate-700/50 p-16 flex flex-col items-center justify-center gap-4">
+      <div className="h-full bg-white dark:bg-slate-800/50 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700/50 p-16 flex flex-col items-center justify-center gap-4">
         <p role="alert" className="text-red-600 dark:text-red-400 font-medium text-center">
           {message}
         </p>
@@ -50,8 +50,9 @@ export function StepResult() {
   const dashOffset = GAUGE_CIRCUMFERENCE * (1 - data.overallScore / 100)
 
   return (
-    <div className="bg-white dark:bg-slate-800/50 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-2xl border border-slate-100 dark:border-slate-700/50 overflow-hidden">
-      <div className="p-10 flex flex-col md:flex-row items-center gap-12 border-b border-slate-100 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-900/30">
+    <div className="h-full flex flex-col bg-white dark:bg-slate-800/50 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700/50 overflow-hidden">
+      <div className="flex-1 min-h-0 overflow-y-auto">
+      <div className="p-6 flex flex-col md:flex-row items-center gap-12 border-b border-slate-100 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-900/30">
         <div className="relative w-40 h-40 shrink-0">
           <svg className="-rotate-90" viewBox="0 0 160 160">
             <circle
@@ -92,7 +93,7 @@ export function StepResult() {
         </div>
       </div>
 
-      <div className="p-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-10">
         <ReportList
           icon={<CircleCheck className="text-green-600 dark:text-green-500" size={18} />}
           title={t('result.strengths')}
@@ -107,7 +108,7 @@ export function StepResult() {
         />
       </div>
 
-      <div className="m-10 mt-0 p-8 bg-blue-50 dark:bg-indigo-500/5 rounded-2xl border border-blue-100 dark:border-indigo-500/20">
+      <div className="m-10 mt-0 p-6 bg-blue-50 dark:bg-indigo-500/5 rounded-xl border border-blue-100 dark:border-indigo-500/20">
         <h3 className="text-lg font-semibold text-blue-900 dark:text-white mb-4 flex items-center gap-2">
           <Lightbulb size={18} /> {t('result.suggestions')}
         </h3>
@@ -127,11 +128,12 @@ export function StepResult() {
         </div>
       </div>
 
-      <p className="px-10 pb-2 text-xs text-slate-400 dark:text-slate-500 text-center">
+      <p className="px-10 pb-6 text-xs text-slate-400 dark:text-slate-500 text-center">
         {t('result.disclaimer')}
       </p>
+      </div>
 
-      <div className="p-6 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700/50 flex justify-between items-center">
+      <div className="shrink-0 p-6 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700/50 flex justify-between items-center">
         <Button
           type="text"
           icon={<RotateCcw size={16} />}

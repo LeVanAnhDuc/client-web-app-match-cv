@@ -19,11 +19,76 @@ const STEPS: Array<StepDef> = [
 
 interface StepperProps {
   current: WizardStep
+  orientation?: 'horizontal' | 'vertical'
 }
 
-/** Horizontal 4-step wizard stepper — dot + connecting line (mock §7 Stepper). */
-export function Stepper({ current }: StepperProps) {
+function Dot({
+  step,
+  Icon,
+  isActive,
+  isDone,
+}: {
+  step: WizardStep
+  Icon: ComponentType<{ size?: number }>
+  isActive: boolean
+  isDone: boolean
+}) {
+  return (
+    <div
+      data-testid={`stepper-step-${step}`}
+      data-status={isActive ? 'active' : isDone ? 'done' : 'idle'}
+      aria-current={isActive ? 'step' : undefined}
+      className={[
+        'w-10 h-10 rounded-full flex items-center justify-center font-bold z-10 transition-colors shrink-0',
+        isActive
+          ? 'bg-blue-600 dark:bg-indigo-600 text-white shadow-lg shadow-blue-200 dark:shadow-indigo-500/40'
+          : isDone
+            ? 'bg-blue-100 text-blue-600 border border-blue-200 dark:bg-indigo-600/20 dark:text-indigo-400 dark:border-indigo-600/50'
+            : 'bg-white border-2 border-slate-200 text-slate-400 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-600',
+      ].join(' ')}
+    >
+      <Icon size={18} />
+    </div>
+  )
+}
+
+/** 4-step wizard stepper — dot + connecting line (mock §7). Vertical rail (default) or horizontal. */
+export function Stepper({ current, orientation = 'vertical' }: StepperProps) {
   const { t } = useTranslation()
+
+  const labelClass = (isActive: boolean) =>
+    isActive
+      ? 'text-sm font-semibold text-slate-900 dark:text-white'
+      : 'text-sm font-medium text-slate-500 dark:text-slate-400'
+
+  if (orientation === 'vertical') {
+    return (
+      <div className="flex flex-col">
+        {STEPS.map((s, idx) => {
+          const isDone = s.step < current
+          const isActive = s.step === current
+          const Icon = isDone ? Check : s.icon
+          return (
+            <div key={s.step} className="flex flex-col">
+              <div className="flex items-center gap-3">
+                <Dot step={s.step} Icon={Icon} isActive={isActive} isDone={isDone} />
+                <span className={labelClass(isActive)}>{t(s.labelKey)}</span>
+              </div>
+              {idx < STEPS.length - 1 && (
+                <div
+                  className={`w-[2px] h-8 ml-5 my-1 ${
+                    s.step < current
+                      ? 'bg-blue-600 dark:bg-indigo-600'
+                      : 'bg-slate-200 dark:bg-slate-700'
+                  }`}
+                />
+              )}
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
 
   return (
     <div className="flex items-center justify-between w-full mb-16">
@@ -31,34 +96,11 @@ export function Stepper({ current }: StepperProps) {
         const isDone = s.step < current
         const isActive = s.step === current
         const Icon = isDone ? Check : s.icon
-
         return (
           <div key={s.step} className="flex items-center flex-1 last:flex-none">
             <div className="flex flex-col items-center gap-3 relative">
-              <div
-                data-testid={`stepper-step-${s.step}`}
-                data-status={isActive ? 'active' : isDone ? 'done' : 'idle'}
-                aria-current={isActive ? 'step' : undefined}
-                className={[
-                  'w-10 h-10 rounded-full flex items-center justify-center font-bold z-10 transition-colors',
-                  isActive
-                    ? 'bg-blue-600 dark:bg-indigo-600 text-white shadow-lg shadow-blue-200 dark:shadow-indigo-500/40'
-                    : isDone
-                      ? 'bg-blue-100 text-blue-600 border border-blue-200 dark:bg-indigo-600/20 dark:text-indigo-400 dark:border-indigo-600/50'
-                      : 'bg-white border-2 border-slate-200 text-slate-400 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-600',
-                ].join(' ')}
-              >
-                <Icon size={18} />
-              </div>
-              <span
-                className={
-                  isActive
-                    ? 'text-sm font-semibold text-slate-900 dark:text-white'
-                    : 'text-sm font-medium text-slate-500 dark:text-slate-400'
-                }
-              >
-                {t(s.labelKey)}
-              </span>
+              <Dot step={s.step} Icon={Icon} isActive={isActive} isDone={isDone} />
+              <span className={labelClass(isActive)}>{t(s.labelKey)}</span>
             </div>
             {idx < STEPS.length - 1 && (
               <div

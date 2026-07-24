@@ -67,6 +67,15 @@
   "save": {
     "jd": "Save this JD for later reuse",
     "cv": "Save this CV for later reuse",
+    "button": "Save for reuse",
+    "saved": "Saved for reuse: {{title}}",
+    "nameRequired": "Please enter a name",
+    "modal": {
+      "title": "Save this document for reuse",
+      "description": "Saved documents show up in the reuse list on this step — next time you can pick one instead of importing again. Give it a clear name so you recognise it later.",
+      "nameLabel": "Document name",
+      "confirm": "Save"
+    },
     "title": {
       "placeholder": "Enter a title for this document"
     }
@@ -74,6 +83,7 @@
   "action": {
     "next": "Next",
     "back": "Back",
+    "cancel": "Cancel",
     "runMatch": "Run match",
     "startOver": "Start over",
     "saveReport": "Save report"
@@ -89,6 +99,7 @@
     "disclaimer": "AI-generated. CV/JD content is sent to Google Gemini for analysis — verify results independently."
   },
   "err": {
+    "saveFailed": "Couldn't save. Please try again.",
     "fileType": "Only PDF or DOCX files are allowed",
     "fileSize": "File exceeds the {{max}} limit",
     "empty": "Please provide a {{kind}} to continue",

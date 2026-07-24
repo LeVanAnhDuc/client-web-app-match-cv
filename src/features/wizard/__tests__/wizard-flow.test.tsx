@@ -65,15 +65,12 @@ describe('wizard flow: JD -> CV -> Back', () => {
     stubApi()
     renderWizard()
 
-    // Step 1: JD title from mock; switch to paste, fill text + title, submit.
+    // Step 1: switch to paste, enter text, Next → creates a transient (save:false) doc.
     await screen.findByText(/input job description/i)
 
     fireEvent.click(screen.getByText(/paste text/i))
     fireEvent.change(await screen.findByPlaceholderText(/paste the text content here/i), {
       target: { value: 'We are hiring a senior engineer.' },
-    })
-    fireEvent.change(screen.getByPlaceholderText(/enter a title for this document/i), {
-      target: { value: 'Senior Engineer JD' },
     })
     fireEvent.click(screen.getByRole('button', { name: /next/i }))
 

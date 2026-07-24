@@ -1,12 +1,11 @@
 import { expect, test } from '@playwright/test'
 import { cleanDocuments } from '../db-cleanup'
 import {
-  fillTitle,
   gotoWizard,
   nextButton,
   pasteText,
+  saveForReuse,
   switchToPasteTab,
-  turnSaveOff,
   uniqueTitle,
 } from './helpers'
 
@@ -34,7 +33,6 @@ test.describe('reuse list — empty state', () => {
     await gotoWizard(page)
     await switchToPasteTab(page)
     await pasteText(page, 'JD text just to advance past step 1.')
-    await turnSaveOff(page)
     await nextButton(page).click()
 
     await expect(page.getByRole('heading', { name: 'Candidate CV / Resume' })).toBeVisible()
@@ -51,8 +49,8 @@ test.describe('reuse list — saved doc appears + radio-select flow', () => {
     await gotoWizard(page)
     await switchToPasteTab(page)
     await pasteText(page, 'Reusable JD: hiring a platform engineer.')
-    // Save toggle defaults ON.
-    await fillTitle(page, title)
+    // Explicit save via the button + modal (name required).
+    await saveForReuse(page, title)
     await nextButton(page).click()
     await expect(page.getByRole('heading', { name: 'Candidate CV / Resume' })).toBeVisible()
 
