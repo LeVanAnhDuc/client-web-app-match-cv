@@ -1,7 +1,7 @@
 ---
 name: mocks
 paths:
-  - 'src/mocks/**/*'
+  - "src/mocks/**/*"
 ---
 
 # Mocks Convention (src/mocks/)
@@ -14,22 +14,22 @@ paths:
 
 ```ts
 // src/mocks/MatchResults.ts
-import type { MatchResultDto } from '#/types/Matching'
+import type { MatchResultDto } from "#/types/Matching";
 
 export const sampleMatchResult: MatchResultDto = {
-  id: 'match_001',
-  cvDocumentId: 'doc_cv_001',
-  jdDocumentId: 'doc_jd_001',
+  id: "match_001",
+  cvDocumentId: "doc_cv_001",
+  jdDocumentId: "doc_jd_001",
   overallScore: 82,
   semanticScore: 85,
   keywordScore: 78,
   report: {
-    strengths: ['5+ years React', 'Strong TypeScript'],
-    gaps: ['No Kubernetes experience'],
-    suggestions: ['Highlight CI/CD ownership'],
+    strengths: ["5+ years React", "Strong TypeScript"],
+    gaps: ["No Kubernetes experience"],
+    suggestions: ["Highlight CI/CD ownership"]
   },
-  createdAt: '2026-07-30T08:00:00.000Z',
-}
+  createdAt: "2026-07-30T08:00:00.000Z"
+};
 ```
 
 ## Quy tắc

@@ -1,7 +1,7 @@
 ---
 name: types
 paths:
-  - 'src/types/**/*'
+  - "src/types/**/*"
 ---
 
 # Types Convention (src/types/)
@@ -19,25 +19,25 @@ src/types/
 Ví dụ `src/types/Documents/index.ts` (mirror API contract — giữ đồng bộ với server DTO):
 
 ```ts
-export type DocumentKind = 'CV' | 'JD'
-export type SourceFormat = 'pdf' | 'docx' | 'text'
+export type DocumentKind = "CV" | "JD";
+export type SourceFormat = "pdf" | "docx" | "text";
 
 export interface DocumentDto {
-  id: string
-  kind: DocumentKind
-  title: string
-  sourceFormat: SourceFormat
-  rawText: string
-  isSaved: boolean
-  createdAt: string
+  id: string;
+  kind: DocumentKind;
+  title: string;
+  sourceFormat: SourceFormat;
+  rawText: string;
+  isSaved: boolean;
+  createdAt: string;
 }
 
 export interface CreateDocumentFileInput {
-  mode: 'file'
-  kind: DocumentKind
-  save: boolean
-  title?: string
-  file: File
+  mode: "file";
+  kind: DocumentKind;
+  save: boolean;
+  title?: string;
+  file: File;
 }
 // ... CreateDocumentPasteInput, CreateDocumentInput (discriminated union)
 ```
@@ -62,23 +62,23 @@ Consumer import: `import type { DocumentDto } from '#/types/Documents'`.
 // ✅ Đúng — props inline
 const Stepper = ({
   current,
-  orientation = 'horizontal',
+  orientation = "horizontal"
 }: {
-  current: number
-  orientation?: 'horizontal' | 'vertical'
+  current: number;
+  orientation?: "horizontal" | "vertical";
 }) => {
   // ...
-}
+};
 
-export default Stepper
+export default Stepper;
 ```
 
 ```tsx
 // ❌ Sai — tách Props ra ngoài
-type Props = { current: number }
+type Props = { current: number };
 const Stepper = ({ current }: Props) => {
   /* ... */
-}
+};
 ```
 
 Ngược lại, mọi type **dùng chung** (không phải props riêng của 1 component) → `src/types/<Domain>/` như mục 1.

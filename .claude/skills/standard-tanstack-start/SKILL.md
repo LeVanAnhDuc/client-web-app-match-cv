@@ -28,10 +28,10 @@ Every non-root route exports a `Route` created with `createFileRoute`:
 
 ```tsx
 // src/routes/wizard.tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { WizardPage } from '#/features/wizard/WizardPage'
+import { createFileRoute } from "@tanstack/react-router";
+import { WizardPage } from "#/features/wizard/WizardPage";
 
-export const Route = createFileRoute('/wizard')({ component: WizardPage })
+export const Route = createFileRoute("/wizard")({ component: WizardPage });
 ```
 
 Rules:
@@ -46,32 +46,32 @@ The root uses `createRootRouteWithContext<Ctx>()` and a `shellComponent` that re
 
 ```tsx
 // src/routes/__root.tsx
-import '@ant-design/v5-patch-for-react-19' // MUST be first — see standard-antd
+import "@ant-design/v5-patch-for-react-19"; // MUST be first — see standard-antd
 import {
   HeadContent,
   Scripts,
-  createRootRouteWithContext,
-} from '@tanstack/react-router'
-import { AntdProvider } from '#/providers/AntdProvider'
-import '#/i18n'
-import appCss from '#/styles.css?url'
-import type { QueryClient } from '@tanstack/react-query'
+  createRootRouteWithContext
+} from "@tanstack/react-router";
+import { AntdProvider } from "#/providers/AntdProvider";
+import "#/i18n";
+import appCss from "#/styles.css?url";
+import type { QueryClient } from "@tanstack/react-query";
 
 interface MyRouterContext {
-  queryClient: QueryClient
+  queryClient: QueryClient;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({
     meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'Match CV' },
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "Match CV" }
     ],
-    links: [{ rel: 'stylesheet', href: appCss }],
+    links: [{ rel: "stylesheet", href: appCss }]
   }),
-  shellComponent: RootDocument,
-})
+  shellComponent: RootDocument
+});
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -84,7 +84,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
-  )
+  );
 }
 ```
 
@@ -102,28 +102,28 @@ Rules:
 
 ```tsx
 // src/router.tsx
-import { createRouter as createTanStackRouter } from '@tanstack/react-router'
-import { QueryClient } from '@tanstack/react-query'
-import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
-import { routeTree } from './routeTree.gen'
-import { getContext } from '#/integrations/tanstack-query/root-provider'
+import { createRouter as createTanStackRouter } from "@tanstack/react-router";
+import { QueryClient } from "@tanstack/react-query";
+import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
+import { routeTree } from "./routeTree.gen";
+import { getContext } from "#/integrations/tanstack-query/root-provider";
 
 export function getRouter() {
-  const context = getContext() // { queryClient }
+  const context = getContext(); // { queryClient }
   const router = createTanStackRouter({
     routeTree,
     context,
     scrollRestoration: true,
-    defaultPreload: 'intent',
-    defaultPreloadStaleTime: 0,
-  })
-  setupRouterSsrQueryIntegration({ router, queryClient: context.queryClient })
-  return router
+    defaultPreload: "intent",
+    defaultPreloadStaleTime: 0
+  });
+  setupRouterSsrQueryIntegration({ router, queryClient: context.queryClient });
+  return router;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface Register {
-    router: ReturnType<typeof getRouter>
+    router: ReturnType<typeof getRouter>;
   }
 }
 ```
@@ -142,29 +142,29 @@ Two layers, used deliberately:
 
 ```tsx
 // feature query hook — the standard pattern
-import { useQuery } from '@tanstack/react-query'
-import { apiFetch } from '#/libs/api'
+import { useQuery } from "@tanstack/react-query";
+import { apiFetch } from "#/libs/api";
 
 export function useSavedDocuments(kind: DocumentKind) {
   return useQuery({
-    queryKey: ['documents', kind, 'saved'] as const,
+    queryKey: ["documents", kind, "saved"] as const,
     queryFn: () =>
-      apiFetch<Array<DocumentSummaryDto>>(`/documents?kind=${kind}&saved=true`),
-  })
+      apiFetch<Array<DocumentSummaryDto>>(`/documents?kind=${kind}&saved=true`)
+  });
 }
 ```
 
 - **Route loaders** — use `loader` on a route only when data must be ready before the route renders (SSR-critical, blocking navigation). Prefer `context.queryClient.ensureQueryData(...)` inside the loader so the same cache is reused, rather than a parallel fetch:
 
 ```tsx
-export const Route = createFileRoute('/documents/$id')({
+export const Route = createFileRoute("/documents/$id")({
   loader: ({ context, params }) =>
     context.queryClient.ensureQueryData({
-      queryKey: ['documents', params.id],
-      queryFn: () => apiFetch<DocumentDto>(`/documents/${params.id}`),
+      queryKey: ["documents", params.id],
+      queryFn: () => apiFetch<DocumentDto>(`/documents/${params.id}`)
     }),
-  component: DocumentPage,
-})
+  component: DocumentPage
+});
 ```
 
 Rules:
@@ -197,13 +197,13 @@ TanStack Start renders on the server first, then hydrates on the client. Code in
 ```tsx
 // ✅ browser API inside an effect — only runs client-side
 useEffect(() => {
-  const mql = window.matchMedia('(prefers-color-scheme: dark)')
+  const mql = window.matchMedia("(prefers-color-scheme: dark)");
   // ...
-}, [])
+}, []);
 
 // ✅ one-time client-only setup guarded explicitly (see src/i18n/index.ts)
-if (import.meta.env.DEV && typeof window !== 'undefined') {
-  ;(window as unknown as { __i18n: typeof i18n }).__i18n = i18n
+if (import.meta.env.DEV && typeof window !== "undefined") {
+  (window as unknown as { __i18n: typeof i18n }).__i18n = i18n;
 }
 ```
 

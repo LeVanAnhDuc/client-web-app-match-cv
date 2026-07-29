@@ -1,11 +1,11 @@
-import { Input, Segmented, Upload } from 'antd'
-import { UploadCloud } from 'lucide-react'
-import { Trans, useTranslation } from 'react-i18next'
-import type { UploadFile, UploadProps } from 'antd'
-import type { InputMode } from '#/types/Wizard'
+import { Input, Segmented, Upload } from "antd";
+import { UploadCloud } from "lucide-react";
+import { Trans, useTranslation } from "react-i18next";
+import type { UploadFile, UploadProps } from "antd";
+import type { InputMode } from "#/types/Wizard";
 
-const { Dragger } = Upload
-const { TextArea } = Input
+const { Dragger } = Upload;
+const { TextArea } = Input;
 
 /** Upload/Paste segmented switcher — dropzone or textarea (mock §7 Input tabs). */
 const UploadPasteTabs = ({
@@ -15,33 +15,33 @@ const UploadPasteTabs = ({
   onFileChange,
   pastedText,
   onPastedTextChange,
-  maxSizeLabel,
+  maxSizeLabel
 }: {
-  mode: InputMode
-  onModeChange: (mode: InputMode) => void
-  file: File | null
-  onFileChange: (file: File | null) => void
-  pastedText: string
-  onPastedTextChange: (text: string) => void
-  maxSizeLabel: string
+  mode: InputMode;
+  onModeChange: (mode: InputMode) => void;
+  file: File | null;
+  onFileChange: (file: File | null) => void;
+  pastedText: string;
+  onPastedTextChange: (text: string) => void;
+  maxSizeLabel: string;
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const fileList: Array<UploadFile> = file
-    ? [{ uid: file.name, name: file.name, status: 'done' }]
-    : []
+    ? [{ uid: file.name, name: file.name, status: "done" }]
+    : [];
 
   const draggerProps: UploadProps = {
-    accept: '.pdf,.docx',
+    accept: ".pdf,.docx",
     multiple: false,
     showUploadList: false,
     fileList,
     beforeUpload: (selected) => {
-      onFileChange(selected)
-      return false
+      onFileChange(selected);
+      return false;
     },
-    onRemove: () => onFileChange(null),
-  }
+    onRemove: () => onFileChange(null)
+  };
 
   return (
     <div className="mb-8">
@@ -49,19 +49,19 @@ const UploadPasteTabs = ({
         value={mode}
         onChange={(value) => onModeChange(value as InputMode)}
         options={[
-          { label: t('input.tab.upload'), value: 'upload' },
-          { label: t('input.tab.paste'), value: 'paste' },
+          { label: t("input.tab.upload"), value: "upload" },
+          { label: t("input.tab.paste"), value: "paste" }
         ]}
         className="mb-8"
       />
 
-      {mode === 'upload' ? (
-        <Dragger {...draggerProps} className="mb-10 !border-dashed !rounded-xl">
+      {mode === "upload" ? (
+        <Dragger {...draggerProps} className="mb-10 !rounded-xl !border-dashed">
           <div className="flex flex-col items-center justify-center py-6">
-            <div className="w-16 h-16 bg-blue-50 dark:bg-slate-900 text-blue-600 dark:text-indigo-400 rounded-xl flex items-center justify-center mb-4">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-slate-900 dark:text-indigo-400">
               <UploadCloud size={28} />
             </div>
-            <p className="text-lg font-medium text-slate-900 dark:text-white mb-1">
+            <p className="mb-1 text-lg font-medium text-slate-900 dark:text-white">
               {file ? (
                 file.name
               ) : (
@@ -70,13 +70,13 @@ const UploadPasteTabs = ({
                   components={{
                     highlight: (
                       <span className="text-blue-600 dark:text-indigo-400" />
-                    ),
+                    )
                   }}
                 />
               )}
             </p>
-            <p className="text-slate-500 dark:text-slate-500 text-sm">
-              {t('dropzone.hint', { max: maxSizeLabel })}
+            <p className="text-sm text-slate-500 dark:text-slate-500">
+              {t("dropzone.hint", { max: maxSizeLabel })}
             </p>
           </div>
         </Dragger>
@@ -85,12 +85,12 @@ const UploadPasteTabs = ({
           value={pastedText}
           onChange={(e) => onPastedTextChange(e.target.value)}
           rows={8}
-          placeholder={t('paste.placeholder')}
+          placeholder={t("paste.placeholder")}
           className="mb-10 !rounded-xl"
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default UploadPasteTabs
+export default UploadPasteTabs;

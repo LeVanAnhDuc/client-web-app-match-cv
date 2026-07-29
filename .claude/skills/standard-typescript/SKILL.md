@@ -60,14 +60,14 @@ Additional required flags:
 
 ```ts
 interface User {
-  id: string
-  name: string
-  email: string
+  id: string;
+  name: string;
+  email: string;
 }
 
-type Status = 'pending' | 'approved' | 'rejected'
-type AdminUser = User & { role: 'admin' }
-type UpdateUserInput = Partial<Pick<User, 'name' | 'email'>>
+type Status = "pending" | "approved" | "rejected";
+type AdminUser = User & { role: "admin" };
+type UpdateUserInput = Partial<Pick<User, "name" | "email">>;
 ```
 
 ---
@@ -90,12 +90,12 @@ Never use `Number`, `String`, `Boolean`, `Symbol`, `Object` as types. Use `numbe
 
 ```ts
 // ❌
-const data: any = fetchData()
+const data: any = fetchData();
 
 // ✅
-const data: unknown = fetchData()
+const data: unknown = fetchData();
 if (isUser(data)) {
-  data.name
+  data.name;
 }
 ```
 
@@ -103,30 +103,30 @@ if (isUser(data)) {
 
 ```ts
 // ❌ Assertion without verification
-const user = response.data as User
+const user = response.data as User;
 
 // ✅ Type guard first, then use
 function isUser(x: unknown): x is User {
-  return typeof x === 'object' && x !== null && 'id' in x
+  return typeof x === "object" && x !== null && "id" in x;
 }
 if (isUser(response.data)) {
-  response.data.name
+  response.data.name;
 }
 
 // ❌ Double assertion — always wrong
-const x = foo as unknown as Bar
+const x = foo as unknown as Bar;
 ```
 
 ### Non-null assertion `!` — forbidden without structural guarantee
 
 ```ts
 // ❌
-const el = document.getElementById('app')!
+const el = document.getElementById("app")!;
 
 // ✅
-const el = document.getElementById('app')
-if (!el) throw new Error('Element #app not found')
-el.style.display = 'none'
+const el = document.getElementById("app");
+if (!el) throw new Error("Element #app not found");
+el.style.display = "none";
 ```
 
 ### `@ts-ignore` — never use
@@ -149,13 +149,13 @@ el.style.display = 'none'
 
 ```ts
 // ❌
-const name = user.name || 'stranger' // treats '' as falsy
+const name = user.name || "stranger"; // treats '' as falsy
 
 // ✅
-const name = user.name ?? 'stranger'
+const name = user.name ?? "stranger";
 
 // ✅ Optional chaining
-console.log(user?.address?.city)
+console.log(user?.address?.city);
 ```
 
 ---
@@ -164,34 +164,34 @@ console.log(user?.address?.city)
 
 ```ts
 // typeof
-if (typeof value === 'string') {
-  value.toUpperCase()
+if (typeof value === "string") {
+  value.toUpperCase();
 }
 
 // instanceof
 if (error instanceof AppError) {
-  error.code
+  error.code;
 }
 
 // Discriminated union
 type Shape =
-  | { kind: 'circle'; radius: number }
-  | { kind: 'rect'; width: number; height: number }
+  | { kind: "circle"; radius: number }
+  | { kind: "rect"; width: number; height: number };
 
 function area(shape: Shape): number {
   switch (shape.kind) {
-    case 'circle':
-      return Math.PI * shape.radius ** 2
-    case 'rect':
-      return shape.width * shape.height
+    case "circle":
+      return Math.PI * shape.radius ** 2;
+    case "rect":
+      return shape.width * shape.height;
     default:
-      return assertNever(shape)
+      return assertNever(shape);
   }
 }
 
 // Exhaustiveness check
 function assertNever(x: never): never {
-  throw new Error(`Unhandled case: ${JSON.stringify(x)}`)
+  throw new Error(`Unhandled case: ${JSON.stringify(x)}`);
 }
 ```
 
@@ -209,19 +209,19 @@ function wrap<T>(): void {}
 
 // ✅
 function wrap<T>(value: T): { value: T } {
-  return { value }
+  return { value };
 }
 
 // Constraint
 function getProperty<TObj, TKey extends keyof TObj>(
   obj: TObj,
-  key: TKey,
+  key: TKey
 ): TObj[TKey] {
-  return obj[key]
+  return obj[key];
 }
 
 // Result type pattern
-type Result<T> = { success: true; data: T } | { success: false; error: string }
+type Result<T> = { success: true; data: T } | { success: false; error: string };
 ```
 
 ---
@@ -229,16 +229,16 @@ type Result<T> = { success: true; data: T } | { success: false; error: string }
 ## Utility Types — Use Instead of Manual Duplication
 
 ```ts
-Partial<T> // all properties optional
-Required<T> // all properties required
-Readonly<T> // all properties readonly
-Pick<T, K> // select subset of properties
-Omit<T, K> // exclude properties
-Record<K, V> // object with keys K and values V
-ReturnType<T> // infer return type of function
-Parameters<T> // infer parameter types of function
-NonNullable<T> // exclude null and undefined
-Awaited<T> // unwrap Promise type
+Partial<T>; // all properties optional
+Required<T>; // all properties required
+Readonly<T>; // all properties readonly
+Pick<T, K>; // select subset of properties
+Omit<T, K>; // exclude properties
+Record<K, V>; // object with keys K and values V
+ReturnType<T>; // infer return type of function
+Parameters<T>; // infer parameter types of function
+NonNullable<T>; // exclude null and undefined
+Awaited<T>; // unwrap Promise type
 ```
 
 ---
@@ -253,24 +253,24 @@ Awaited<T> // unwrap Promise type
 ```ts
 // ❌
 function run(cb: () => any): void {
-  cb()
+  cb();
 }
 // ✅
 function run(cb: () => void): void {
-  cb()
+  cb();
 }
 
 // ❌ Overloads for trailing optional
-function create(name: string): User
-function create(name: string, role: string): User
+function create(name: string): User;
+function create(name: string, role: string): User;
 // ✅
-function create(name: string, role?: string): User
+function create(name: string, role?: string): User;
 
 // ❌ Overloads differing only by argument type
-function format(x: string): string
-function format(x: number): string
+function format(x: string): string;
+function format(x: number): string;
 // ✅
-function format(x: string | number): string
+function format(x: string | number): string;
 ```
 
 ---
@@ -283,17 +283,17 @@ function format(x: string | number): string
 
 ```ts
 // ❌
-obj.key = val
-arr.push(item)
+obj.key = val;
+arr.push(item);
 
 // ✅
-const newObj = { ...obj, key: val }
-const newArr = [...arr, item]
+const newObj = { ...obj, key: val };
+const newArr = [...arr, item];
 
 // readonly in interfaces
 interface Point {
-  readonly x: number
-  readonly y: number
+  readonly x: number;
+  readonly y: number;
 }
 
 // ReadonlyArray
@@ -307,16 +307,16 @@ function process(items: readonly string[]): void {}
 ```ts
 // ❌ Enum — generates runtime JS, not tree-shakeable
 enum Direction {
-  Up = 'UP',
-  Down = 'DOWN',
+  Up = "UP",
+  Down = "DOWN"
 }
 
 // ✅ Union type — zero runtime cost
-type Direction = 'UP' | 'DOWN'
+type Direction = "UP" | "DOWN";
 
 // ✅ Const object — when runtime values needed
-const Direction = { Up: 'UP', Down: 'DOWN' } as const
-type Direction = (typeof Direction)[keyof typeof Direction]
+const Direction = { Up: "UP", Down: "DOWN" } as const;
+type Direction = (typeof Direction)[keyof typeof Direction];
 ```
 
 ---
@@ -325,12 +325,12 @@ type Direction = (typeof Direction)[keyof typeof Direction]
 
 ```ts
 // as const — preserves literal types
-const config = { host: 'localhost', port: 3000 } as const
+const config = { host: "localhost", port: 3000 } as const;
 
 // satisfies — validates type without widening inference
 const palette = {
-  red: ['#ff0000'],
-} satisfies Record<string, string[]>
+  red: ["#ff0000"]
+} satisfies Record<string, string[]>;
 // palette.red is still string[], not widened
 ```
 
@@ -344,18 +344,18 @@ const palette = {
 
 ```ts
 // ❌ Sequential — adds full latency per call
-const user = await getUser(id)
-const orders = await getOrders(id)
+const user = await getUser(id);
+const orders = await getOrders(id);
 
 // ✅ Parallel
-const [user, orders] = await Promise.all([getUser(id), getOrders(id)])
+const [user, orders] = await Promise.all([getUser(id), getOrders(id)]);
 
 // When partial failure is OK
-const results = await Promise.allSettled([fetchA(), fetchB()])
+const results = await Promise.allSettled([fetchA(), fetchB()]);
 results.forEach((r) => {
-  if (r.status === 'fulfilled') use(r.value)
-  else log(r.reason)
-})
+  if (r.status === "fulfilled") use(r.value);
+  else log(r.reason);
+});
 ```
 
 ---
@@ -369,27 +369,27 @@ results.forEach((r) => {
 ```ts
 // ✅ Narrow catch type
 try {
-  await doSomething()
+  await doSomething();
 } catch (e) {
-  if (e instanceof Error) console.error(e.message)
-  else console.error(String(e))
+  if (e instanceof Error) console.error(e.message);
+  else console.error(String(e));
 }
 
 // ✅ Typed error class
 class AppError extends Error {
   constructor(
     public readonly code: string,
-    message: string,
+    message: string
   ) {
-    super(message)
-    this.name = 'AppError'
+    super(message);
+    this.name = "AppError";
   }
 }
 
 // ✅ Check response.ok
-const res = await fetch(url)
-if (!res.ok) throw new AppError('FETCH_FAILED', `HTTP ${res.status}`)
-const data = await res.json()
+const res = await fetch(url);
+if (!res.ok) throw new AppError("FETCH_FAILED", `HTTP ${res.status}`);
+const data = await res.json();
 ```
 
 ---
@@ -398,13 +398,13 @@ const data = await res.json()
 
 ```ts
 // ❌ Regular import for type
-import { User } from './types'
+import { User } from "./types";
 
 // ✅ Type-only import
-import type { User } from './types'
+import type { User } from "./types";
 
 // ✅ Mixed
-import { fetchUser, type User } from './api'
+import { fetchUser, type User } from "./api";
 ```
 
 - Export convention is governed by `.claude/rules/` (see `component-folder.md`), not this skill. In this project:

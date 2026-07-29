@@ -1,7 +1,7 @@
 ---
 name: forms
 paths:
-  - 'src/forms/**/*'
+  - "src/forms/**/*"
 ---
 
 # Forms Convention (src/forms/)
@@ -22,15 +22,15 @@ src/forms/
 ## Ant Design Form pattern
 
 ```tsx
-import { Form, Input, Button } from 'antd'
-import type { CreateDocumentInput } from '#/types/Documents'
+import { Form, Input, Button } from "antd";
+import type { CreateDocumentInput } from "#/types/Documents";
 
 const SaveDocumentForm = ({
-  onSubmit,
+  onSubmit
 }: {
-  onSubmit: (values: { title: string }) => void
+  onSubmit: (values: { title: string }) => void;
 }) => {
-  const [form] = Form.useForm<{ title: string }>()
+  const [form] = Form.useForm<{ title: string }>();
 
   return (
     <Form form={form} layout="vertical" onFinish={onSubmit}>
@@ -38,8 +38,8 @@ const SaveDocumentForm = ({
         name="title"
         label="Title"
         rules={[
-          { required: true, message: 'Please enter a title.' },
-          { max: 120, message: 'Title must be at most 120 characters.' },
+          { required: true, message: "Please enter a title." },
+          { max: 120, message: "Title must be at most 120 characters." }
         ]}
       >
         <Input placeholder="e.g. Senior Frontend JD" />
@@ -48,10 +48,10 @@ const SaveDocumentForm = ({
         Save
       </Button>
     </Form>
-  )
-}
+  );
+};
 
-export default SaveDocumentForm
+export default SaveDocumentForm;
 ```
 
 ## Quy tắc

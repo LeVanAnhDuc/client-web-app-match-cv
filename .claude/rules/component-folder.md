@@ -1,7 +1,7 @@
 ---
 name: component-folder
 paths:
-  - 'src/**/*.tsx'
+  - "src/**/*.tsx"
 ---
 
 # Component Folder Convention
@@ -14,10 +14,10 @@ paths:
   // Stepper/index.tsx
   const Stepper = () => {
     // ...
-    return <div>...</div>
-  }
+    return <div>...</div>;
+  };
 
-  export default Stepper
+  export default Stepper;
   ```
 
 - **Một component EXPORT / một file**: file `index.tsx` chỉ `export default` **đúng 1** component (arrow const, trùng tên folder). KHÔNG có `export` thứ hai.

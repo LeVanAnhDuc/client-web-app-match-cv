@@ -1,7 +1,7 @@
 ---
 name: datasources
 paths:
-  - 'src/dataSources/**/*'
+  - "src/dataSources/**/*"
 ---
 
 # DataSources Convention (src/dataSources/)
@@ -16,41 +16,41 @@ Tách theo domain: `dataSources/<Domain>/`.
 
 ```ts
 // src/dataSources/Documents/options.ts
-import type { DocumentKind } from '#/types/Documents'
+import type { DocumentKind } from "#/types/Documents";
 
 export const documentKindOptions: Array<{
-  value: DocumentKind
-  label: string
+  value: DocumentKind;
+  label: string;
 }> = [
-  { value: 'JD', label: 'Job Description' },
-  { value: 'CV', label: 'Curriculum Vitae' },
-]
+  { value: "JD", label: "Job Description" },
+  { value: "CV", label: "Curriculum Vitae" }
+];
 ```
 
 ### Table columns config (Ant Design `Table`)
 
 ```tsx
 // src/dataSources/Matching/columns.tsx
-import type { ColumnsType } from 'antd/es/table'
-import type { DocumentSummaryDto } from '#/types/Documents'
+import type { ColumnsType } from "antd/es/table";
+import type { DocumentSummaryDto } from "#/types/Documents";
 
 export const savedDocumentColumns: ColumnsType<DocumentSummaryDto> = [
-  { title: 'Title', dataIndex: 'title', key: 'title' },
-  { title: 'Format', dataIndex: 'sourceFormat', key: 'sourceFormat' },
-]
+  { title: "Title", dataIndex: "title", key: "title" },
+  { title: "Format", dataIndex: "sourceFormat", key: "sourceFormat" }
+];
 ```
 
 ### Enum → label map
 
 ```ts
 // src/dataSources/Documents/labels.ts
-import type { SourceFormat } from '#/types/Documents'
+import type { SourceFormat } from "#/types/Documents";
 
 export const sourceFormatLabel: Record<SourceFormat, string> = {
-  pdf: 'PDF',
-  docx: 'Word',
-  text: 'Plain text',
-}
+  pdf: "PDF",
+  docx: "Word",
+  text: "Plain text"
+};
 ```
 
 ## Quy tắc

@@ -1,15 +1,17 @@
-import { expect, type Page } from '@playwright/test'
-import type { MatchResultDto } from '../../src/features/matching/types'
+import { expect, type Page } from "@playwright/test";
+import type { MatchResultDto } from "../../src/features/matching/types";
 
 /** Navigate to the wizard, starting fresh (in-memory Zustand store resets on full load). */
 export async function gotoWizard(page: Page): Promise<void> {
-  await page.goto('/wizard')
-  await expect(page.getByRole('heading', { name: 'Match CV' })).toBeVisible()
+  await page.goto("/wizard");
+  await expect(page.getByRole("heading", { name: "Match CV" })).toBeVisible();
   // Wait for client hydration before interacting: the dev-only `window.__i18n`
   // hook (see src/i18n/index.ts) is attached only after the client bundle runs,
   // so its presence is a reliable "React is hydrated & interactive" signal.
   // Without this, fast clicks land on SSR markup before handlers are wired.
-  await page.waitForFunction(() => '__i18n' in window, undefined, { timeout: 15000 })
+  await page.waitForFunction(() => "__i18n" in window, undefined, {
+    timeout: 15000
+  });
 }
 
 export async function switchToPasteTab(page: Page): Promise<void> {
@@ -21,16 +23,21 @@ export async function switchToPasteTab(page: Page): Promise<void> {
   // React onChange isn't wired yet and the first click is a no-op. Re-click
   // until the paste textarea actually renders.
   await expect(async () => {
-    await page.locator('.ant-segmented-item').filter({ hasText: 'Paste text' }).click()
-    await expect(page.getByPlaceholder('Paste the text content here')).toBeVisible({
-      timeout: 1000,
-    })
-  }).toPass({ timeout: 15000 })
+    await page
+      .locator(".ant-segmented-item")
+      .filter({ hasText: "Paste text" })
+      .click();
+    await expect(
+      page.getByPlaceholder("Paste the text content here")
+    ).toBeVisible({
+      timeout: 1000
+    });
+  }).toPass({ timeout: 15000 });
 }
 
 export async function pasteText(page: Page, text: string): Promise<void> {
-  await switchToPasteTab(page)
-  await page.getByPlaceholder('Paste the text content here').fill(text)
+  await switchToPasteTab(page);
+  await page.getByPlaceholder("Paste the text content here").fill(text);
 }
 
 /**
@@ -38,12 +45,12 @@ export async function pasteText(page: Page, text: string): Promise<void> {
  * (name required). Replaces the old inline save toggle + title input.
  */
 export async function saveForReuse(page: Page, name: string): Promise<void> {
-  await page.getByRole('button', { name: 'Save for reuse' }).click()
-  const dialog = page.getByRole('dialog')
-  await expect(dialog).toBeVisible()
-  await dialog.getByPlaceholder('Enter a title for this document').fill(name)
-  await dialog.getByRole('button', { name: 'Save' }).click()
-  await expect(dialog).toBeHidden()
+  await page.getByRole("button", { name: "Save for reuse" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  await dialog.getByPlaceholder("Enter a title for this document").fill(name);
+  await dialog.getByRole("button", { name: "Save" }).click();
+  await expect(dialog).toBeHidden();
 }
 
 /** No-op: saving is now OFF by default (Next creates a transient save:false doc);
@@ -53,20 +60,20 @@ export async function turnSaveOff(_page: Page): Promise<void> {
 }
 
 export function nextButton(page: Page) {
-  return page.getByRole('button', { name: 'Next' })
+  return page.getByRole("button", { name: "Next" });
 }
 
 export function backButton(page: Page) {
-  return page.getByRole('button', { name: 'Back' })
+  return page.getByRole("button", { name: "Back" });
 }
 
 export function stepperStep(page: Page, step: 1 | 2 | 3 | 4) {
-  return page.getByTestId(`stepper-step-${step}`)
+  return page.getByTestId(`stepper-step-${step}`);
 }
 
 /** Unique title per test run so reuse-list assertions never collide across re-runs. */
 export function uniqueTitle(label: string): string {
-  return `E2E ${label} ${Date.now()}-${Math.floor(Math.random() * 10_000)}`
+  return `E2E ${label} ${Date.now()}-${Math.floor(Math.random() * 10_000)}`;
 }
 
 /**
@@ -75,19 +82,24 @@ export function uniqueTitle(label: string): string {
  * step 3/4 tests MUST intercept the network rather than hit the real engine.
  */
 export const STUB_MATCH_RESULT: MatchResultDto = {
-  id: 'e2e-stub-match-id',
-  cvDocumentId: 'e2e-stub-cv-id',
-  jdDocumentId: 'e2e-stub-jd-id',
+  id: "e2e-stub-match-id",
+  cvDocumentId: "e2e-stub-cv-id",
+  jdDocumentId: "e2e-stub-jd-id",
   overallScore: 82,
   semanticScore: 90,
   keywordScore: 74,
   report: {
-    strengths: ['Strong backend engineering background', 'Solid Node.js fundamentals'],
-    gaps: ['No direct GraphQL experience mentioned'],
-    suggestions: ['Highlight any API design work with concrete, quantified impact.'],
+    strengths: [
+      "Strong backend engineering background",
+      "Solid Node.js fundamentals"
+    ],
+    gaps: ["No direct GraphQL experience mentioned"],
+    suggestions: [
+      "Highlight any API design work with concrete, quantified impact."
+    ]
   },
-  createdAt: '2026-07-24T00:00:00.000Z',
-}
+  createdAt: "2026-07-24T00:00:00.000Z"
+};
 
 /**
  * Route-stub `POST /api/v1/match` and `GET /api/v1/match/:id` so step 3 "Run
@@ -97,21 +109,29 @@ export const STUB_MATCH_RESULT: MatchResultDto = {
  */
 export async function stubMatchApi(
   page: Page,
-  result: MatchResultDto = STUB_MATCH_RESULT,
+  result: MatchResultDto = STUB_MATCH_RESULT
 ): Promise<void> {
-  await page.route('**/api/v1/match', async (route) => {
-    if (route.request().method() !== 'POST') {
-      await route.fallback()
-      return
+  await page.route("**/api/v1/match", async (route) => {
+    if (route.request().method() !== "POST") {
+      await route.fallback();
+      return;
     }
-    await route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify(result) })
-  })
+    await route.fulfill({
+      status: 201,
+      contentType: "application/json",
+      body: JSON.stringify(result)
+    });
+  });
 
-  await page.route('**/api/v1/match/*', async (route) => {
-    if (route.request().method() !== 'GET') {
-      await route.fallback()
-      return
+  await page.route("**/api/v1/match/*", async (route) => {
+    if (route.request().method() !== "GET") {
+      await route.fallback();
+      return;
     }
-    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(result) })
-  })
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(result)
+    });
+  });
 }

@@ -2,23 +2,23 @@
 // ("API Contract (Plan 2)"). Keep in sync with server DTOs.
 
 export interface MatchReport {
-  strengths: Array<string>
-  gaps: Array<string>
-  suggestions: Array<string>
+  strengths: Array<string>;
+  gaps: Array<string>;
+  suggestions: Array<string>;
 }
 
 export interface MatchResultDto {
-  id: string
-  cvDocumentId: string
-  jdDocumentId: string
-  overallScore: number
-  semanticScore: number
-  keywordScore: number
-  report: MatchReport
-  createdAt: string
+  id: string;
+  cvDocumentId: string;
+  jdDocumentId: string;
+  overallScore: number;
+  semanticScore: number;
+  keywordScore: number;
+  report: MatchReport;
+  createdAt: string;
 }
 
 export interface CreateMatchInput {
-  cvDocumentId: string
-  jdDocumentId: string
+  cvDocumentId: string;
+  jdDocumentId: string;
 }

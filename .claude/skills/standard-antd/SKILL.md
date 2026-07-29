@@ -23,25 +23,25 @@ antd is wired once in `src/providers/AntdProvider.tsx`, rendered inside `__root.
 
 ```tsx
 // src/providers/AntdProvider.tsx
-import { StyleProvider } from '@ant-design/cssinjs'
-import { ConfigProvider, theme } from 'antd'
-import { useEffect, useState } from 'react'
-import type { PropsWithChildren } from 'react'
+import { StyleProvider } from "@ant-design/cssinjs";
+import { ConfigProvider, theme } from "antd";
+import { useEffect, useState } from "react";
+import type { PropsWithChildren } from "react";
 
 function usePrefersDark() {
-  const [isDark, setIsDark] = useState(false) // stable SSR default → updated after mount
+  const [isDark, setIsDark] = useState(false); // stable SSR default → updated after mount
   useEffect(() => {
-    const mql = window.matchMedia('(prefers-color-scheme: dark)')
-    setIsDark(mql.matches)
-    const listener = (e: MediaQueryListEvent) => setIsDark(e.matches)
-    mql.addEventListener('change', listener)
-    return () => mql.removeEventListener('change', listener)
-  }, [])
-  return isDark
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    setIsDark(mql.matches);
+    const listener = (e: MediaQueryListEvent) => setIsDark(e.matches);
+    mql.addEventListener("change", listener);
+    return () => mql.removeEventListener("change", listener);
+  }, []);
+  return isDark;
 }
 
 export function AntdProvider({ children }: PropsWithChildren) {
-  const isDark = usePrefersDark()
+  const isDark = usePrefersDark();
   return (
     <StyleProvider hashPriority="high">
       <ConfigProvider
@@ -49,17 +49,17 @@ export function AntdProvider({ children }: PropsWithChildren) {
           cssVar: true,
           algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
           token: {
-            colorPrimary: isDark ? '#6366f1' : '#2563eb',
+            colorPrimary: isDark ? "#6366f1" : "#2563eb",
             borderRadius: 8,
             fontFamily:
-              'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, ...',
-          },
+              'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, ...'
+          }
         }}
       >
         {children}
       </ConfigProvider>
     </StyleProvider>
-  )
+  );
 }
 ```
 
@@ -76,7 +76,7 @@ Rules:
 antd 5 + React 19 needs `@ant-design/v5-patch-for-react-19`, imported **before** anything else in `src/routes/__root.tsx`:
 
 ```tsx
-import '@ant-design/v5-patch-for-react-19' // FIRST line of __root.tsx
+import "@ant-design/v5-patch-for-react-19"; // FIRST line of __root.tsx
 ```
 
 Without it: `console.error` flood about the React version, plus broken wave/ripple and `Modal`/`message`/`notification` portal behavior. Never remove it; never move it below other imports.
@@ -139,20 +139,20 @@ Rules:
 Use antd `Form` for forms in this project (the stack chose antd `Form` over a separate form lib):
 
 ```tsx
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button } from "antd";
 
 const Login = () => {
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
   const handleFinish = (values: { email: string; password: string }) => {
     // submit via a mutation hook
-  }
+  };
   return (
     <Form form={form} layout="vertical" onFinish={handleFinish} requiredMark>
       <Form.Item
         name="email"
         label="Email"
         rules={[
-          { required: true, type: 'email', message: 'Enter a valid email' },
+          { required: true, type: "email", message: "Enter a valid email" }
         ]}
       >
         <Input autoComplete="email" />
@@ -160,7 +160,7 @@ const Login = () => {
       <Form.Item
         name="password"
         label="Password"
-        rules={[{ required: true, min: 8, message: 'At least 8 characters' }]}
+        rules={[{ required: true, min: 8, message: "At least 8 characters" }]}
       >
         <Input.Password autoComplete="current-password" />
       </Form.Item>
@@ -168,8 +168,8 @@ const Login = () => {
         Sign in
       </Button>
     </Form>
-  )
-}
+  );
+};
 ```
 
 Rules:

@@ -1,7 +1,7 @@
 ---
 name: utils
 paths:
-  - 'src/utils/**/*'
+  - "src/utils/**/*"
 ---
 
 # Utils Convention (src/utils/)
@@ -24,16 +24,16 @@ src/utils/
 
 ```ts
 // src/utils/score.ts
-export const formatScore = (score: number): string => `${Math.round(score)}%`
+export const formatScore = (score: number): string => `${Math.round(score)}%`;
 
 export const clampPercent = (value: number): number =>
-  Math.max(0, Math.min(100, value))
+  Math.max(0, Math.min(100, value));
 ```
 
 ```ts
 // src/utils/index.ts
-export * from './score'
-export * from './document'
+export * from "./score";
+export * from "./document";
 ```
 
 ## Quy tắc

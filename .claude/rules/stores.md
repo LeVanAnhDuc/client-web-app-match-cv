@@ -1,7 +1,7 @@
 ---
 name: stores
 paths:
-  - 'src/stores/**/*'
+  - "src/stores/**/*"
 ---
 
 # Stores Convention (src/stores/)
@@ -20,29 +20,29 @@ src/stores/
 ## Ví dụ — `src/stores/slices/wizard.ts`
 
 ```ts
-import { create } from 'zustand'
-import type { WizardStep } from '#/types/Wizard'
+import { create } from "zustand";
+import type { WizardStep } from "#/types/Wizard";
 
 interface WizardState {
-  step: WizardStep
-  jdDocId: string | null
-  cvDocId: string | null
-  matchId: string | null
-  setStep: (step: WizardStep) => void
-  setJdDocId: (id: string) => void
-  setCvDocId: (id: string) => void
-  setMatchId: (id: string) => void
-  goNext: () => void
-  goBack: () => void
-  reset: () => void
+  step: WizardStep;
+  jdDocId: string | null;
+  cvDocId: string | null;
+  matchId: string | null;
+  setStep: (step: WizardStep) => void;
+  setJdDocId: (id: string) => void;
+  setCvDocId: (id: string) => void;
+  setMatchId: (id: string) => void;
+  goNext: () => void;
+  goBack: () => void;
+  reset: () => void;
 }
 
 const initialState = {
   step: 1 as WizardStep,
   jdDocId: null as string | null,
   cvDocId: null as string | null,
-  matchId: null as string | null,
-}
+  matchId: null as string | null
+};
 
 export const useWizardStore = create<WizardState>((set) => ({
   ...initialState,
@@ -52,13 +52,13 @@ export const useWizardStore = create<WizardState>((set) => ({
   setMatchId: (id) => set({ matchId: id }),
   goNext: () => set((s) => ({ step: Math.min(4, s.step + 1) as WizardStep })),
   goBack: () => set((s) => ({ step: Math.max(1, s.step - 1) as WizardStep })),
-  reset: () => set({ ...initialState }),
-}))
+  reset: () => set({ ...initialState })
+}));
 ```
 
 ```ts
 // src/stores/index.ts
-export * from './slices/wizard'
+export * from "./slices/wizard";
 ```
 
 ## Truy cập ngoài React — `useXStore.getState()`
@@ -66,8 +66,8 @@ export * from './slices/wizard'
 Trong React: selector `useWizardStore((s) => s.step)` (chỉ subscribe field cần → tránh re-render thừa). Ngoài React (util, request handler, event listener): đọc/ghi imperative qua `getState()` / `setState()`:
 
 ```ts
-const { jdDocId, cvDocId } = useWizardStore.getState()
-useWizardStore.getState().reset()
+const { jdDocId, cvDocId } = useWizardStore.getState();
+useWizardStore.getState().reset();
 ```
 
 ## Quy tắc

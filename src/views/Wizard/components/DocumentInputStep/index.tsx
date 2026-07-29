@@ -1,14 +1,14 @@
-import { Button } from 'antd'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useCreateDocument } from '#/hooks/useDocuments'
-import { FILE } from '#/constants'
-import type { DocumentKind } from '#/types/Documents'
-import type { InputMode } from '#/types/Wizard'
-import SaveForReuseButton from '../SaveForReuseButton'
-import SavedDocRadioList from '../SavedDocRadioList'
-import UploadPasteTabs from '../UploadPasteTabs'
+import { Button } from "antd";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useCreateDocument } from "#/hooks/useDocuments";
+import { FILE } from "#/constants";
+import type { DocumentKind } from "#/types/Documents";
+import type { InputMode } from "#/types/Wizard";
+import SaveForReuseButton from "../SaveForReuseButton";
+import SavedDocRadioList from "../SavedDocRadioList";
+import UploadPasteTabs from "../UploadPasteTabs";
 
 /**
  * Shared step body for wizard step 1 (JD) and step 2 (CV): Upload/Paste tabs,
@@ -21,131 +21,131 @@ import UploadPasteTabs from '../UploadPasteTabs'
 const DocumentInputStep = ({
   kind,
   onNext,
-  onBack,
+  onBack
 }: {
-  kind: DocumentKind
-  onNext: (docId: string) => void
-  onBack?: () => void
+  kind: DocumentKind;
+  onNext: (docId: string) => void;
+  onBack?: () => void;
 }) => {
-  const { t } = useTranslation()
-  const [mode, setMode] = useState<InputMode>('upload')
-  const [file, setFile] = useState<File | null>(null)
-  const [pastedText, setPastedText] = useState('')
-  const [selectedSavedId, setSelectedSavedId] = useState<string | null>(null)
-  const [savedId, setSavedId] = useState<string | null>(null)
-  const [savedTitle, setSavedTitle] = useState<string | null>(null)
-  const [validationError, setValidationError] = useState<string | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { t } = useTranslation();
+  const [mode, setMode] = useState<InputMode>("upload");
+  const [file, setFile] = useState<File | null>(null);
+  const [pastedText, setPastedText] = useState("");
+  const [selectedSavedId, setSelectedSavedId] = useState<string | null>(null);
+  const [savedId, setSavedId] = useState<string | null>(null);
+  const [savedTitle, setSavedTitle] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const createDocument = useCreateDocument()
+  const createDocument = useCreateDocument();
 
-  const stepCopyKey = kind === 'JD' ? 'wizard.stepJd' : 'wizard.stepCv'
-  const reuseKey = kind === 'JD' ? 'jd' : 'cv'
+  const stepCopyKey = kind === "JD" ? "wizard.stepJd" : "wizard.stepCv";
+  const reuseKey = kind === "JD" ? "jd" : "cv";
 
   const hasNewInput =
-    mode === 'upload' ? file !== null : pastedText.trim().length > 0
-  const canSubmit = selectedSavedId !== null || hasNewInput
+    mode === "upload" ? file !== null : pastedText.trim().length > 0;
+  const canSubmit = selectedSavedId !== null || hasNewInput;
 
   /** Editing the input invalidates a prior save/selection from this session. */
   function resetDerived() {
-    setSelectedSavedId(null)
-    setSavedId(null)
-    setSavedTitle(null)
-    setValidationError(null)
+    setSelectedSavedId(null);
+    setSavedId(null);
+    setSavedTitle(null);
+    setValidationError(null);
   }
 
   function handleModeChange(next: InputMode) {
-    setMode(next)
-    resetDerived()
+    setMode(next);
+    resetDerived();
   }
 
   function handleFileChange(next: File | null) {
     if (next) {
       if (!FILE.ALLOWED_PATTERN.test(next.name)) {
-        setValidationError(t('err.fileType'))
-        return
+        setValidationError(t("err.fileType"));
+        return;
       }
       if (next.size > FILE.MAX_SIZE_BYTES) {
-        setValidationError(t('err.fileSize', { max: FILE.MAX_SIZE_LABEL }))
-        return
+        setValidationError(t("err.fileSize", { max: FILE.MAX_SIZE_LABEL }));
+        return;
       }
     }
-    setFile(next)
-    resetDerived()
+    setFile(next);
+    resetDerived();
   }
 
   function handlePastedTextChange(next: string) {
-    setPastedText(next)
-    resetDerived()
+    setPastedText(next);
+    resetDerived();
   }
 
   function handleSelectSaved(id: string) {
-    setSelectedSavedId(id)
-    setFile(null)
-    setPastedText('')
-    setSavedId(null)
-    setSavedTitle(null)
-    setValidationError(null)
+    setSelectedSavedId(id);
+    setFile(null);
+    setPastedText("");
+    setSavedId(null);
+    setSavedTitle(null);
+    setValidationError(null);
   }
 
   /** Create a document from the current input (saved or transient). */
   function createFromInput(save: boolean, title?: string) {
-    return mode === 'upload' && file
-      ? createDocument.mutateAsync({ mode: 'file', kind, file, save, title })
+    return mode === "upload" && file
+      ? createDocument.mutateAsync({ mode: "file", kind, file, save, title })
       : createDocument.mutateAsync({
-          mode: 'paste',
+          mode: "paste",
           kind,
           sourceText: pastedText.trim(),
           save,
-          title,
-        })
+          title
+        });
   }
 
   async function handleSaveForReuse(name: string) {
-    const created = await createFromInput(true, name)
-    setSavedId(created.id)
-    setSavedTitle(name)
+    const created = await createFromInput(true, name);
+    setSavedId(created.id);
+    setSavedTitle(name);
   }
 
   async function handleNext() {
     if (selectedSavedId) {
-      onNext(selectedSavedId)
-      return
+      onNext(selectedSavedId);
+      return;
     }
     if (!hasNewInput) {
-      setValidationError(t('err.empty', { kind: t(`step.${reuseKey}`) }))
-      return
+      setValidationError(t("err.empty", { kind: t(`step.${reuseKey}`) }));
+      return;
     }
     if (savedId) {
-      onNext(savedId)
-      return
+      onNext(savedId);
+      return;
     }
-    setIsSubmitting(true)
-    setValidationError(null)
+    setIsSubmitting(true);
+    setValidationError(null);
     try {
-      const created = await createFromInput(false)
-      onNext(created.id)
+      const created = await createFromInput(false);
+      onNext(created.id);
     } catch (err) {
       setValidationError(
-        err instanceof Error ? err.message : t('err.parseFailed'),
-      )
+        err instanceof Error ? err.message : t("err.parseFailed")
+      );
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
   return (
-    <div className="h-full flex flex-col bg-white dark:bg-slate-800/50 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700/50 overflow-hidden">
-      <div className="shrink-0 p-6 border-b border-slate-100 dark:border-slate-700/50">
-        <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
+    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm dark:border-slate-700/50 dark:bg-slate-800/50">
+      <div className="shrink-0 border-b border-slate-100 p-6 dark:border-slate-700/50">
+        <h2 className="mb-2 text-xl font-semibold text-slate-900 dark:text-white">
           {t(`${stepCopyKey}.title`)}
         </h2>
-        <p className="text-slate-500 dark:text-slate-400 text-sm">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           {t(`${stepCopyKey}.description`)}
         </p>
       </div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto p-6">
+      <div className="min-h-0 flex-1 overflow-y-auto p-6">
         <UploadPasteTabs
           mode={mode}
           onModeChange={handleModeChange}
@@ -167,7 +167,7 @@ const DocumentInputStep = ({
         )}
 
         <div>
-          <h3 className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-4">
+          <h3 className="mb-4 text-sm font-bold tracking-wider text-slate-400 uppercase dark:text-slate-500">
             {t(`reuse.${reuseKey}.title`)}
           </h3>
           <SavedDocRadioList
@@ -187,7 +187,7 @@ const DocumentInputStep = ({
         )}
       </div>
 
-      <div className="shrink-0 p-6 bg-slate-50/50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700/50 flex justify-between items-center">
+      <div className="flex shrink-0 items-center justify-between border-t border-slate-100 bg-slate-50/50 p-6 dark:border-slate-700/50 dark:bg-slate-800/80">
         <Button
           type="text"
           disabled={!onBack}
@@ -195,7 +195,7 @@ const DocumentInputStep = ({
           onClick={onBack}
           className="!text-slate-500 dark:!text-slate-300"
         >
-          {t('action.back')}
+          {t("action.back")}
         </Button>
         <Button
           type="primary"
@@ -205,11 +205,11 @@ const DocumentInputStep = ({
           iconPosition="end"
           icon={<ArrowRight size={16} />}
         >
-          {t('action.next')}
+          {t("action.next")}
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DocumentInputStep
+export default DocumentInputStep;
