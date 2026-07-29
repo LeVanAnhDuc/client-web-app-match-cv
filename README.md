@@ -13,11 +13,14 @@ yarn dev                # http://localhost:5300
 The matching wizard is at **`/wizard`** — all 4 steps: 1 JD · 2 CV · 3 Review · 4 Result. Needs the API server running (see `server/`); **step 4 (match) requires `GEMINI_API_KEY` set on the server** (else 503).
 
 **Env vars** — see `.env.example`:
+
 - `VITE_API_BASE_URL` — server API base URL (default `http://localhost:5200/api/v1`)
 - `VITE_DEFAULT_LOCALE` — default i18n locale (`en` | `vi`)
 - `E2E_DATABASE_URL` — Postgres URL used by the Playwright DB cleanup (real value in `.env`, gitignored)
 
 **Scripts**: `yarn dev` · `yarn build` · `yarn preview` · `yarn test` (Vitest unit) · `yarn lint` · `yarn format`
+
+**Pre-commit hook** (husky + lint-staged, auto-installed on `yarn install` via the `prepare` script): every `git commit` runs `eslint --fix` + `prettier --write` on **staged files only**, then re-stages them. An unfixable ESLint error blocks the commit.
 
 **E2E (Playwright)** — dual-gate §4.3. Requires **both** servers running (`server` :5200 + `client` :5300) and `E2E_DATABASE_URL` set:
 
@@ -28,7 +31,7 @@ npx playwright test               # e2e/cv-jd-matching-wizard/*.e2e.ts (serial)
 
 ---
 
-Welcome to your new TanStack Start app! 
+Welcome to your new TanStack Start app!
 
 # Getting Started
 
@@ -70,7 +73,6 @@ If you prefer not to use Tailwind CSS:
 
 ## Linting & Formatting
 
-
 This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
 
 ```bash
@@ -78,8 +80,6 @@ yarn run lint
 yarn run format
 yarn run check
 ```
-
-
 
 ## Routing
 
@@ -98,7 +98,7 @@ Now that you have two routes you can use a `Link` component to navigate between 
 To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
 
 ```tsx
-import { Link } from "@tanstack/react-router";
+import { Link } from '@tanstack/react-router'
 ```
 
 Then anywhere in your JSX you can use it like so:
@@ -166,11 +166,11 @@ const getServerTime = createServerFn({
 // Use in a component
 function MyComponent() {
   const [time, setTime] = useState('')
-  
+
   useEffect(() => {
     getServerTime().then(setTime)
   }, [])
-  
+
   return <div>Server time: {time}</div>
 }
 ```
