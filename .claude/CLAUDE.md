@@ -64,12 +64,16 @@ yarn dev              # Dev server (port 5300)
 yarn generate-routes  # tsr generate → routeTree.gen.ts (KHÔNG sửa tay)
 yarn build            # Production build (client + SSR)
 yarn preview          # Preview build
-yarn lint             # ESLint
+yarn type-check       # tsc --noEmit
+yarn lint             # ESLint (check-only, không sửa file)
+yarn lint:fix         # ESLint + auto-fix
 yarn format           # prettier --write . && eslint --fix
+yarn format:check     # prettier --check .
 yarn test             # Vitest (unit)
 yarn test:e2e         # Playwright (e2e)
-npx tsc --noEmit      # Type check (no yarn script)
 ```
+
+**Lint/format config**: Prettier (`prettier.config.js`) dùng chung style với `server/` và app anh em `web-app-store-server-client` — double quote, có `;`, `trailingComma: none`, `printWidth 80`; kèm `prettier-plugin-tailwindcss` sort class Tailwind (`tailwindStylesheet: ./src/styles.css` vì Tailwind 4 không có file config JS). ESLint (`eslint.config.js`) = `tanstackConfig` + layer react / react-hooks / jsx-a11y / promise / unused-imports / prettier. `src/routeTree.gen.ts` bị **ignore ở cả prettier lẫn eslint** (file generated, tự yêu cầu vậy trong header).
 
 ## Architecture
 
@@ -113,7 +117,7 @@ i18n: src/i18n/config.ts init i18next (side-effect import trong __root)
 ```bash
 yarn format       # auto-fix format
 yarn lint         # ESLint (fix hết error)
-npx tsc --noEmit  # type check (fix tay)
+yarn type-check   # type check (fix tay)
 yarn test         # Vitest (phải xanh)
 yarn build        # build phải thành công
 ```
