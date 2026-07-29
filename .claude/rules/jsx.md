@@ -1,7 +1,7 @@
 ---
 name: jsx
 paths:
-  - 'src/**/*.tsx'
+  - "src/**/*.tsx"
 ---
 
 # JSX Convention
@@ -42,7 +42,7 @@ Các tag layout/semantic thuần (không hành vi) dùng thẳng: `<div>`, `<spa
 
 ```tsx
 <aside className="w-72 shrink-0 border-r ...">
-  <h1 className="text-xl font-semibold">{t('appName')}</h1>
+  <h1 className="text-xl font-semibold">{t("appName")}</h1>
 </aside>
 ```
 

@@ -1,7 +1,7 @@
 ---
 name: components
 paths:
-  - 'src/components/**/*'
+  - "src/components/**/*"
 ---
 
 # Shared Components (src/components/)
@@ -30,21 +30,21 @@ Stack dùng **Ant Design 5**. Với control có hành vi (click, input, select, 
 
 ```tsx
 // ✅ dùng antd primitive trực tiếp
-import { Button } from 'antd'
+import { Button } from "antd";
 
 const NextButton = ({
   onClick,
-  loading,
+  loading
 }: {
-  onClick: () => void
-  loading?: boolean
+  onClick: () => void;
+  loading?: boolean;
 }) => (
   <Button type="primary" onClick={onClick} loading={loading}>
     Next
   </Button>
-)
+);
 
-export default NextButton
+export default NextButton;
 ```
 
 ## Lớp `Custom*` — OPTIONAL, chỉ tạo khi có nhu cầu chung thật sự

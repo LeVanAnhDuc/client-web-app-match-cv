@@ -15,7 +15,7 @@ v4 replaces `tailwind.config.js` with a single CSS import. No JavaScript config 
 
 ```css
 /* src/styles.css */
-@import 'tailwindcss';
+@import "tailwindcss";
 ```
 
 That single import replaces all three `@tailwind` directives from v3. Content detection is automatic — no `content: []` array needed.
@@ -37,7 +37,7 @@ Component  →  element-scoped  --button-bg: var(--color-primary)
 - Reference primitive tokens from semantic tokens, semantic tokens from component tokens
 
 ```css
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
   /* Primitive */
@@ -72,7 +72,7 @@ Any color format is valid (`hex`, `rgb`, `hsl`), but do not mix formats in the s
 ### Semantic tokens with dark mode — `@theme inline`
 
 ```css
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* Step 1: Define per-theme values */
 :root {
@@ -110,7 +110,7 @@ Any color format is valid (`hex`, `rgb`, `hsl`), but do not mix formats in the s
 ### Class-based (manual switcher)
 
 ```css
-@import 'tailwindcss';
+@import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 ```
 
@@ -259,7 +259,7 @@ Define animations in `@theme` to generate `animate-*` utilities:
 @plugin "@tailwindcss/forms";
 
 /* ❌ Does not work as CSS import */
-@import '@tailwindcss/typography';
+@import "@tailwindcss/typography";
 ```
 
 ### Deprecated packages — do not install
@@ -296,11 +296,11 @@ Use native `@keyframes` in `@theme` or `@tailwindcss/motion` instead.
 
 ```tsx
 // ❌ Tailwind cannot detect — class will be purged
-const cls = `bg-${color}-500`
+const cls = `bg-${color}-500`;
 
 // ✅ Complete class names only
-const colorMap = { blue: 'bg-blue-500', red: 'bg-red-500' }
-const cls = colorMap[color]
+const colorMap = { blue: "bg-blue-500", red: "bg-red-500" };
+const cls = colorMap[color];
 ```
 
 - Never use `@apply` inside a loop — generates duplicate CSS

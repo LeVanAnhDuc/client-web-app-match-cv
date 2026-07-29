@@ -1,1 +1,1 @@
-export { useWizardStore } from './slices/wizard'
+export { useWizardStore } from "./slices/wizard";

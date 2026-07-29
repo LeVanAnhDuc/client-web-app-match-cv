@@ -1,7 +1,7 @@
 ---
 name: constants
 paths:
-  - 'src/constants/**/*'
+  - "src/constants/**/*"
 ---
 
 # Constants Convention (src/constants/)
@@ -23,36 +23,36 @@ src/constants/
 
 ```ts
 // src/constants/endpoints.ts
-import type { DocumentKind } from '#/types/Documents'
+import type { DocumentKind } from "#/types/Documents";
 
 export const ENDPOINTS = {
-  documents: '/documents',
+  documents: "/documents",
   documentById: (id: string) => `/documents/${id}`,
   savedDocuments: (kind: DocumentKind) => `/documents?kind=${kind}&saved=true`,
-  match: '/match',
-  matchById: (id: string) => `/match/${id}`,
-} as const
+  match: "/match",
+  matchById: (id: string) => `/match/${id}`
+} as const;
 
 // src/constants/fileConstraints.ts
 export const FILE = {
   MAX_SIZE_BYTES: 10 * 1024 * 1024,
-  MAX_SIZE_LABEL: '10MB',
-  ALLOWED_PATTERN: /\.(pdf|docx)$/i,
-} as const
+  MAX_SIZE_LABEL: "10MB",
+  ALLOWED_PATTERN: /\.(pdf|docx)$/i
+} as const;
 ```
 
 ```ts
 // src/constants/index.ts
-import { ENDPOINTS } from './endpoints'
-import { FILE } from './fileConstraints'
+import { ENDPOINTS } from "./endpoints";
+import { FILE } from "./fileConstraints";
 
 const CONSTANTS = {
   ENDPOINTS,
-  FILE,
-} as const
+  FILE
+} as const;
 
-export default CONSTANTS
-export { ENDPOINTS, FILE }
+export default CONSTANTS;
+export { ENDPOINTS, FILE };
 ```
 
 ## No Hard-coded literals — luôn qua CONSTANTS

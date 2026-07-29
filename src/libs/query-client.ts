@@ -1,4 +1,4 @@
-import { QueryClient } from '@tanstack/react-query'
+import { QueryClient } from "@tanstack/react-query";
 
 /**
  * Builds the router context object. TanStack Start's SSR query integration
@@ -7,7 +7,7 @@ import { QueryClient } from '@tanstack/react-query'
  * `<QueryClientProvider>` component in the app shell.
  */
 export function getContext() {
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient();
 
-  return { queryClient }
+  return { queryClient };
 }

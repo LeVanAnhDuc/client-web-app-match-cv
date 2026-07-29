@@ -59,13 +59,13 @@ Reading a layout property immediately after writing one forces the browser to fl
 ```js
 // ❌ Layout thrashing — browser must recalculate on every read
 elements.forEach((el) => {
-  const height = el.offsetHeight // triggers layout
-  el.style.height = height + 10 + 'px' // invalidates layout
-})
+  const height = el.offsetHeight; // triggers layout
+  el.style.height = height + 10 + "px"; // invalidates layout
+});
 
 // ✅ Batch reads before writes
-const heights = elements.map((el) => el.offsetHeight) // read all
-elements.forEach((el, i) => (el.style.height = heights[i] + 10 + 'px')) // write all
+const heights = elements.map((el) => el.offsetHeight); // read all
+elements.forEach((el, i) => (el.style.height = heights[i] + 10 + "px")); // write all
 ```
 
 ---

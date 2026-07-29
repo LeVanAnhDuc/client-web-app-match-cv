@@ -1,4 +1,4 @@
-import { Client } from 'pg'
+import { Client } from "pg";
 
 // Dev DB only. Connection is sourced from E2E_DATABASE_URL (loaded from
 // client/.env by playwright.config.ts via dotenv) so no credential is
@@ -6,14 +6,15 @@ import { Client } from 'pg'
 // No DELETE endpoint exists yet, so the E2E suite cleans the rows it creates
 // directly via `pg` to stay idempotent and safe to re-run.
 const CONNECTION_STRING =
-  process.env.E2E_DATABASE_URL ?? 'postgresql://postgres:postgres@localhost:5432/matchcv'
+  process.env.E2E_DATABASE_URL ??
+  "postgresql://postgres:postgres@localhost:5432/matchcv";
 
 export async function cleanDocuments(): Promise<void> {
-  const client = new Client({ connectionString: CONNECTION_STRING })
-  await client.connect()
+  const client = new Client({ connectionString: CONNECTION_STRING });
+  await client.connect();
   try {
-    await client.query('DELETE FROM "Document"')
+    await client.query('DELETE FROM "Document"');
   } finally {
-    await client.end()
+    await client.end();
   }
 }

@@ -1,7 +1,7 @@
 ---
 name: views
 paths:
-  - 'src/views/**/*'
+  - "src/views/**/*"
 ---
 
 # View Folder Structure
@@ -38,10 +38,10 @@ Ví dụ cụ thể — `src/views/Wizard/`:
 
 ```tsx
 // ✅ index.tsx chỉ import từ mains/
-import StepJD from './mains/StepJD'
+import StepJD from "./mains/StepJD";
 
 // ✅ mains/ mới được import components/
-import Stepper from '../../components/Stepper'
+import Stepper from "../../components/Stepper";
 ```
 
 Nếu 1 component ở `components/` sau đó được index gốc dùng → **di chuyển sang `mains/`**.
@@ -52,7 +52,7 @@ Chỉ import & compose từ `mains/` (+ `ghosts/`) — không chứa logic phứ
 
 ```tsx
 const Wizard = () => {
-  const step = useWizardStore((s) => s.step)
+  const step = useWizardStore((s) => s.step);
   return (
     <div className="...">
       <Stepper current={step} />
@@ -61,10 +61,10 @@ const Wizard = () => {
       {step === 3 && <StepReview />}
       {step === 4 && <StepResult />}
     </div>
-  )
-}
+  );
+};
 
-export default Wizard
+export default Wizard;
 ```
 
 ## ghosts/ (optional)

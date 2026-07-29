@@ -1,7 +1,7 @@
 ---
 name: hooks
 paths:
-  - 'src/hooks/**/*'
+  - "src/hooks/**/*"
 ---
 
 # Hooks Convention (src/hooks/)
@@ -21,44 +21,44 @@ Ranh giới quan trọng của layout layer-first:
 
 ```ts
 // src/hooks/useDocuments.ts
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createDocument,
   documentQueryKey,
   fetchDocument,
   fetchSavedDocuments,
-  savedDocumentsQueryKey,
-} from '#/requests/documents'
-import type { DocumentKind } from '#/types/Documents'
+  savedDocumentsQueryKey
+} from "#/requests/documents";
+import type { DocumentKind } from "#/types/Documents";
 
 /** GET /documents/:id — rawText cho bước Review của wizard. */
 export function useDocument(id: string | null) {
   return useQuery({
-    queryKey: documentQueryKey(id ?? ''),
+    queryKey: documentQueryKey(id ?? ""),
     queryFn: () => fetchDocument(id as string),
-    enabled: id !== null,
-  })
+    enabled: id !== null
+  });
 }
 
 export function useSavedDocuments(kind: DocumentKind) {
   return useQuery({
     queryKey: savedDocumentsQueryKey(kind),
-    queryFn: () => fetchSavedDocuments(kind),
-  })
+    queryFn: () => fetchSavedDocuments(kind)
+  });
 }
 
 export function useCreateDocument() {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createDocument,
     onSuccess: (data) => {
       if (data.isSaved) {
         void queryClient.invalidateQueries({
-          queryKey: savedDocumentsQueryKey(data.kind),
-        })
+          queryKey: savedDocumentsQueryKey(data.kind)
+        });
       }
-    },
-  })
+    }
+  });
 }
 ```
 
@@ -67,9 +67,9 @@ export function useCreateDocument() {
 export {
   useDocument,
   useSavedDocuments,
-  useCreateDocument,
-} from './useDocuments'
-export { useRunMatch, useMatchResult } from './useMatch'
+  useCreateDocument
+} from "./useDocuments";
+export { useRunMatch, useMatchResult } from "./useMatch";
 ```
 
 ## Import ở consumer — dùng module domain để test spy được
@@ -77,7 +77,7 @@ export { useRunMatch, useMatchResult } from './useMatch'
 Component gọi hook import từ **module domain cụ thể** (`#/hooks/useDocuments`, `#/hooks/useMatch`) — KHÔNG chỉ qua barrel — để test có thể `vi.spyOn(import * as ..., 'useMatchResult')` chặn đúng binding:
 
 ```tsx
-import { useMatchResult } from '#/hooks/useMatch'
+import { useMatchResult } from "#/hooks/useMatch";
 ```
 
 Barrel `#/hooks` dùng cho hook không bị spy (VD hook tiện ích) hoặc import gọn nhiều hook.

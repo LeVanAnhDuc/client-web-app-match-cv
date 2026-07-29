@@ -1,8 +1,8 @@
 ---
 name: ghosts
 paths:
-  - 'src/ghosts/**/*'
-  - 'src/views/**/ghosts/**/*'
+  - "src/ghosts/**/*"
+  - "src/views/**/ghosts/**/*"
 ---
 
 # Ghost Components
@@ -20,16 +20,16 @@ Headless component — chỉ chứa **side effect** (sync store, subscription, e
 
 ```tsx
 // src/views/Wizard/ghosts/ResetWizardOnUnmount/index.tsx
-import { useEffect } from 'react'
-import { useWizardStore } from '#/stores'
+import { useEffect } from "react";
+import { useWizardStore } from "#/stores";
 
 const ResetWizardOnUnmount = () => {
-  const reset = useWizardStore((s) => s.reset)
-  useEffect(() => reset, [reset])
-  return null
-}
+  const reset = useWizardStore((s) => s.reset);
+  useEffect(() => reset, [reset]);
+  return null;
+};
 
-export default ResetWizardOnUnmount
+export default ResetWizardOnUnmount;
 ```
 
 ## Quy tắc

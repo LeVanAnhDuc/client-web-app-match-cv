@@ -1,7 +1,7 @@
 ---
 name: requests
 paths:
-  - 'src/requests/**/*'
+  - "src/requests/**/*"
 ---
 
 # Requests Convention (src/requests/)
@@ -24,88 +24,88 @@ src/requests/
 ## Ví dụ — `src/requests/documents.ts`
 
 ```ts
-import { apiFetch } from '#/libs/api'
-import { ENDPOINTS } from '#/constants'
+import { apiFetch } from "#/libs/api";
+import { ENDPOINTS } from "#/constants";
 import type {
   CreateDocumentInput,
   DocumentDto,
   DocumentKind,
-  DocumentSummaryDto,
-} from '#/types/Documents'
+  DocumentSummaryDto
+} from "#/types/Documents";
 
 // Query-key factory — nguồn chân lý key cho domain documents
 export function savedDocumentsQueryKey(kind: DocumentKind) {
-  return ['documents', kind, 'saved'] as const
+  return ["documents", kind, "saved"] as const;
 }
 
 export function documentQueryKey(id: string) {
-  return ['documents', id] as const
+  return ["documents", id] as const;
 }
 
 /** GET /documents/:id */
 export function fetchDocument(id: string): Promise<DocumentDto> {
-  return apiFetch<DocumentDto>(ENDPOINTS.documentById(id))
+  return apiFetch<DocumentDto>(ENDPOINTS.documentById(id));
 }
 
 /** GET /documents?kind=..&saved=true */
 export function fetchSavedDocuments(
-  kind: DocumentKind,
+  kind: DocumentKind
 ): Promise<Array<DocumentSummaryDto>> {
-  return apiFetch<Array<DocumentSummaryDto>>(ENDPOINTS.savedDocuments(kind))
+  return apiFetch<Array<DocumentSummaryDto>>(ENDPOINTS.savedDocuments(kind));
 }
 
 /** POST /documents — file (multipart) hoặc paste (JSON). */
 export function createDocument(
-  input: CreateDocumentInput,
+  input: CreateDocumentInput
 ): Promise<DocumentDto> {
-  if (input.mode === 'file') {
-    const formData = new FormData()
-    formData.append('file', input.file)
-    formData.append('kind', input.kind)
-    formData.append('save', String(input.save))
-    if (input.title) formData.append('title', input.title)
+  if (input.mode === "file") {
+    const formData = new FormData();
+    formData.append("file", input.file);
+    formData.append("kind", input.kind);
+    formData.append("save", String(input.save));
+    if (input.title) formData.append("title", input.title);
     return apiFetch<DocumentDto>(ENDPOINTS.documents, {
-      method: 'POST',
-      body: formData,
-    })
+      method: "POST",
+      body: formData
+    });
   }
 
   return apiFetch<DocumentDto>(ENDPOINTS.documents, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       kind: input.kind,
       sourceText: input.sourceText,
       save: input.save,
-      title: input.title,
-    }),
-  })
+      title: input.title
+    })
+  });
 }
 ```
 
 ## Ví dụ — `src/requests/match.ts`
 
 ```ts
-import { apiFetch } from '#/libs/api'
-import { ENDPOINTS } from '#/constants'
-import type { CreateMatchInput, MatchResultDto } from '#/types/Matching'
+import { apiFetch } from "#/libs/api";
+import { ENDPOINTS } from "#/constants";
+import type { CreateMatchInput, MatchResultDto } from "#/types/Matching";
 
 export function matchResultQueryKey(id: string) {
-  return ['match', id] as const
+  return ["match", id] as const;
 }
 
 /** POST /match — chạy engine hybrid (semantic + keyword). */
 export function runMatch(input: CreateMatchInput): Promise<MatchResultDto> {
   return apiFetch<MatchResultDto>(ENDPOINTS.match, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(input),
-  })
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input)
+  });
 }
 
 /** GET /match/:id */
 export function fetchMatchResult(id: string): Promise<MatchResultDto> {
-  return apiFetch<MatchResultDto>(ENDPOINTS.matchById(id))
+  return apiFetch<MatchResultDto>(ENDPOINTS.matchById(id));
 }
 ```
 

@@ -1,7 +1,7 @@
 ---
 name: locales
 paths:
-  - 'src/locales/**/*'
+  - "src/locales/**/*"
 ---
 
 # Locales Convention (src/locales/)

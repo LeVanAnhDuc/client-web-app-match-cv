@@ -1,7 +1,7 @@
 ---
 name: imports
 paths:
-  - 'src/**/*'
+  - "src/**/*"
 ---
 
 # Imports Convention
@@ -12,13 +12,13 @@ Alias `#/*` → `./src/*`. Mọi import cross-folder dùng `#/` — KHÔNG dùng
 
 ```ts
 // ✅ Đúng
-import { apiFetch } from '#/libs/api'
-import { ENDPOINTS } from '#/constants'
-import { useDocument } from '#/hooks/useDocuments'
-import type { DocumentDto } from '#/types/Documents'
+import { apiFetch } from "#/libs/api";
+import { ENDPOINTS } from "#/constants";
+import { useDocument } from "#/hooks/useDocuments";
+import type { DocumentDto } from "#/types/Documents";
 
 // ❌ Sai — deep relative
-import { apiFetch } from '../../libs/api'
+import { apiFetch } from "../../libs/api";
 ```
 
 Relative (`./`, `../`) chỉ dùng **trong cùng một folder feature/view** (VD `mains/` import `../../components/Stepper` trong cùng view) — cross-layer luôn `#/`.
@@ -28,8 +28,8 @@ Relative (`./`, `../`) chỉ dùng **trong cùng một folder feature/view** (VD
 `verbatimModuleSyntax` đang bật → import chỉ dùng làm type BẮT BUỘC `import type`:
 
 ```ts
-import type { DocumentDto, DocumentKind } from '#/types/Documents'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import type { DocumentDto, DocumentKind } from "#/types/Documents";
+import { useMutation, useQuery } from "@tanstack/react-query";
 ```
 
 Trộn value + type trong 1 dòng → tách type ra `import type` riêng, hoặc dùng inline `import { foo, type Bar }`.
@@ -47,12 +47,12 @@ Routing dùng **TanStack Router**. Mọi API điều hướng import từ `@tans
 
 ```tsx
 // libs
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from "@tanstack/react-router";
 
 const GoToWizard = () => {
-  const navigate = useNavigate()
-  return <Link to="/wizard">Start</Link>
-}
+  const navigate = useNavigate();
+  return <Link to="/wizard">Start</Link>;
+};
 ```
 
 KHÔNG dùng `<a href>` cho điều hướng nội bộ (mất client routing) — `<a>` chỉ cho link external (`https://...`).
@@ -63,13 +63,13 @@ Nhóm theo thứ tự, cách nhau 1 dòng trống:
 
 ```ts
 // libs — third-party (react, antd, @tanstack/*, zustand, i18next)
-import { Button } from 'antd'
-import { useQuery } from '@tanstack/react-query'
+import { Button } from "antd";
+import { useQuery } from "@tanstack/react-query";
 // types — import type ...
-import type { DocumentDto } from '#/types/Documents'
+import type { DocumentDto } from "#/types/Documents";
 // internal — #/components, #/views, #/hooks, #/requests, #/stores, #/constants, #/utils, #/libs
-import { useDocument } from '#/hooks/useDocuments'
-import { ENDPOINTS } from '#/constants'
+import { useDocument } from "#/hooks/useDocuments";
+import { ENDPOINTS } from "#/constants";
 // relative — cùng feature/view
-import Stepper from '../../components/Stepper'
+import Stepper from "../../components/Stepper";
 ```

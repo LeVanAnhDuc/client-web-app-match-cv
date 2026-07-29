@@ -252,7 +252,7 @@ WCAG 2.1 AA minimum contrast ratios:
 ```tsx
 // Bad — aria-label is lost
 function Button({ children, ...props }) {
-  return <div onClick={props.onClick}>{children}</div>
+  return <div onClick={props.onClick}>{children}</div>;
 }
 
 // Good — passes through all aria/html attributes
@@ -260,7 +260,7 @@ function Button({
   children,
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return <button {...props}>{children}</button>
+  return <button {...props}>{children}</button>;
 }
 ```
 
@@ -271,16 +271,16 @@ function Button({
 
 ```tsx
 // App root — always present in DOM
-;<div
+<div
   aria-live="polite"
   aria-atomic="true"
   className="sr-only"
   id="announcer"
-/>
+/>;
 
 // Announce updates programmatically
-document.getElementById('announcer').textContent =
-  'Search results updated. 12 items found.'
+document.getElementById("announcer").textContent =
+  "Search results updated. 12 items found.";
 ```
 
 ### Route changes (TanStack Router)
@@ -290,16 +290,16 @@ document.getElementById('announcer').textContent =
 
 ```tsx
 // e.g. in a root-level effect keyed to the current location
-import { useLocation } from '@tanstack/react-router'
+import { useLocation } from "@tanstack/react-router";
 
-const location = useLocation()
+const location = useLocation();
 useEffect(() => {
-  const heading = document.querySelector('h1')
+  const heading = document.querySelector("h1");
   if (heading) {
-    heading.setAttribute('tabindex', '-1')
-    heading.focus()
+    heading.setAttribute("tabindex", "-1");
+    heading.focus();
   }
-}, [location.pathname])
+}, [location.pathname]);
 ```
 
 ### Modal / Dialog
@@ -459,10 +459,10 @@ User KHÔNG biết business rule ("phải verify email", "chưa đủ credit", "
         aria-disabled={!isValid || isSubmitting}
         onClick={(e) => {
           if (!isValid || isSubmitting) {
-            e.preventDefault()
-            return
+            e.preventDefault();
+            return;
           }
-          handleSubmit()
+          handleSubmit();
         }}
       >
         Gửi
@@ -470,8 +470,8 @@ User KHÔNG biết business rule ("phải verify email", "chưa đủ credit", "
     </span>
   </TooltipTrigger>
   <TooltipContent id="submit-reason">
-    {!isValid && 'Vui lòng điền đầy đủ thông tin'}
-    {isSubmitting && 'Đang xử lý...'}
+    {!isValid && "Vui lòng điền đầy đủ thông tin"}
+    {isSubmitting && "Đang xử lý..."}
   </TooltipContent>
 </Tooltip>
 ```
