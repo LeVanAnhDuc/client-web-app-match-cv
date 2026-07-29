@@ -7,9 +7,9 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
-import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
-import { AntdProvider } from '../providers/AntdProvider'
-import '../i18n'
+import TanStackQueryDevtools from '#/libs/query-devtools'
+import { AntdProvider } from '#/contexts/AntdProvider'
+import '#/i18n/config'
 
 import appCss from '../styles.css?url'
 
