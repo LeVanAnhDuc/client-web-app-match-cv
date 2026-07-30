@@ -1,6 +1,13 @@
 {
   "appName": "Ghép CV",
   "start": "Bắt đầu",
+  "nav": {
+    "home": "Trang chủ",
+    "match": "Ghép CV↔JD",
+    "savedCvs": "CV đã lưu",
+    "savedJds": "JD đã lưu",
+    "openMenu": "Mở menu"
+  },
   "step": {
     "jd": "Mô tả công việc",
     "cv": "CV / Hồ sơ",

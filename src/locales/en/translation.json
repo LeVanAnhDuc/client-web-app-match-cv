@@ -1,6 +1,13 @@
 {
   "appName": "Match CV",
   "start": "Start",
+  "nav": {
+    "home": "Home",
+    "match": "Match CV↔JD",
+    "savedCvs": "Saved CVs",
+    "savedJds": "Saved JDs",
+    "openMenu": "Open menu"
+  },
   "step": {
     "jd": "Job Description",
     "cv": "CV / Resume",
