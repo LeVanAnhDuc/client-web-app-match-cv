@@ -8,6 +8,32 @@
     "savedJds": "Saved JDs",
     "openMenu": "Open menu"
   },
+  "home": {
+    "hero": {
+      "title": "Match your CV against a JD",
+      "subtitle": "Upload files or paste text to get an instant AI-powered compatibility score and improvement suggestions.",
+      "cta": "Start matching now"
+    },
+    "stat": {
+      "savedCvs": "Saved CVs",
+      "savedJds": "Saved JDs",
+      "totalMatches": "Total matches",
+      "highest": "Highest score",
+      "avg": "avg {{value}}%"
+    },
+    "recent": {
+      "title": "Recent matches",
+      "viewAll": "View all",
+      "empty": "No matches yet",
+      "emptyCta": "Match now"
+    },
+    "cols": {
+      "cv": "CV",
+      "jd": "JD",
+      "score": "Score",
+      "date": "Date"
+    }
+  },
   "step": {
     "jd": "Job Description",
     "cv": "CV / Resume",

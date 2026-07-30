@@ -1,21 +1,17 @@
-import { Button } from "antd";
-import { useTranslation } from "react-i18next";
+import HeroCta from "./mains/HeroCta";
+import RecentMatches from "./mains/RecentMatches";
+import StatCards from "./mains/StatCards";
 
-/** Landing placeholder — scaffolding home page (replaced by the real dashboard later). */
-const Home = () => {
-  const { t } = useTranslation();
-
-  return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold">{t("appName")}</h1>
-      <p className="mt-4 text-lg">
-        Edit <code>src/routes/index.tsx</code> to get started.
-      </p>
-      <Button type="primary" className="mt-4">
-        {t("start")}
-      </Button>
-    </div>
-  );
-};
+/**
+ * Home dashboard — hero CTA into the wizard, stat cards, recent match
+ * history. Mock: docs/ui-designs/home-dashboard-library/home.html.
+ */
+const Home = () => (
+  <div className="mx-auto max-w-6xl space-y-6 p-4 md:p-8">
+    <HeroCta />
+    <StatCards />
+    <RecentMatches />
+  </div>
+);
 
 export default Home;

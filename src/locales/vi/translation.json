@@ -8,6 +8,32 @@
     "savedJds": "JD đã lưu",
     "openMenu": "Mở menu"
   },
+  "home": {
+    "hero": {
+      "title": "Ghép CV của bạn với JD",
+      "subtitle": "Tải file hoặc dán văn bản để nhận điểm khớp và gợi ý cải thiện tức thì từ AI.",
+      "cta": "Bắt đầu ghép ngay"
+    },
+    "stat": {
+      "savedCvs": "CV đã lưu",
+      "savedJds": "JD đã lưu",
+      "totalMatches": "Tổng số lần ghép",
+      "highest": "Điểm cao nhất",
+      "avg": "TB {{value}}%"
+    },
+    "recent": {
+      "title": "Ghép gần đây",
+      "viewAll": "Xem tất cả",
+      "empty": "Chưa có lượt ghép nào",
+      "emptyCta": "Ghép ngay"
+    },
+    "cols": {
+      "cv": "CV",
+      "jd": "JD",
+      "score": "Điểm",
+      "date": "Ngày"
+    }
+  },
   "step": {
     "jd": "Mô tả công việc",
     "cv": "CV / Hồ sơ",
