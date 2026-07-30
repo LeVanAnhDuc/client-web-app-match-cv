@@ -4,7 +4,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PropsWithChildren } from "react";
 import {
   useCreateDocument,
+  useDeleteDocument,
   useDocument,
+  useRenameDocument,
   useSavedDocuments
 } from "#/hooks/useDocuments";
 import type { DocumentDto, DocumentSummaryDto } from "#/types/Documents";
@@ -204,5 +206,93 @@ describe("useDocument", () => {
 
     expect(result.current.fetchStatus).toBe("idle");
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("useRenameDocument", () => {
+  it("PATCHes /documents/:id with a JSON {title} body and returns the DocumentDto", async () => {
+    const dto: DocumentDto = {
+      id: "jd-1",
+      kind: "JD",
+      title: "Renamed JD",
+      sourceFormat: "pdf",
+      rawText: "some jd text",
+      isSaved: true,
+      createdAt: "2023-10-12T00:00:00.000Z"
+    };
+    const fetchMock = vi.fn(
+      async () => ({ ok: true, status: 200, json: async () => dto }) as Response
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { result } = renderHook(() => useRenameDocument(), {
+      wrapper: createWrapper()
+    });
+
+    result.current.mutate({ id: "jd-1", title: "Renamed JD" });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(result.current.data).toEqual(dto);
+
+    const [url, init] = fetchMock.mock.calls[0] as unknown as [
+      string,
+      RequestInit
+    ];
+    expect(url).toContain("/documents/jd-1");
+    expect(init.method).toBe("PATCH");
+    expect(init.headers).toEqual({ "Content-Type": "application/json" });
+    expect(JSON.parse(init.body as string)).toEqual({ title: "Renamed JD" });
+  });
+});
+
+describe("useDeleteDocument", () => {
+  it("DELETEs /documents/:id and resolves with no data on 204", async () => {
+    const fetchMock = vi.fn(
+      async () =>
+        ({ ok: true, status: 204, json: async () => ({}) }) as Response
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { result } = renderHook(() => useDeleteDocument(), {
+      wrapper: createWrapper()
+    });
+
+    result.current.mutate("jd-1");
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(result.current.data).toBeUndefined();
+
+    const [url, init] = fetchMock.mock.calls[0] as unknown as [
+      string,
+      RequestInit
+    ];
+    expect(url).toContain("/documents/jd-1");
+    expect(init.method).toBe("DELETE");
+  });
+
+  it("rejects with the server message on a 409 (used by a match)", async () => {
+    const fetchMock = vi.fn(
+      async () =>
+        ({
+          ok: false,
+          status: 409,
+          statusText: "Conflict",
+          json: async () => ({
+            message: "Cannot delete: used in a match history."
+          })
+        }) as Response
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { result } = renderHook(() => useDeleteDocument(), {
+      wrapper: createWrapper()
+    });
+
+    result.current.mutate("jd-1");
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    expect((result.current.error as Error).message).toBe(
+      "Cannot delete: used in a match history."
+    );
   });
 });

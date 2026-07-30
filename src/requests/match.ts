@@ -1,9 +1,17 @@
 import { apiFetch } from "#/libs/api";
 import { ENDPOINTS } from "#/constants";
-import type { CreateMatchInput, MatchResultDto } from "#/types/Matching";
+import type {
+  CreateMatchInput,
+  MatchResultDto,
+  MatchSummaryDto
+} from "#/types/Matching";
 
 export function matchResultQueryKey(id: string) {
   return ["match", id] as const;
+}
+
+export function matchHistoryQueryKey() {
+  return ["match", "history"] as const;
 }
 
 /** POST /match — run the hybrid (semantic + keyword) matching engine. */
@@ -18,4 +26,9 @@ export function runMatch(input: CreateMatchInput): Promise<MatchResultDto> {
 /** GET /match/:id — fetch a persisted match report (step 4 Result). */
 export function fetchMatchResult(id: string): Promise<MatchResultDto> {
   return apiFetch<MatchResultDto>(ENDPOINTS.matchById(id));
+}
+
+/** GET /match — list match history for the current user, newest-first. */
+export function fetchMatchHistory(): Promise<Array<MatchSummaryDto>> {
+  return apiFetch<Array<MatchSummaryDto>>(ENDPOINTS.matchHistory);
 }

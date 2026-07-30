@@ -1,6 +1,8 @@
 export {
   useDocument,
   useSavedDocuments,
-  useCreateDocument
+  useCreateDocument,
+  useRenameDocument,
+  useDeleteDocument
 } from "./useDocuments";
-export { useRunMatch, useMatchResult } from "./useMatch";
+export { useRunMatch, useMatchResult, useMatchHistory } from "./useMatch";
