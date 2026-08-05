@@ -40,10 +40,14 @@ const RenameModal = ({
       onCancel={onCancel}
       onOk={() => onConfirm(trimmed)}
     >
-      <label className="mb-1 block text-sm text-slate-600 dark:text-slate-300">
+      <label
+        htmlFor="rename-doc-title"
+        className="mb-1 block text-sm text-slate-600 dark:text-slate-300"
+      >
         {t("library.rename.label")}
       </label>
       <Input
+        id="rename-doc-title"
         value={title}
         maxLength={200}
         onChange={(e) => setTitle(e.target.value)}

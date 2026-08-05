@@ -1,4 +1,4 @@
-import { apiFetch, ApiError } from "#/libs/api";
+import { apiFetch, apiFetchBinary } from "#/libs/api";
 import { ENDPOINTS } from "#/constants";
 import type {
   CreateDocumentInput,
@@ -81,11 +81,11 @@ export function deleteDocument(id: string): Promise<void> {
   return apiFetch<void>(ENDPOINTS.documentById(id), { method: "DELETE" });
 }
 
-/** GET /documents/:id/file — fetch the original file bytes for client-side preview. */
-export async function fetchDocumentFile(id: string): Promise<ArrayBuffer> {
-  const res = await fetch(documentFileUrl(id), { credentials: "include" });
-  if (!res.ok) {
-    throw new ApiError(res.status, `Failed to load file (${res.status})`);
-  }
-  return res.arrayBuffer();
+/**
+ * GET /documents/:id/file — fetch the original file bytes for client-side
+ * preview. Routed through `apiFetchBinary` (not a raw `fetch`) so base URL,
+ * error handling, and credentials policy stay centralised in `#/libs/api`.
+ */
+export function fetchDocumentFile(id: string): Promise<ArrayBuffer> {
+  return apiFetchBinary(ENDPOINTS.documentFile(id));
 }

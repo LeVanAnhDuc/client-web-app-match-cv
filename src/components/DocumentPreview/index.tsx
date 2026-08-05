@@ -152,7 +152,14 @@ function DocxPreview({ docId }: { docId: string }) {
         ]);
         if (cancelled || !containerRef.current) return;
         containerRef.current.innerHTML = "";
-        await renderAsync(new Blob([data]), containerRef.current);
+        // The DOCX is untrusted user content. Lock docx-preview to its safe
+        // posture: styles scoped inside a wrapper (inWrapper) and NO
+        // experimental features. docx-preview does not execute scripts by
+        // default; do not enable options that would widen this surface.
+        await renderAsync(new Blob([data]), containerRef.current, undefined, {
+          inWrapper: true,
+          experimental: false
+        });
         setStatus("ready");
       } catch {
         if (!cancelled) setStatus("error");

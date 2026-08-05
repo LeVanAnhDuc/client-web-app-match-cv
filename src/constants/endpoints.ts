@@ -6,7 +6,7 @@ export const ENDPOINTS = {
   documentById: (id: string) => `/documents/${id}`,
   savedDocuments: (kind: DocumentKind) => `/documents?kind=${kind}&saved=true`,
   documentFile: (id: string, download?: boolean) =>
-    `/documents/${id}/file${download ? "?download=1" : ""}`,
+    `/documents/${encodeURIComponent(id)}/file${download ? "?download=1" : ""}`,
   match: "/match",
   matchById: (id: string) => `/match/${id}`,
   matchHistory: "/match"

@@ -75,8 +75,9 @@ const RecentMatches = () => {
         history.length > RECENT_LIMIT ? (
           // No dedicated "all matches" page exists yet (out of scope for this
           // task, same kind of intentional follow-up gap as library
-          // pagination) — affordance only, not wired to a route.
-          <span className="text-sm font-medium text-blue-600 dark:text-indigo-400">
+          // pagination) — rendered as muted, non-interactive text so it does
+          // not read as a broken link.
+          <span className="text-sm font-medium text-slate-400 dark:text-slate-500">
             {t("home.recent.viewAll")}
           </span>
         ) : null
@@ -96,7 +97,10 @@ const RecentMatches = () => {
           className: "cursor-pointer",
           onClick: () => openResult(record.id),
           onKeyDown: (event: React.KeyboardEvent) => {
-            if (event.key === "Enter") openResult(record.id);
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              openResult(record.id);
+            }
           }
         })}
         locale={{
