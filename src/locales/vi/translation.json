@@ -84,6 +84,10 @@
     "docx": "Word",
     "text": "Văn bản"
   },
+  "preview": {
+    "loading": "Đang tải bản xem trước…",
+    "error": "Không tải được file này. Vui lòng thử lại."
+  },
   "reuse": {
     "jd": {
       "title": "Hoặc chọn JD đã lưu"
