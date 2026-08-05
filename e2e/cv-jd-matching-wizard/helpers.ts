@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import type { MatchResultDto } from "../../src/features/matching/types";
+import type { MatchResultDto } from "../../src/types/Matching";
 
 /** Navigate to the wizard, starting fresh (in-memory Zustand store resets on full load). */
 export async function gotoWizard(page: Page): Promise<void> {

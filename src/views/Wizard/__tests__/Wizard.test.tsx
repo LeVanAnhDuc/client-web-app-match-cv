@@ -54,6 +54,31 @@ function stubApi() {
   return fetchMock;
 }
 
+describe("wizard shell layout", () => {
+  beforeEach(() => {
+    useWizardStore.setState({ step: 1, jdDocId: null, cvDocId: null });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("renders exactly one nav — no duplicated desktop/mobile variants", async () => {
+    stubApi();
+    renderWizard();
+    await screen.findByText(/input job description/i);
+
+    // Regression guard for design.md §4.2: rendering a desktop aside AND a
+    // mobile top bar would duplicate these nodes and break the strict-mode
+    // locators the Playwright suite relies on.
+    expect(screen.getAllByTestId("stepper-step-1")).toHaveLength(1);
+    expect(screen.getAllByText(/step 1 of 4/i)).toHaveLength(1);
+    expect(screen.getAllByRole("heading", { name: /match cv/i })).toHaveLength(
+      1
+    );
+  });
+});
+
 describe("wizard flow: JD -> CV -> Back", () => {
   beforeEach(() => {
     useWizardStore.setState({ step: 1, jdDocId: null, cvDocId: null });

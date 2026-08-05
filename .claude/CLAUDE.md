@@ -70,7 +70,9 @@ yarn lint:fix         # ESLint + auto-fix
 yarn format           # prettier --write . && eslint --fix
 yarn format:check     # prettier --check .
 yarn test             # Vitest (unit)
-yarn test:e2e         # Playwright (e2e)
+yarn test:e2e         # Playwright (e2e) — 3 viewport project: desktop / tablet / mobile
+                      #   1 viewport: yarn test:e2e --project=mobile
+                      #   dev server ở port khác (worktree): E2E_BASE_URL=http://localhost:5302 yarn test:e2e
 ```
 
 **Lint/format config**: Prettier (`prettier.config.js`) dùng chung style với `server/` và app anh em `web-app-store-server-client` — double quote, có `;`, `trailingComma: none`, `printWidth 80`; kèm `prettier-plugin-tailwindcss` sort class Tailwind (`tailwindStylesheet: ./src/styles.css` vì Tailwind 4 không có file config JS). ESLint (`eslint.config.js`) = `tanstackConfig` + layer react / react-hooks / jsx-a11y / promise / unused-imports / prettier. `src/routeTree.gen.ts` bị **ignore ở cả prettier lẫn eslint** (file generated, tự yêu cầu vậy trong header).

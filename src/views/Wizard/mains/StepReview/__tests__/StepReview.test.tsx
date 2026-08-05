@@ -51,6 +51,20 @@ const matchResult: MatchResultDto = {
   createdAt: "2023-10-12T00:00:00.000Z"
 };
 
+/** Both documents resolved — the precondition for step 3 rendering its panes. */
+function stubLoadedDocs() {
+  vi.spyOn(documentHooks, "useDocument").mockImplementation((id) => {
+    const data = id === "jd-1" ? jdDto : id === "cv-1" ? cvDto : undefined;
+    return { data, isLoading: false, isError: false } as ReturnType<
+      typeof documentHooks.useDocument
+    >;
+  });
+  vi.spyOn(matchHooks, "useRunMatch").mockReturnValue({
+    mutateAsync: vi.fn(),
+    isPending: false
+  } as unknown as ReturnType<typeof matchHooks.useRunMatch>);
+}
+
 describe("StepReview", () => {
   beforeEach(() => {
     useWizardStore.setState({
@@ -82,6 +96,28 @@ describe("StepReview", () => {
 
     expect(await screen.findByDisplayValue(jdDto.rawText)).toBeInTheDocument();
     expect(await screen.findByDisplayValue(cvDto.rawText)).toBeInTheDocument();
+  });
+
+  it("gives each pane a fixed 40vh height below lg and full height from lg up", async () => {
+    stubLoadedDocs();
+    renderStep();
+
+    const jd = await screen.findByLabelText("Job Description");
+    expect(jd.className).toContain("!h-[40vh]");
+    expect(jd.className).toContain("lg:!h-full");
+    // The old inline style={{ height: "100%" }} would win over the responsive
+    // classes below lg, collapsing the stacked panes.
+    expect(jd.getAttribute("style") ?? "").not.toContain("height: 100%");
+  });
+
+  it("pins the footer actions to the viewport below lg and uses large hit-areas", async () => {
+    stubLoadedDocs();
+    renderStep();
+
+    const runMatch = await screen.findByRole("button", { name: /run match/i });
+    expect(runMatch.className).toContain("ant-btn-lg");
+    expect(runMatch.parentElement?.className).toContain("sticky");
+    expect(runMatch.parentElement?.className).toContain("lg:static");
   });
 
   it("Back navigates to step 2", async () => {
