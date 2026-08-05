@@ -109,7 +109,7 @@ const StepReview = () => {
   // so without this the spinner below would hang forever. Offer a way back.
   if (!jdDocId || !cvDocId) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4 rounded-xl border border-slate-100 bg-white p-16 shadow-sm dark:border-slate-700/50 dark:bg-slate-800/50">
+      <div className="flex h-full flex-col items-center justify-center gap-4 rounded-xl border border-slate-100 bg-white p-8 shadow-sm md:p-16 dark:border-slate-700/50 dark:bg-slate-800/50">
         <p
           role="alert"
           className="font-medium text-slate-500 dark:text-slate-400"
@@ -125,7 +125,7 @@ const StepReview = () => {
 
   if (isLoadingDocs) {
     return (
-      <div className="flex h-full items-center justify-center gap-3 rounded-xl border border-slate-100 bg-white p-16 shadow-sm dark:border-slate-700/50 dark:bg-slate-800/50">
+      <div className="flex h-full items-center justify-center gap-3 rounded-xl border border-slate-100 bg-white p-8 shadow-sm md:p-16 dark:border-slate-700/50 dark:bg-slate-800/50">
         <Loader2
           className="animate-spin text-slate-400 dark:text-slate-500"
           size={20}
@@ -138,8 +138,8 @@ const StepReview = () => {
   }
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm dark:border-slate-700/50 dark:bg-slate-800/50">
-      <div className="flex shrink-0 flex-col justify-between gap-4 border-b border-slate-100 p-6 md:flex-row md:items-center dark:border-slate-700/50">
+    <div className="flex flex-col rounded-xl border border-slate-100 bg-white shadow-sm lg:h-full lg:overflow-hidden dark:border-slate-700/50 dark:bg-slate-800/50">
+      <div className="flex shrink-0 flex-col justify-between gap-4 border-b border-slate-100 p-4 md:flex-row md:items-center md:p-6 dark:border-slate-700/50">
         <div>
           <h2 className="mb-1 text-xl font-semibold text-slate-900 dark:text-white">
             {t("wizard.stepReview.title")}
@@ -153,8 +153,10 @@ const StepReview = () => {
         </div>
       </div>
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 divide-y divide-slate-100 lg:grid-cols-2 lg:divide-x lg:divide-y-0 dark:divide-slate-700/50">
-        <div className="flex min-h-0 flex-col p-6">
+      {/* Side by side at lg; stacked below, where each pane gets a fixed 40vh
+          height and scrolls internally (design.md §6.4). */}
+      <div className="grid grid-cols-1 divide-y divide-slate-100 lg:min-h-0 lg:flex-1 lg:grid-cols-2 lg:divide-x lg:divide-y-0 dark:divide-slate-700/50">
+        <div className="flex flex-col p-4 md:p-6 lg:min-h-0">
           <h3 className="mb-4 shrink-0 text-sm font-bold tracking-widest text-slate-400 uppercase dark:text-slate-500">
             {t("step.jd")}
           </h3>
@@ -162,12 +164,11 @@ const StepReview = () => {
             value={jdText}
             onChange={(e) => setJdText(e.target.value)}
             autoSize={false}
-            style={{ height: "100%" }}
-            className="!flex-1 !resize-none !rounded-xl"
+            className="!h-[40vh] !min-h-56 !resize-none !rounded-xl lg:!h-full lg:!min-h-0 lg:!flex-1"
             aria-label={t("step.jd")}
           />
         </div>
-        <div className="flex min-h-0 flex-col p-6">
+        <div className="flex flex-col p-4 md:p-6 lg:min-h-0">
           <h3 className="mb-4 shrink-0 text-sm font-bold tracking-widest text-slate-400 uppercase dark:text-slate-500">
             {t("step.cv")}
           </h3>
@@ -175,8 +176,7 @@ const StepReview = () => {
             value={cvText}
             onChange={(e) => setCvText(e.target.value)}
             autoSize={false}
-            style={{ height: "100%" }}
-            className="!flex-1 !resize-none !rounded-xl"
+            className="!h-[40vh] !min-h-56 !resize-none !rounded-xl lg:!h-full lg:!min-h-0 lg:!flex-1"
             aria-label={t("step.cv")}
           />
         </div>
@@ -191,9 +191,10 @@ const StepReview = () => {
         </p>
       )}
 
-      <div className="flex shrink-0 items-center justify-between border-t border-slate-100 bg-slate-50/50 p-6 dark:border-slate-700/50 dark:bg-slate-800/80">
+      <div className="sticky bottom-0 z-10 flex shrink-0 items-center justify-between border-t border-slate-100 bg-slate-50 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:p-6 lg:static lg:bg-slate-50/50 lg:pb-6 dark:border-slate-700/50 dark:bg-slate-800 lg:dark:bg-slate-800/80">
         <Button
           type="text"
+          size="large"
           icon={<ArrowLeft size={16} />}
           onClick={goBack}
           className="!text-slate-500 dark:!text-slate-300"
@@ -202,6 +203,7 @@ const StepReview = () => {
         </Button>
         <Button
           type="primary"
+          size="large"
           loading={isSubmitting}
           onClick={() => void handleRunMatch()}
           icon={<Sparkles size={16} />}

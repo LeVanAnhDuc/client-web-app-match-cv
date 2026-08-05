@@ -4,7 +4,7 @@
  * antd + Tailwind coexistence:
  * - Tailwind preflight stays ON (this stylesheet, linked in <head> at build time).
  * - antd v5 renders its component CSS at runtime via @ant-design/cssinjs (see
- *   src/providers/AntdProvider.tsx), inserted into <head> AFTER this stylesheet.
+ *   src/contexts/AntdProvider/index.tsx), inserted into <head> AFTER this stylesheet.
  * - `StyleProvider hashPriority="high"` raises antd's generated selector priority
  *   so its component styles win over Tailwind's preflight/utility resets on the
  *   same element, without disabling either system.

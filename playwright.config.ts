@@ -16,9 +16,33 @@ export default defineConfig({
   globalSetup: "./e2e/global-setup.ts",
   globalTeardown: "./e2e/global-teardown.ts",
   use: {
-    baseURL: "http://localhost:5300",
+    // Override when the dev server runs on another port — e.g. a git worktree
+    // running in parallel with the main checkout that already owns :5300.
+    baseURL: process.env.E2E_BASE_URL ?? "http://localhost:5300",
     trace: "retain-on-failure",
     screenshot: "only-on-failure"
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }]
+  // Three viewport classes per docs/specs/wizard-responsive/design.md §8.2.
+  // All chromium on purpose: the `iPhone 13` / `iPad (gen 7)` descriptors force
+  // `defaultBrowserType: "webkit"`, which means installing another browser for
+  // no gain when what we assert is CSS breakpoint behaviour.
+  projects: [
+    { name: "desktop", use: { ...devices["Desktop Chrome"] } },
+    {
+      name: "tablet",
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: { width: 820, height: 1180 },
+        hasTouch: true
+      }
+    },
+    {
+      name: "mobile",
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: { width: 390, height: 844 },
+        hasTouch: true
+      }
+    }
+  ]
 });

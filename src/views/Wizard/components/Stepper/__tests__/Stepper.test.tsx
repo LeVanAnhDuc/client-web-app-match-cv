@@ -30,6 +30,22 @@ describe("Stepper", () => {
     expect(doneDot.getAttribute("data-status")).toBe("done");
   });
 
+  it("keeps step labels in the accessibility tree at mobile widths (sr-only, not hidden)", () => {
+    render(<Stepper current={1} />);
+
+    const label = screen.getByText(/job description/i);
+    expect(label.className).toContain("sr-only");
+    expect(label.className).toContain("md:not-sr-only");
+    expect(label.className).not.toContain("hidden");
+  });
+
+  it("renders exactly one dot per step (no duplicated nav variants)", () => {
+    render(<Stepper current={1} />);
+
+    expect(screen.getAllByTestId("stepper-step-1")).toHaveLength(1);
+    expect(screen.getAllByTestId("stepper-step-4")).toHaveLength(1);
+  });
+
   it("does not mark any step as disabled (Review/Result are implemented in Plan 2)", () => {
     render(<Stepper current={1} />);
 
