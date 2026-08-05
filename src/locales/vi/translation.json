@@ -53,8 +53,8 @@
       "description": "Cung cấp thông tin kinh nghiệm của ứng viên bạn đang phân tích."
     },
     "stepReview": {
-      "title": "Xem lại dữ liệu đã trích xuất",
-      "description": "Xem lại và chỉnh sửa nội dung trước khi chạy thuật toán so khớp."
+      "title": "Xem lại tài liệu",
+      "description": "Kiểm tra CV và JD gốc bên dưới, rồi chạy so khớp."
     },
     "stepResult": {
       "badge": "Đã hoàn tất so khớp"

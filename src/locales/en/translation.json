@@ -53,8 +53,8 @@
       "description": "Provide the experience details for the candidate you're analyzing."
     },
     "stepReview": {
-      "title": "Review Parsed Data",
-      "description": "Review and edit the content before running the matching algorithm."
+      "title": "Review documents",
+      "description": "Check the original CV and JD below, then run the match."
     },
     "stepResult": {
       "badge": "Matching complete"

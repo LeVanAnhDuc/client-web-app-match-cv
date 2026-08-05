@@ -9,6 +9,14 @@ import type { DocumentDto } from "#/types/Documents";
 import type { MatchResultDto } from "#/types/Matching";
 import StepReview from "../index";
 
+// DocumentPreview pulls react-pdf/docx-preview — stub it so the pane just
+// reports which doc id it was asked to render.
+vi.mock("#/components/DocumentPreview", () => ({
+  default: ({ docId }: { docId: string }) => (
+    <div data-testid="review-pane" data-docid={docId} />
+  )
+}));
+
 function renderStep() {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } }
@@ -34,7 +42,7 @@ const cvDto: DocumentDto = {
   id: "cv-1",
   kind: "CV",
   title: "Sarah Johnson",
-  sourceFormat: "pdf",
+  sourceFormat: "docx",
   rawText: "Sarah Johnson — 6 years of product design experience.",
   isSaved: true,
   createdAt: "2023-10-12T00:00:00.000Z"
@@ -51,6 +59,15 @@ const matchResult: MatchResultDto = {
   createdAt: "2023-10-12T00:00:00.000Z"
 };
 
+function mockDocs() {
+  vi.spyOn(documentHooks, "useDocument").mockImplementation((id) => {
+    const data = id === "jd-1" ? jdDto : id === "cv-1" ? cvDto : undefined;
+    return { data, isLoading: false, isError: false } as ReturnType<
+      typeof documentHooks.useDocument
+    >;
+  });
+}
+
 describe("StepReview", () => {
   beforeEach(() => {
     useWizardStore.setState({
@@ -63,16 +80,10 @@ describe("StepReview", () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.unstubAllGlobals();
   });
 
-  it("renders two review panes prefilled with the CV and JD rawText", async () => {
-    vi.spyOn(documentHooks, "useDocument").mockImplementation((id) => {
-      const data = id === "jd-1" ? jdDto : id === "cv-1" ? cvDto : undefined;
-      return { data, isLoading: false, isError: false } as ReturnType<
-        typeof documentHooks.useDocument
-      >;
-    });
+  it("renders read-only preview panes for the selected CV and JD", async () => {
+    mockDocs();
     vi.spyOn(matchHooks, "useRunMatch").mockReturnValue({
       mutateAsync: vi.fn(),
       isPending: false
@@ -80,37 +91,31 @@ describe("StepReview", () => {
 
     renderStep();
 
-    expect(await screen.findByDisplayValue(jdDto.rawText)).toBeInTheDocument();
-    expect(await screen.findByDisplayValue(cvDto.rawText)).toBeInTheDocument();
+    const panes = await screen.findAllByTestId("review-pane");
+    const docIds = panes.map((p) => p.getAttribute("data-docid"));
+    expect(docIds).toContain("cv-1");
+    expect(docIds).toContain("jd-1");
+    // No editable textareas anymore.
+    expect(screen.queryByRole("textbox")).toBeNull();
   });
 
   it("Back navigates to step 2", async () => {
-    vi.spyOn(documentHooks, "useDocument").mockImplementation((id) => {
-      const data = id === "jd-1" ? jdDto : id === "cv-1" ? cvDto : undefined;
-      return { data, isLoading: false, isError: false } as ReturnType<
-        typeof documentHooks.useDocument
-      >;
-    });
+    mockDocs();
     vi.spyOn(matchHooks, "useRunMatch").mockReturnValue({
       mutateAsync: vi.fn(),
       isPending: false
     } as unknown as ReturnType<typeof matchHooks.useRunMatch>);
 
     renderStep();
-    await screen.findByDisplayValue(jdDto.rawText);
+    await screen.findAllByTestId("review-pane");
 
     fireEvent.click(screen.getByRole("button", { name: /back/i }));
 
     await waitFor(() => expect(useWizardStore.getState().step).toBe(2));
   });
 
-  it("Run match reuses existing doc ids unchanged, sets matchId and advances to step 4", async () => {
-    vi.spyOn(documentHooks, "useDocument").mockImplementation((id) => {
-      const data = id === "jd-1" ? jdDto : id === "cv-1" ? cvDto : undefined;
-      return { data, isLoading: false, isError: false } as ReturnType<
-        typeof documentHooks.useDocument
-      >;
-    });
+  it("Run match uses the selected doc ids, sets matchId and advances to step 4", async () => {
+    mockDocs();
     const mutateAsync = vi.fn(async () => matchResult);
     vi.spyOn(matchHooks, "useRunMatch").mockReturnValue({
       mutateAsync,
@@ -118,7 +123,7 @@ describe("StepReview", () => {
     } as unknown as ReturnType<typeof matchHooks.useRunMatch>);
 
     renderStep();
-    await screen.findByDisplayValue(jdDto.rawText);
+    await screen.findAllByTestId("review-pane");
 
     fireEvent.click(screen.getByRole("button", { name: /run match/i }));
 
@@ -132,47 +137,5 @@ describe("StepReview", () => {
       expect(useWizardStore.getState().matchId).toBe("match-1")
     );
     await waitFor(() => expect(useWizardStore.getState().step).toBe(4));
-  });
-
-  it("Run match creates a fresh transient document when text was edited", async () => {
-    vi.spyOn(documentHooks, "useDocument").mockImplementation((id) => {
-      const data = id === "jd-1" ? jdDto : id === "cv-1" ? cvDto : undefined;
-      return { data, isLoading: false, isError: false } as ReturnType<
-        typeof documentHooks.useDocument
-      >;
-    });
-    const createMutateAsync = vi.fn(async () => ({ ...jdDto, id: "jd-2" }));
-    vi.spyOn(documentHooks, "useCreateDocument").mockReturnValue({
-      mutateAsync: createMutateAsync,
-      isPending: false
-    } as unknown as ReturnType<typeof documentHooks.useCreateDocument>);
-    const runMutateAsync = vi.fn(async () => matchResult);
-    vi.spyOn(matchHooks, "useRunMatch").mockReturnValue({
-      mutateAsync: runMutateAsync,
-      isPending: false
-    } as unknown as ReturnType<typeof matchHooks.useRunMatch>);
-
-    renderStep();
-    const jdTextarea = await screen.findByDisplayValue(jdDto.rawText);
-    fireEvent.change(jdTextarea, { target: { value: "Edited JD text" } });
-
-    fireEvent.click(screen.getByRole("button", { name: /run match/i }));
-
-    await waitFor(() =>
-      expect(createMutateAsync).toHaveBeenCalledWith(
-        expect.objectContaining({
-          mode: "paste",
-          kind: "JD",
-          sourceText: "Edited JD text",
-          save: false
-        })
-      )
-    );
-    await waitFor(() =>
-      expect(runMutateAsync).toHaveBeenCalledWith({
-        cvDocumentId: "cv-1",
-        jdDocumentId: "jd-2"
-      })
-    );
   });
 });
