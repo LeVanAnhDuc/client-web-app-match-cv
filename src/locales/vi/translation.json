@@ -86,7 +86,43 @@
   },
   "preview": {
     "loading": "Đang tải bản xem trước…",
-    "error": "Không tải được file này. Vui lòng thử lại."
+    "error": "Không tải được file này. Vui lòng thử lại.",
+    "close": "Đóng",
+    "download": "Tải xuống"
+  },
+  "library": {
+    "title": {
+      "cv": "CV đã lưu",
+      "jd": "JD đã lưu"
+    },
+    "subtitle": "{{count}} đã lưu",
+    "empty": {
+      "cv": "Chưa có CV nào được lưu",
+      "jd": "Chưa có JD nào được lưu"
+    },
+    "emptyHint": "Tài liệu bạn lưu khi match sẽ hiển thị ở đây.",
+    "emptyCta": "Bắt đầu match",
+    "loadError": "Không tải được danh sách tài liệu. Vui lòng thử lại.",
+    "action": {
+      "preview": "Xem trước",
+      "rename": "Đổi tên",
+      "download": "Tải xuống",
+      "delete": "Xóa"
+    },
+    "delete": {
+      "confirm": "Xóa tài liệu này?",
+      "inUse": "Không thể xóa: tài liệu đang được dùng trong lịch sử match.",
+      "success": "Đã xóa tài liệu",
+      "failed": "Không xóa được. Vui lòng thử lại."
+    },
+    "rename": {
+      "title": "Đổi tên tài liệu",
+      "label": "Tên tài liệu",
+      "confirm": "Lưu",
+      "success": "Đã đổi tên",
+      "required": "Vui lòng nhập tên",
+      "failed": "Không đổi tên được. Vui lòng thử lại."
+    }
   },
   "reuse": {
     "jd": {

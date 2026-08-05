@@ -86,7 +86,43 @@
   },
   "preview": {
     "loading": "Loading preview…",
-    "error": "Couldn't load this file. Please try again."
+    "error": "Couldn't load this file. Please try again.",
+    "close": "Close",
+    "download": "Download"
+  },
+  "library": {
+    "title": {
+      "cv": "Saved CVs",
+      "jd": "Saved JDs"
+    },
+    "subtitle": "{{count}} saved",
+    "empty": {
+      "cv": "No saved CVs yet",
+      "jd": "No saved JDs yet"
+    },
+    "emptyHint": "Documents you save while matching will show up here.",
+    "emptyCta": "Start matching",
+    "loadError": "Couldn't load your documents. Please try again.",
+    "action": {
+      "preview": "Preview",
+      "rename": "Rename",
+      "download": "Download",
+      "delete": "Delete"
+    },
+    "delete": {
+      "confirm": "Delete this document?",
+      "inUse": "Can't delete: this document is used in a match history.",
+      "success": "Document deleted",
+      "failed": "Couldn't delete. Please try again."
+    },
+    "rename": {
+      "title": "Rename document",
+      "label": "Document name",
+      "confirm": "Save",
+      "success": "Renamed",
+      "required": "Please enter a name",
+      "failed": "Couldn't rename. Please try again."
+    }
   },
   "reuse": {
     "jd": {

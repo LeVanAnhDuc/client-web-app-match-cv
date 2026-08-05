@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppCvRouteImport } from './routes/_app/cv'
+import { Route as AppJdRouteImport } from './routes/_app/jd'
 import { Route as AppWizardRouteImport } from './routes/_app/wizard'
 
 const AppRoute = AppRouteImport.update({
@@ -22,6 +24,16 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCvRoute = AppCvRouteImport.update({
+  id: '/cv',
+  path: '/cv',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppJdRoute = AppJdRouteImport.update({
+  id: '/jd',
+  path: '/jd',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppWizardRoute = AppWizardRouteImport.update({
   id: '/wizard',
   path: '/wizard',
@@ -30,24 +42,30 @@ const AppWizardRoute = AppWizardRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
+  '/cv': typeof AppCvRoute
+  '/jd': typeof AppJdRoute
   '/wizard': typeof AppWizardRoute
 }
 export interface FileRoutesByTo {
+  '/cv': typeof AppCvRoute
+  '/jd': typeof AppJdRoute
   '/wizard': typeof AppWizardRoute
   '/': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
+  '/_app/cv': typeof AppCvRoute
+  '/_app/jd': typeof AppJdRoute
   '/_app/wizard': typeof AppWizardRoute
   '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/wizard'
+  fullPaths: '/' | '/cv' | '/jd' | '/wizard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/wizard' | '/'
-  id: '__root__' | '/_app' | '/_app/wizard' | '/_app/'
+  to: '/cv' | '/jd' | '/wizard' | '/'
+  id: '__root__' | '/_app' | '/_app/cv' | '/_app/jd' | '/_app/wizard' | '/_app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -70,6 +88,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/cv': {
+      id: '/_app/cv'
+      path: '/cv'
+      fullPath: '/cv'
+      preLoaderRoute: typeof AppCvRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/jd': {
+      id: '/_app/jd'
+      path: '/jd'
+      fullPath: '/jd'
+      preLoaderRoute: typeof AppJdRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/wizard': {
       id: '/_app/wizard'
       path: '/wizard'
@@ -81,11 +113,15 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppCvRoute: typeof AppCvRoute
+  AppJdRoute: typeof AppJdRoute
   AppWizardRoute: typeof AppWizardRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppCvRoute: AppCvRoute,
+  AppJdRoute: AppJdRoute,
   AppWizardRoute: AppWizardRoute,
   AppIndexRoute: AppIndexRoute,
 }
