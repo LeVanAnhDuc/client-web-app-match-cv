@@ -9,68 +9,127 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as WizardRouteImport } from './routes/wizard'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppCvRouteImport } from './routes/_app/cv'
+import { Route as AppJdRouteImport } from './routes/_app/jd'
+import { Route as AppWizardRouteImport } from './routes/_app/wizard'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const WizardRoute = WizardRouteImport.update({
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCvRoute = AppCvRouteImport.update({
+  id: '/cv',
+  path: '/cv',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppJdRoute = AppJdRouteImport.update({
+  id: '/jd',
+  path: '/jd',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppWizardRoute = AppWizardRouteImport.update({
   id: '/wizard',
   path: '/wizard',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/wizard': typeof WizardRoute
+  '/': typeof AppIndexRoute
+  '/cv': typeof AppCvRoute
+  '/jd': typeof AppJdRoute
+  '/wizard': typeof AppWizardRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/wizard': typeof WizardRoute
+  '/cv': typeof AppCvRoute
+  '/jd': typeof AppJdRoute
+  '/wizard': typeof AppWizardRoute
+  '/': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/wizard': typeof WizardRoute
+  '/_app': typeof AppRouteWithChildren
+  '/_app/cv': typeof AppCvRoute
+  '/_app/jd': typeof AppJdRoute
+  '/_app/wizard': typeof AppWizardRoute
+  '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/wizard'
+  fullPaths: '/' | '/cv' | '/jd' | '/wizard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/wizard'
-  id: '__root__' | '/' | '/wizard'
+  to: '/cv' | '/jd' | '/wizard' | '/'
+  id: '__root__' | '/_app' | '/_app/cv' | '/_app/jd' | '/_app/wizard' | '/_app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  WizardRoute: typeof WizardRoute
+  AppRoute: typeof AppRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
+    '/_app': {
+      id: '/_app'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/wizard': {
-      id: '/wizard'
+    '/_app/': {
+      id: '/_app/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/cv': {
+      id: '/_app/cv'
+      path: '/cv'
+      fullPath: '/cv'
+      preLoaderRoute: typeof AppCvRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/jd': {
+      id: '/_app/jd'
+      path: '/jd'
+      fullPath: '/jd'
+      preLoaderRoute: typeof AppJdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/wizard': {
+      id: '/_app/wizard'
       path: '/wizard'
       fullPath: '/wizard'
-      preLoaderRoute: typeof WizardRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppWizardRouteImport
+      parentRoute: typeof AppRoute
     }
   }
 }
 
+interface AppRouteChildren {
+  AppCvRoute: typeof AppCvRoute
+  AppJdRoute: typeof AppJdRoute
+  AppWizardRoute: typeof AppWizardRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppCvRoute: AppCvRoute,
+  AppJdRoute: AppJdRoute,
+  AppWizardRoute: AppWizardRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  WizardRoute: WizardRoute,
+  AppRoute: AppRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

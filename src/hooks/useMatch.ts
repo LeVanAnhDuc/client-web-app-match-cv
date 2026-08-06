@@ -1,6 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  fetchMatchHistory,
   fetchMatchResult,
+  matchHistoryQueryKey,
   matchResultQueryKey,
   runMatch
 } from "#/requests/match";
@@ -18,5 +20,13 @@ export function useMatchResult(id: string | null) {
     queryKey: matchResultQueryKey(id ?? ""),
     queryFn: () => fetchMatchResult(id as string),
     enabled: id !== null
+  });
+}
+
+/** GET /match — list match history for the current user (Home dashboard). */
+export function useMatchHistory() {
+  return useQuery({
+    queryKey: matchHistoryQueryKey(),
+    queryFn: fetchMatchHistory
   });
 }

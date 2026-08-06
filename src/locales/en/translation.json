@@ -1,6 +1,39 @@
 {
   "appName": "Match CV",
   "start": "Start",
+  "nav": {
+    "home": "Home",
+    "match": "Match CV↔JD",
+    "savedCvs": "Saved CVs",
+    "savedJds": "Saved JDs",
+    "openMenu": "Open menu"
+  },
+  "home": {
+    "hero": {
+      "title": "Match your CV against a JD",
+      "subtitle": "Upload files or paste text to get an instant AI-powered compatibility score and improvement suggestions.",
+      "cta": "Start matching now"
+    },
+    "stat": {
+      "savedCvs": "Saved CVs",
+      "savedJds": "Saved JDs",
+      "totalMatches": "Total matches",
+      "highest": "Highest score",
+      "avg": "avg {{value}}%"
+    },
+    "recent": {
+      "title": "Recent matches",
+      "viewAll": "View all",
+      "empty": "No matches yet",
+      "emptyCta": "Match now"
+    },
+    "cols": {
+      "cv": "CV",
+      "jd": "JD",
+      "score": "Score",
+      "date": "Date"
+    }
+  },
   "step": {
     "jd": "Job Description",
     "cv": "CV / Resume",
@@ -20,8 +53,8 @@
       "description": "Provide the experience details for the candidate you're analyzing."
     },
     "stepReview": {
-      "title": "Review Parsed Data",
-      "description": "Review and edit the content before running the matching algorithm."
+      "title": "Review documents",
+      "description": "Check the original CV and JD below, then run the match."
     },
     "stepResult": {
       "badge": "Matching complete"
@@ -50,6 +83,46 @@
     "pdf": "PDF",
     "docx": "Word",
     "text": "Text"
+  },
+  "preview": {
+    "loading": "Loading preview…",
+    "error": "Couldn't load this file. Please try again.",
+    "close": "Close",
+    "download": "Download"
+  },
+  "library": {
+    "title": {
+      "cv": "Saved CVs",
+      "jd": "Saved JDs"
+    },
+    "subtitle": "{{count}} saved",
+    "empty": {
+      "cv": "No saved CVs yet",
+      "jd": "No saved JDs yet"
+    },
+    "emptyHint": "Documents you save while matching will show up here.",
+    "emptyCta": "Start matching",
+    "loadError": "Couldn't load your documents. Please try again.",
+    "action": {
+      "preview": "Preview",
+      "rename": "Rename",
+      "download": "Download",
+      "delete": "Delete"
+    },
+    "delete": {
+      "confirm": "Delete this document?",
+      "inUse": "Can't delete: this document is used in a match history.",
+      "success": "Document deleted",
+      "failed": "Couldn't delete. Please try again."
+    },
+    "rename": {
+      "title": "Rename document",
+      "label": "Document name",
+      "confirm": "Save",
+      "success": "Renamed",
+      "required": "Please enter a name",
+      "failed": "Couldn't rename. Please try again."
+    }
   },
   "reuse": {
     "jd": {

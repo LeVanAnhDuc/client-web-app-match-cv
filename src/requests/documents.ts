@@ -1,4 +1,4 @@
-import { apiFetch } from "#/libs/api";
+import { apiFetch, apiFetchBinary } from "#/libs/api";
 import { ENDPOINTS } from "#/constants";
 import type {
   CreateDocumentInput,
@@ -54,4 +54,38 @@ export function createDocument(
       title: input.title
     })
   });
+}
+
+/** Builds the full URL for `GET /documents/:id/file` (inline preview or `<a download>`). */
+export function documentFileUrl(id: string, download = false): string {
+  const base =
+    (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
+    "http://localhost:5200/api/v1";
+  return `${base}${ENDPOINTS.documentFile(id, download)}`;
+}
+
+/** PATCH /documents/:id — rename a saved document. */
+export function renameDocument(
+  id: string,
+  title: string
+): Promise<DocumentDto> {
+  return apiFetch<DocumentDto>(ENDPOINTS.documentById(id), {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title })
+  });
+}
+
+/** DELETE /documents/:id — 204 on success, 409 when still referenced by a match. */
+export function deleteDocument(id: string): Promise<void> {
+  return apiFetch<void>(ENDPOINTS.documentById(id), { method: "DELETE" });
+}
+
+/**
+ * GET /documents/:id/file — fetch the original file bytes for client-side
+ * preview. Routed through `apiFetchBinary` (not a raw `fetch`) so base URL,
+ * error handling, and credentials policy stay centralised in `#/libs/api`.
+ */
+export function fetchDocumentFile(id: string): Promise<ArrayBuffer> {
+  return apiFetchBinary(ENDPOINTS.documentFile(id));
 }

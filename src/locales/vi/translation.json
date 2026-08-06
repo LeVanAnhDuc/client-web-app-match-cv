@@ -1,6 +1,39 @@
 {
   "appName": "Ghép CV",
   "start": "Bắt đầu",
+  "nav": {
+    "home": "Trang chủ",
+    "match": "Ghép CV↔JD",
+    "savedCvs": "CV đã lưu",
+    "savedJds": "JD đã lưu",
+    "openMenu": "Mở menu"
+  },
+  "home": {
+    "hero": {
+      "title": "Ghép CV của bạn với JD",
+      "subtitle": "Tải file hoặc dán văn bản để nhận điểm khớp và gợi ý cải thiện tức thì từ AI.",
+      "cta": "Bắt đầu ghép ngay"
+    },
+    "stat": {
+      "savedCvs": "CV đã lưu",
+      "savedJds": "JD đã lưu",
+      "totalMatches": "Tổng số lần ghép",
+      "highest": "Điểm cao nhất",
+      "avg": "TB {{value}}%"
+    },
+    "recent": {
+      "title": "Ghép gần đây",
+      "viewAll": "Xem tất cả",
+      "empty": "Chưa có lượt ghép nào",
+      "emptyCta": "Ghép ngay"
+    },
+    "cols": {
+      "cv": "CV",
+      "jd": "JD",
+      "score": "Điểm",
+      "date": "Ngày"
+    }
+  },
   "step": {
     "jd": "Mô tả công việc",
     "cv": "CV / Hồ sơ",
@@ -20,8 +53,8 @@
       "description": "Cung cấp thông tin kinh nghiệm của ứng viên bạn đang phân tích."
     },
     "stepReview": {
-      "title": "Xem lại dữ liệu đã trích xuất",
-      "description": "Xem lại và chỉnh sửa nội dung trước khi chạy thuật toán so khớp."
+      "title": "Xem lại tài liệu",
+      "description": "Kiểm tra CV và JD gốc bên dưới, rồi chạy so khớp."
     },
     "stepResult": {
       "badge": "Đã hoàn tất so khớp"
@@ -50,6 +83,46 @@
     "pdf": "PDF",
     "docx": "Word",
     "text": "Văn bản"
+  },
+  "preview": {
+    "loading": "Đang tải bản xem trước…",
+    "error": "Không tải được file này. Vui lòng thử lại.",
+    "close": "Đóng",
+    "download": "Tải xuống"
+  },
+  "library": {
+    "title": {
+      "cv": "CV đã lưu",
+      "jd": "JD đã lưu"
+    },
+    "subtitle": "{{count}} đã lưu",
+    "empty": {
+      "cv": "Chưa có CV nào được lưu",
+      "jd": "Chưa có JD nào được lưu"
+    },
+    "emptyHint": "Tài liệu bạn lưu khi match sẽ hiển thị ở đây.",
+    "emptyCta": "Bắt đầu match",
+    "loadError": "Không tải được danh sách tài liệu. Vui lòng thử lại.",
+    "action": {
+      "preview": "Xem trước",
+      "rename": "Đổi tên",
+      "download": "Tải xuống",
+      "delete": "Xóa"
+    },
+    "delete": {
+      "confirm": "Xóa tài liệu này?",
+      "inUse": "Không thể xóa: tài liệu đang được dùng trong lịch sử match.",
+      "success": "Đã xóa tài liệu",
+      "failed": "Không xóa được. Vui lòng thử lại."
+    },
+    "rename": {
+      "title": "Đổi tên tài liệu",
+      "label": "Tên tài liệu",
+      "confirm": "Lưu",
+      "success": "Đã đổi tên",
+      "required": "Vui lòng nhập tên",
+      "failed": "Không đổi tên được. Vui lòng thử lại."
+    }
   },
   "reuse": {
     "jd": {

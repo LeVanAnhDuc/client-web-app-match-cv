@@ -1,31 +1,28 @@
 import { useWizardStore } from "#/stores";
+import Stepper from "./components/Stepper";
 import StepCV from "./mains/StepCV";
 import StepJD from "./mains/StepJD";
 import StepResult from "./mains/StepResult";
 import StepReview from "./mains/StepReview";
-import WizardNav from "./mains/WizardNav";
 
 /**
- * Wizard shell: nav (brand + step badge + 4-step Stepper) + current step body.
- * Mobile/tablet: one column, nav on top, the page scrolls naturally and each
- * step pins its own footer. From `lg`: two columns locked to the viewport
- * (`h-dvh`) with the step body scrolling internally so the footer/Next stays in
- * view — the pre-existing desktop behaviour.
- * See docs/specs/wizard-responsive/design.md §6.1.
+ * Wizard shell — rendered inside the app shell (which owns the sidebar/nav),
+ * so this only holds the horizontal 4-step Stepper + the current step body.
+ * Step 1 (JD) and 2 (CV) use DocumentInputStep; step 3 (Review) renders the
+ * original files read-only; step 4 (Result) shows the match report.
  */
 const Wizard = () => {
   const step = useWizardStore((s) => s.step);
 
   return (
-    <div className="flex min-h-dvh flex-col bg-slate-50 lg:h-dvh lg:flex-row lg:overflow-hidden dark:bg-slate-900">
-      <WizardNav step={step} />
-
-      <main className="flex min-w-0 flex-1 flex-col p-4 md:p-6 lg:overflow-hidden">
+    <div className="mx-auto flex h-full max-w-5xl flex-col p-4 md:p-8">
+      <Stepper current={step} />
+      <div className="flex min-h-0 flex-1 flex-col">
         {step === 1 && <StepJD />}
         {step === 2 && <StepCV />}
         {step === 3 && <StepReview />}
         {step === 4 && <StepResult />}
-      </main>
+      </div>
     </div>
   );
 };

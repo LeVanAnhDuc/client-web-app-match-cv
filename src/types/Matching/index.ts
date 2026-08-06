@@ -22,3 +22,11 @@ export interface CreateMatchInput {
   cvDocumentId: string;
   jdDocumentId: string;
 }
+
+export interface MatchSummaryDto {
+  id: string;
+  cvTitle: string;
+  jdTitle: string;
+  overallScore: number;
+  createdAt: string;
+}

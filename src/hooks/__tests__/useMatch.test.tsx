@@ -2,8 +2,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PropsWithChildren } from "react";
-import { useMatchResult, useRunMatch } from "#/hooks/useMatch";
-import type { MatchResultDto } from "#/types/Matching";
+import { useMatchHistory, useMatchResult, useRunMatch } from "#/hooks/useMatch";
+import type { MatchResultDto, MatchSummaryDto } from "#/types/Matching";
 
 function createWrapper() {
   const queryClient = new QueryClient({
@@ -120,5 +120,42 @@ describe("useMatchResult", () => {
 
     expect(result.current.fetchStatus).toBe("idle");
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("useMatchHistory", () => {
+  it("GETs /match and returns the MatchSummaryDto list, newest-first", async () => {
+    const history: Array<MatchSummaryDto> = [
+      {
+        id: "match-2",
+        cvTitle: "Resume",
+        jdTitle: "Senior Product Designer",
+        overallScore: 82,
+        createdAt: "2023-10-13T00:00:00.000Z"
+      },
+      {
+        id: "match-1",
+        cvTitle: "Resume",
+        jdTitle: "Marketing Manager",
+        overallScore: 61,
+        createdAt: "2023-10-12T00:00:00.000Z"
+      }
+    ];
+    const fetchMock = vi.fn(
+      async () =>
+        ({ ok: true, status: 200, json: async () => history }) as Response
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { result } = renderHook(() => useMatchHistory(), {
+      wrapper: createWrapper()
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(result.current.data).toEqual(history);
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining("/match"),
+      undefined
+    );
   });
 });

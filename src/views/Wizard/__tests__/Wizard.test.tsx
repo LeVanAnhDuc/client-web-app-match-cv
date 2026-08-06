@@ -63,19 +63,17 @@ describe("wizard shell layout", () => {
     vi.unstubAllGlobals();
   });
 
-  it("renders exactly one nav — no duplicated desktop/mobile variants", async () => {
+  it("renders the stepper exactly once — single markup, no duplicated variants", async () => {
     stubApi();
     renderWizard();
     await screen.findByText(/input job description/i);
 
-    // Regression guard for design.md §4.2: rendering a desktop aside AND a
-    // mobile top bar would duplicate these nodes and break the strict-mode
-    // locators the Playwright suite relies on.
+    // The wizard lives inside the app shell (which owns the sidebar/brand), so
+    // it renders only the horizontal Stepper. Single-markup guard: each step
+    // testid appears exactly once — the Playwright strict-mode locators rely on
+    // there being no duplicated desktop/mobile stepper variants.
     expect(screen.getAllByTestId("stepper-step-1")).toHaveLength(1);
-    expect(screen.getAllByText(/step 1 of 4/i)).toHaveLength(1);
-    expect(screen.getAllByRole("heading", { name: /match cv/i })).toHaveLength(
-      1
-    );
+    expect(screen.getAllByTestId("stepper-step-4")).toHaveLength(1);
   });
 });
 

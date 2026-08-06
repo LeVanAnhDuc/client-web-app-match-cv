@@ -35,6 +35,22 @@ export async function apiFetch<T>(
   return (await res.json()) as T;
 }
 
+/**
+ * Binary counterpart of {@link apiFetch} — for endpoints that stream raw bytes
+ * (e.g. the original document file) rather than JSON. Shares the base URL and
+ * `ApiError` handling so auth/credentials policy stays centralised in one place
+ * (today: none, matching apiFetch — auth is deferred, Roadmap #2).
+ */
+export async function apiFetchBinary(path: string): Promise<ArrayBuffer> {
+  const res = await fetch(`${API_BASE_URL}${path}`);
+
+  if (!res.ok) {
+    throw new ApiError(res.status, await extractErrorMessage(res));
+  }
+
+  return res.arrayBuffer();
+}
+
 async function extractErrorMessage(res: Response): Promise<string> {
   try {
     const body = (await res.json()) as { message?: string | Array<string> };

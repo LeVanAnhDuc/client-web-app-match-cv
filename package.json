@@ -43,11 +43,13 @@
     "@tanstack/react-start": "^1.168.28",
     "@tanstack/router-plugin": "^1.132.0",
     "antd": "^5.29.2",
+    "docx-preview": "^0.4.0",
     "i18next": "^26.3.6",
     "lucide-react": "^0.545.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-i18next": "^17.0.10",
+    "react-pdf": "^10.4.1",
     "tailwindcss": "^4.1.18",
     "zustand": "^5.0.14"
   },

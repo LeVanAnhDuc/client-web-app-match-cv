@@ -70,17 +70,14 @@ const Stepper = ({ current }: { current: WizardStep }) => {
     ].join(" ");
 
   return (
-    <div className="flex items-center justify-between lg:flex-col lg:items-stretch">
+    <div className="mb-6 flex items-center justify-between">
       {STEPS.map((s, idx) => {
         const isDone = s.step < current;
         const isActive = s.step === current;
         const Icon = isDone ? Check : s.icon;
         return (
-          <div
-            key={s.step}
-            className="flex flex-1 items-center last:flex-none lg:flex-none lg:flex-col lg:items-stretch"
-          >
-            <div className="flex flex-col items-center gap-2 lg:flex-row lg:gap-3">
+          <div key={s.step} className="flex flex-1 items-center last:flex-none">
+            <div className="flex flex-col items-center gap-2">
               <Dot
                 step={s.step}
                 Icon={Icon}
@@ -91,7 +88,7 @@ const Stepper = ({ current }: { current: WizardStep }) => {
             </div>
             {idx < STEPS.length - 1 && (
               <div
-                className={`mx-2 h-[2px] flex-1 lg:mx-0 lg:my-1 lg:ml-5 lg:h-8 lg:w-[2px] lg:flex-none ${
+                className={`mx-2 h-[2px] flex-1 ${
                   s.step < current
                     ? "bg-blue-600 dark:bg-indigo-600"
                     : "bg-slate-200 dark:bg-slate-700"
