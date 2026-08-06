@@ -139,8 +139,9 @@ test.describe("home dashboard", () => {
         }
       ).__i18n.changeLanguage("vi");
     });
-    await expect(page.getByRole("link", { name: "Trang chủ" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "CV đã lưu" })).toBeVisible();
+    // Assert on main content (visible at every viewport — the sidebar collapses
+    // to a hamburger on tablet/mobile): the hero CTA switches to Vietnamese.
+    await expect(page.getByRole("link", { name: /bắt đầu/i })).toBeVisible();
   });
 
   test("[responsive] hamburger sidebar on mobile", async ({ page }) => {
