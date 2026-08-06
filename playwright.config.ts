@@ -16,7 +16,9 @@ export default defineConfig({
   globalSetup: "./e2e/global-setup.ts",
   globalTeardown: "./e2e/global-teardown.ts",
   use: {
-    baseURL: "http://localhost:5300",
+    // Default to the standard dev port; override with E2E_BASE_URL when the
+    // app runs on another port (e.g. a worktree pair on :5302).
+    baseURL: process.env.E2E_BASE_URL ?? "http://localhost:5300",
     trace: "retain-on-failure",
     screenshot: "only-on-failure"
   },

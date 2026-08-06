@@ -13,6 +13,9 @@ export async function cleanDocuments(): Promise<void> {
   const client = new Client({ connectionString: CONNECTION_STRING });
   await client.connect();
   try {
+    // MatchResult has FK → Document (onDelete Restrict), so clear it first or
+    // the Document delete fails once any match exists.
+    await client.query('DELETE FROM "MatchResult"');
     await client.query('DELETE FROM "Document"');
   } finally {
     await client.end();
