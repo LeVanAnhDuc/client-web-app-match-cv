@@ -84,7 +84,7 @@ const StepResult = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center gap-3 rounded-xl border border-slate-100 bg-white p-16 shadow-sm dark:border-slate-700/50 dark:bg-slate-800/50">
+      <div className="flex h-full items-center justify-center gap-3 rounded-xl border border-slate-100 bg-white p-8 shadow-sm md:p-16 dark:border-slate-700/50 dark:bg-slate-800/50">
         <Loader2
           className="animate-spin text-slate-400 dark:text-slate-500"
           size={20}
@@ -103,7 +103,7 @@ const StepResult = () => {
         : t("err.matchFailed");
 
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4 rounded-xl border border-slate-100 bg-white p-16 shadow-sm dark:border-slate-700/50 dark:bg-slate-800/50">
+      <div className="flex h-full flex-col items-center justify-center gap-4 rounded-xl border border-slate-100 bg-white p-8 shadow-sm md:p-16 dark:border-slate-700/50 dark:bg-slate-800/50">
         <p
           role="alert"
           className="text-center font-medium text-red-600 dark:text-red-400"
@@ -120,10 +120,10 @@ const StepResult = () => {
   const dashOffset = GAUGE_CIRCUMFERENCE * (1 - data.overallScore / 100);
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm dark:border-slate-700/50 dark:bg-slate-800/50">
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        <div className="flex flex-col items-center gap-12 border-b border-slate-100 bg-slate-50/50 p-6 md:flex-row dark:border-slate-700/50 dark:bg-slate-900/30">
-          <div className="relative h-40 w-40 shrink-0">
+    <div className="flex flex-col rounded-xl border border-slate-100 bg-white shadow-sm lg:h-full lg:overflow-hidden dark:border-slate-700/50 dark:bg-slate-800/50">
+      <div className="lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
+        <div className="flex flex-col items-center gap-6 border-b border-slate-100 bg-slate-50/50 p-4 md:flex-row md:gap-12 md:p-6 dark:border-slate-700/50 dark:bg-slate-900/30">
+          <div className="relative size-32 shrink-0 md:size-40">
             <svg className="-rotate-90" viewBox="0 0 160 160">
               <circle
                 cx="80"
@@ -166,7 +166,7 @@ const StepResult = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-10 p-6 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 p-4 md:gap-10 md:p-6 lg:grid-cols-2">
           <ReportList
             icon={
               <CircleCheck
@@ -201,7 +201,7 @@ const StepResult = () => {
           />
         </div>
 
-        <div className="m-10 mt-0 rounded-xl border border-blue-100 bg-blue-50 p-6 dark:border-indigo-500/20 dark:bg-indigo-500/5">
+        <div className="m-4 mt-0 rounded-xl border border-blue-100 bg-blue-50 p-4 md:m-10 md:mt-0 md:p-6 dark:border-indigo-500/20 dark:bg-indigo-500/5">
           <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-blue-900 dark:text-white">
             <Lightbulb size={18} /> {t("result.suggestions")}
           </h3>
@@ -223,21 +223,24 @@ const StepResult = () => {
           </div>
         </div>
 
-        <p className="px-10 pb-6 text-center text-xs text-slate-400 dark:text-slate-500">
+        <p className="px-4 pb-6 text-center text-xs text-slate-400 md:px-10 dark:text-slate-500">
           {t("result.disclaimer")}
         </p>
       </div>
 
-      <div className="flex shrink-0 items-center justify-between border-t border-slate-100 bg-slate-50 p-6 dark:border-slate-700/50 dark:bg-slate-800/80">
+      <div className="sticky bottom-0 z-10 flex shrink-0 items-center justify-between border-t border-slate-100 bg-slate-50 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:p-6 lg:static lg:pb-6 dark:border-slate-700/50 dark:bg-slate-800 lg:dark:bg-slate-800/80">
         <Button
           type="text"
+          size="large"
           icon={<RotateCcw size={16} />}
           onClick={reset}
           className="!text-slate-500 dark:!text-slate-300"
         >
           {t("action.startOver")}
         </Button>
-        <Button type="primary">{t("action.saveReport")}</Button>
+        <Button type="primary" size="large">
+          {t("action.saveReport")}
+        </Button>
       </div>
     </div>
   );

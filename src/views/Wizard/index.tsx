@@ -16,7 +16,7 @@ const Wizard = () => {
 
   return (
     <div className="mx-auto flex h-full max-w-5xl flex-col p-4 md:p-8">
-      <Stepper current={step} orientation="horizontal" />
+      <Stepper current={step} />
       <div className="flex min-h-0 flex-1 flex-col">
         {step === 1 && <StepJD />}
         {step === 2 && <StepCV />}

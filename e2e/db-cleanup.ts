@@ -13,8 +13,10 @@ export async function cleanDocuments(): Promise<void> {
   const client = new Client({ connectionString: CONNECTION_STRING });
   await client.connect();
   try {
-    // MatchResult has FK → Document (onDelete Restrict), so clear it first or
-    // the Document delete fails once any match exists.
+    // MatchResult references Document with the Prisma default onDelete:
+    // Restrict (server/prisma/schema.prisma), so deleting documents while any
+    // match row survives fails with a FK violation and takes globalSetup — and
+    // therefore the whole run — down with it. Clear the child table first.
     await client.query('DELETE FROM "MatchResult"');
     await client.query('DELETE FROM "Document"');
   } finally {

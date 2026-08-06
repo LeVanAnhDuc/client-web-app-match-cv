@@ -39,6 +39,20 @@ describe("DocumentInputStep", () => {
     expect(screen.getByText(/paste text/i)).toBeDefined();
   });
 
+  it("pins the footer actions to the viewport below lg and uses large hit-areas", async () => {
+    stubSavedDocs([]);
+    render(<DocumentInputStep kind="JD" onNext={vi.fn()} />, {
+      wrapper: Wrapper
+    });
+
+    const next = await screen.findByRole("button", { name: /next/i });
+    expect(next.className).toContain("ant-btn-lg");
+
+    const footer = next.parentElement;
+    expect(footer?.className).toContain("sticky");
+    expect(footer?.className).toContain("lg:static");
+  });
+
   it("switches from Upload to Paste tab", async () => {
     stubSavedDocs([]);
     render(<DocumentInputStep kind="JD" onNext={vi.fn()} />, {

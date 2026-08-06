@@ -17,6 +17,7 @@ The matching wizard is at **`/wizard`** — all 4 steps: 1 JD · 2 CV · 3 Revie
 - `VITE_API_BASE_URL` — server API base URL (default `http://localhost:5200/api/v1`)
 - `VITE_DEFAULT_LOCALE` — default i18n locale (`en` | `vi`)
 - `E2E_DATABASE_URL` — Postgres URL used by the Playwright DB cleanup (real value in `.env`, gitignored)
+- `E2E_BASE_URL` — optional; base URL the Playwright suite targets (defaults to `http://localhost:5300`)
 
 **Scripts**: `yarn dev` · `yarn build` · `yarn preview` · `yarn test` (Vitest unit) · `yarn type-check` · `yarn lint` (check-only) · `yarn lint:fix` · `yarn format` · `yarn format:check`
 
@@ -27,7 +28,10 @@ The matching wizard is at **`/wizard`** — all 4 steps: 1 JD · 2 CV · 3 Revie
 ```bash
 npx playwright install chromium   # first time
 npx playwright test               # e2e/cv-jd-matching-wizard/*.e2e.ts (serial)
+npx playwright test --project=mobile   # one viewport only
 ```
+
+The suite runs in three chromium projects — `desktop` (1280×720), `tablet` (820×1180) and `mobile` (390×844) — so responsive regressions surface at every breakpoint. Set `E2E_BASE_URL` when the dev server is not on `:5300` (e.g. a git worktree running alongside the main checkout); the server must then allow that origin via its `CLIENT_ORIGIN` env var.
 
 ---
 

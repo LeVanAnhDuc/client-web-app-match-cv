@@ -54,6 +54,29 @@ function stubApi() {
   return fetchMock;
 }
 
+describe("wizard shell layout", () => {
+  beforeEach(() => {
+    useWizardStore.setState({ step: 1, jdDocId: null, cvDocId: null });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("renders the stepper exactly once — single markup, no duplicated variants", async () => {
+    stubApi();
+    renderWizard();
+    await screen.findByText(/input job description/i);
+
+    // The wizard lives inside the app shell (which owns the sidebar/brand), so
+    // it renders only the horizontal Stepper. Single-markup guard: each step
+    // testid appears exactly once — the Playwright strict-mode locators rely on
+    // there being no duplicated desktop/mobile stepper variants.
+    expect(screen.getAllByTestId("stepper-step-1")).toHaveLength(1);
+    expect(screen.getAllByTestId("stepper-step-4")).toHaveLength(1);
+  });
+});
+
 describe("wizard flow: JD -> CV -> Back", () => {
   beforeEach(() => {
     useWizardStore.setState({ step: 1, jdDocId: null, cvDocId: null });

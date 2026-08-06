@@ -4,7 +4,9 @@ import type { MatchResultDto } from "../../src/types/Matching";
 /** Navigate to the wizard, starting fresh (in-memory Zustand store resets on full load). */
 export async function gotoWizard(page: Page): Promise<void> {
   await page.goto("/wizard");
-  await expect(page.getByRole("heading", { name: "Match CV" })).toBeVisible();
+  // The wizard now lives inside the app shell (brand/nav owned by the shell),
+  // so wait on the wizard's own stepper rather than a "Match CV" heading.
+  await expect(page.getByTestId("stepper-step-1")).toBeVisible();
   // Wait for client hydration before interacting: the dev-only `window.__i18n`
   // hook (see src/i18n/index.ts) is attached only after the client bundle runs,
   // so its presence is a reliable "React is hydrated & interactive" signal.

@@ -44,7 +44,7 @@ const UploadPasteTabs = ({
   };
 
   return (
-    <div className="mb-8">
+    <div className="mb-6 md:mb-8">
       <Segmented
         value={mode}
         onChange={(value) => onModeChange(value as InputMode)}
@@ -56,12 +56,15 @@ const UploadPasteTabs = ({
       />
 
       {mode === "upload" ? (
-        <Dragger {...draggerProps} className="mb-10 !rounded-xl !border-dashed">
-          <div className="flex flex-col items-center justify-center py-6">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-slate-900 dark:text-indigo-400">
+        <Dragger
+          {...draggerProps}
+          className="mb-6 !rounded-xl !border-dashed md:mb-10"
+        >
+          <div className="flex flex-col items-center justify-center py-4 md:py-6">
+            <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 md:size-16 dark:bg-slate-900 dark:text-indigo-400">
               <UploadCloud size={28} />
             </div>
-            <p className="mb-1 text-lg font-medium text-slate-900 dark:text-white">
+            <p className="mb-1 text-base font-medium text-slate-900 md:text-lg dark:text-white">
               {file ? (
                 file.name
               ) : (
@@ -86,7 +89,7 @@ const UploadPasteTabs = ({
           onChange={(e) => onPastedTextChange(e.target.value)}
           rows={8}
           placeholder={t("paste.placeholder")}
-          className="mb-10 !rounded-xl"
+          className="mb-6 !rounded-xl md:mb-10"
         />
       )}
     </div>

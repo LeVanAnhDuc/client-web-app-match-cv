@@ -135,8 +135,8 @@ const DocumentInputStep = ({
   }
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm dark:border-slate-700/50 dark:bg-slate-800/50">
-      <div className="shrink-0 border-b border-slate-100 p-6 dark:border-slate-700/50">
+    <div className="flex flex-col rounded-xl border border-slate-100 bg-white shadow-sm lg:h-full lg:overflow-hidden dark:border-slate-700/50 dark:bg-slate-800/50">
+      <div className="shrink-0 border-b border-slate-100 p-4 md:p-6 dark:border-slate-700/50">
         <h2 className="mb-2 text-xl font-semibold text-slate-900 dark:text-white">
           {t(`${stepCopyKey}.title`)}
         </h2>
@@ -145,7 +145,7 @@ const DocumentInputStep = ({
         </p>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto p-6">
+      <div className="p-4 md:p-6 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
         <UploadPasteTabs
           mode={mode}
           onModeChange={handleModeChange}
@@ -187,9 +187,12 @@ const DocumentInputStep = ({
         )}
       </div>
 
-      <div className="flex shrink-0 items-center justify-between border-t border-slate-100 bg-slate-50/50 p-6 dark:border-slate-700/50 dark:bg-slate-800/80">
+      {/* Sticky below lg so the primary CTA stays reachable while the page
+          scrolls; static at lg where the shell locks to the viewport. */}
+      <div className="sticky bottom-0 z-10 flex shrink-0 items-center justify-between border-t border-slate-100 bg-slate-50 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:p-6 lg:static lg:bg-slate-50/50 lg:pb-6 dark:border-slate-700/50 dark:bg-slate-800 lg:dark:bg-slate-800/80">
         <Button
           type="text"
+          size="large"
           disabled={!onBack}
           icon={<ArrowLeft size={16} />}
           onClick={onBack}
@@ -199,6 +202,7 @@ const DocumentInputStep = ({
         </Button>
         <Button
           type="primary"
+          size="large"
           disabled={!canSubmit}
           loading={isSubmitting || createDocument.isPending}
           onClick={() => void handleNext()}

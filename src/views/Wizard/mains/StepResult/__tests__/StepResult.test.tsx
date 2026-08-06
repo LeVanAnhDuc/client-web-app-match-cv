@@ -74,6 +74,26 @@ describe("StepResult", () => {
     ).toBeInTheDocument();
   });
 
+  it("scales the gauge down on mobile and pins the footer actions", () => {
+    vi.spyOn(matchHooks, "useMatchResult").mockReturnValue({
+      data: matchResult,
+      isLoading: false,
+      isError: false,
+      error: null
+    } as ReturnType<typeof matchHooks.useMatchResult>);
+
+    renderStep();
+
+    const startOver = screen.getByRole("button", { name: /start over/i });
+    expect(startOver.className).toContain("ant-btn-lg");
+    expect(startOver.parentElement?.className).toContain("sticky");
+    expect(startOver.parentElement?.className).toContain("lg:static");
+
+    const gauge = document.querySelector("svg")?.parentElement;
+    expect(gauge?.className).toContain("size-32");
+    expect(gauge?.className).toContain("md:size-40");
+  });
+
   it("shows a loading state while the match result is pending", () => {
     vi.spyOn(matchHooks, "useMatchResult").mockReturnValue({
       data: undefined,

@@ -35,6 +35,17 @@ async function createDoc(
   return ((await res.json()) as { id: string }).id;
 }
 
+async function resetDb(): Promise<void> {
+  const client = new Client({ connectionString: DB_URL });
+  await client.connect();
+  try {
+    await client.query('DELETE FROM "MatchResult"');
+    await client.query('DELETE FROM "Document"');
+  } finally {
+    await client.end();
+  }
+}
+
 async function insertMatch(cvId: string, jdId: string): Promise<void> {
   const client = new Client({ connectionString: DB_URL });
   await client.connect();
@@ -83,7 +94,9 @@ async function confirmPopconfirm(page: Page): Promise<void> {
 }
 
 test.beforeAll(async () => {
-  // global-setup cleared Document/MatchResult. Seed a fresh, disjoint set.
+  // Reset first so the seed is idempotent across Playwright projects (this file
+  // runs once per viewport project — desktop/tablet/mobile).
+  await resetDb();
   const cvId = await createDoc(
     "CV",
     MATCHED_CV,
