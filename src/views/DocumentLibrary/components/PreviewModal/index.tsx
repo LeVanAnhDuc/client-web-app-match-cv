@@ -30,6 +30,9 @@ const PreviewModal = ({
       title={doc?.title ?? t("preview.loading")}
       width={900}
       style={{ maxWidth: "95vw" }}
+      // Unmount the preview (and its pdf.js worker) when closed — avoids
+      // keeping a detached-ArrayBuffer PDF viewer mounted-but-hidden.
+      destroyOnHidden
       styles={{ body: { height: "70vh", overflow: "hidden" } }}
       footer={
         doc && doc.sourceFormat !== "text"

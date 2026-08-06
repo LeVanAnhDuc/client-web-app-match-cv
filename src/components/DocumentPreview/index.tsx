@@ -1,5 +1,5 @@
 import { Loader2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { fetchDocumentFile } from "#/requests/documents";
 import type { SourceFormat } from "#/types/Documents";
@@ -82,6 +82,15 @@ function PdfPreview({ docId }: { docId: string }) {
     };
   }, [mounted, docId]);
 
+  // pdf.js DETACHES (transfers) the ArrayBuffer to its worker on load. Memoize
+  // the `file` object so react-pdf keeps the SAME reference across unrelated
+  // re-renders (e.g. an i18n language change) and never re-invokes getDocument
+  // on an already-detached buffer — which throws "detached ArrayBuffer".
+  const pdfFile = useMemo(
+    () => (state.status === "ready" ? { data: state.data } : null),
+    [state]
+  );
+
   if (!mounted || state.status === "loading") {
     return (
       <div
@@ -114,7 +123,7 @@ function PdfPreview({ docId }: { docId: string }) {
       data-testid="pdf-preview"
       className="flex h-full justify-center overflow-auto p-4"
     >
-      <Document file={{ data: state.data }}>
+      <Document file={pdfFile ?? undefined}>
         <Page pageNumber={1} />
       </Document>
     </div>
