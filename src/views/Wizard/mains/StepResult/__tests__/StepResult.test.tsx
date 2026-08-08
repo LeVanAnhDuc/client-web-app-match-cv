@@ -85,16 +85,18 @@ function mockRunMatch(behaviour: {
   isPending?: boolean;
   result?: MatchResultDto;
 }) {
-  const mutate = vi.fn(
-    (_input: unknown, opts?: { onSuccess?: (r: MatchResultDto) => void }) => {
-      if (behaviour.result) opts?.onSuccess?.(behaviour.result);
-    }
-  );
+  const mutateAsync = vi.fn(async (_input: CreateMatchInput) => {
+    // A pending card is modelled as a promise that never settles — that is
+    // exactly what the skeleton branch is waiting on.
+    if (behaviour.isPending)
+      return new Promise<MatchResultDto>(() => undefined);
+    return behaviour.result as MatchResultDto;
+  });
   vi.mocked(useRunMatch).mockReturnValue({
-    mutate,
-    isPending: behaviour.isPending ?? false
+    mutateAsync,
+    isPending: false
   } as unknown as UseMutationResult<MatchResultDto, Error, CreateMatchInput>);
-  return mutate;
+  return mutateAsync;
 }
 
 function setStore(over: Record<string, unknown>) {
@@ -136,7 +138,10 @@ describe("StepResult", () => {
     render(<StepResult />);
 
     expect(mutate).toHaveBeenCalledTimes(3);
-    expect(mutate.mock.calls[2][0]).toMatchObject({
+    // The system-key card sends no credentialId at all — absent, not null.
+    expect(mutate).toHaveBeenLastCalledWith({
+      cvDocumentId: CV_ID,
+      jdDocumentId: JD_ID,
       runId: RUN_ID,
       credentialId: undefined
     });

@@ -101,20 +101,27 @@ const MatchResultCard = ({
     initialResult
   );
   const [failed, setFailed] = useState(false);
+  const [running, setRunning] = useState(false);
   const firedRef = useRef(false);
 
-  const fire = () => {
+  const fire = async () => {
     setFailed(false);
-    runMatch.mutate(
-      {
-        cvDocumentId,
-        jdDocumentId,
-        runId,
-        // Absent (not null) means "the system key" in the API contract.
-        credentialId: credentialId ?? undefined
-      },
-      { onSuccess: setResult, onError: () => setFailed(true) }
-    );
+    setRunning(true);
+    try {
+      setResult(
+        await runMatch.mutateAsync({
+          cvDocumentId,
+          jdDocumentId,
+          runId,
+          // Absent (not null) means "the system key" in the API contract.
+          credentialId: credentialId ?? undefined
+        })
+      );
+    } catch {
+      setFailed(true);
+    } finally {
+      setRunning(false);
+    }
   };
 
   useEffect(() => {
@@ -122,7 +129,7 @@ const MatchResultCard = ({
     // a second fire would cost a second round of AI calls.
     if (!autoRun || firedRef.current || initialResult) return;
     firedRef.current = true;
-    fire();
+    void fire();
   }, [autoRun, initialResult]);
 
   const providerLabel = (provider: string) =>
@@ -134,7 +141,7 @@ const MatchResultCard = ({
       ? t("credentials.systemKey")
       : t("result.card.pendingTitle");
 
-  if (runMatch.isPending || (!result && !failed)) {
+  if (running || (!result && !failed)) {
     return (
       <SectionCard title={title} aria-busy="true">
         <Skeleton active paragraph={{ rows: 4 }} />
@@ -155,8 +162,8 @@ const MatchResultCard = ({
             <Button
               size="small"
               icon={<RotateCcw size={14} />}
-              onClick={fire}
-              loading={runMatch.isPending}
+              onClick={() => void fire()}
+              loading={running}
             >
               {t("action.tryAgain")}
             </Button>

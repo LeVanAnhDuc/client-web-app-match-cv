@@ -1,6 +1,6 @@
 import { Button, Checkbox, Tag } from "antd";
 import { Plus, ShieldCheck, TriangleAlert } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CredentialFormModal from "#/components/CredentialFormModal";
 import TestStatusTag from "#/components/TestStatusTag";
@@ -54,18 +54,30 @@ const RunWithSelector = ({
   const [addOpen, setAddOpen] = useState(false);
 
   const credentials = credentialsQuery.data ?? [];
+  const seededRef = useRef(false);
 
-  // Reconcile once the list arrives: a selection that no longer exists (the
-  // credential was deleted in another tab) must not be sent to the server.
+  // Two separate jobs, deliberately not merged:
+  //  - seed a sensible default ONCE, when the list first arrives;
+  //  - afterwards only drop ids that no longer exist (deleted in another tab).
+  // Re-seeding on every empty selection would make it impossible to untick
+  // everything, which the step has to allow so it can say "pick at least one".
   useEffect(() => {
     if (!credentialsQuery.isSuccess) return;
+
+    if (!seededRef.current) {
+      seededRef.current = true;
+      if (value.length === 0) {
+        onChange(pickDefault(credentials));
+        return;
+      }
+    }
+
     const known = new Set<string | null>([
       null,
       ...credentials.map((c) => c.id)
     ]);
     const surviving = value.filter((id) => known.has(id));
-    if (surviving.length === value.length && value.length > 0) return;
-    onChange(surviving.length > 0 ? surviving : pickDefault(credentials));
+    if (surviving.length !== value.length) onChange(surviving);
   }, [credentialsQuery.isSuccess, credentials, value, onChange]);
 
   const providerLabel = (id: AiCredentialDto["provider"]) =>
