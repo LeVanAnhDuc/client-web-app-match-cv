@@ -149,7 +149,9 @@ test.describe("home dashboard", () => {
     await page.goto("/");
     await waitHydrated(page);
     await page.getByRole("button", { name: /open menu/i }).click();
-    await expect(page.getByRole("link", { name: "Saved CVs" })).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Curriculum Vitae" })
+    ).toBeVisible();
   });
 });
 
@@ -158,8 +160,12 @@ test.describe("saved CV library", () => {
     await page.goto("/cv");
     await waitHydrated(page);
     await expect(
-      page.getByRole("heading", { name: "Saved CVs" })
+      page.getByRole("heading", { name: "Curriculum Vitae" })
     ).toBeVisible();
+
+    // Scenario 8 — the old wording must be gone everywhere on this page.
+    await expect(page.getByText("Saved CVs")).toHaveCount(0);
+    await expect(page.getByText("Saved JDs")).toHaveCount(0);
     await expect(page.getByText(MATCHED_CV)).toBeVisible();
     await expect(page.getByText(DELETE_CV)).toBeVisible();
   });

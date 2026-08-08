@@ -7,6 +7,7 @@ import {
   RotateCcw
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import SectionCard from "#/components/SectionCard";
 import { useMatchResult } from "#/hooks/useMatch";
 import { ApiError } from "#/libs/api";
 import { useWizardStore } from "#/stores";
@@ -19,14 +20,12 @@ function ScoreBar({ label, value }: { label: string; value: number }) {
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-          {label}
-        </span>
+        <span className="text-sm font-medium text-body">{label}</span>
         <span className="text-sm font-bold text-blue-600 dark:text-indigo-400">
           {value}%
         </span>
       </div>
-      <div className="h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-900">
+      <div className="h-2 overflow-hidden rounded-full bg-line">
         <div
           className="h-full rounded-full bg-blue-600 dark:bg-indigo-500"
           style={{ width: `${value}%` }}
@@ -51,18 +50,16 @@ function ReportList({
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-900/50">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-subtle">
           {icon}
         </div>
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-          {title}
-        </h3>
+        <h3 className="text-lg font-semibold text-body">{title}</h3>
       </div>
       <ul className="space-y-4">
         {items.map((item, index) => (
           <li key={index} className="flex gap-3">
             {itemIcon}
-            <p className="text-sm text-slate-700 dark:text-slate-300">{item}</p>
+            <p className="text-sm text-body">{item}</p>
           </li>
         ))}
       </ul>
@@ -84,15 +81,13 @@ const StepResult = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center gap-3 rounded-xl border border-slate-100 bg-white p-8 shadow-sm md:p-16 dark:border-slate-700/50 dark:bg-slate-800/50">
-        <Loader2
-          className="animate-spin text-slate-400 dark:text-slate-500"
-          size={20}
-        />
-        <p className="font-medium text-slate-400 dark:text-slate-500">
-          {t("result.loading")}
-        </p>
-      </div>
+      <SectionCard
+        className="h-full"
+        bodyClassName="flex h-full items-center justify-center gap-3 p-8 md:p-16"
+      >
+        <Loader2 className="animate-spin text-faint" size={20} />
+        <p className="font-medium text-faint">{t("result.loading")}</p>
+      </SectionCard>
     );
   }
 
@@ -103,7 +98,10 @@ const StepResult = () => {
         : t("err.matchFailed");
 
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4 rounded-xl border border-slate-100 bg-white p-8 shadow-sm md:p-16 dark:border-slate-700/50 dark:bg-slate-800/50">
+      <SectionCard
+        className="h-full"
+        bodyClassName="flex h-full flex-col items-center justify-center gap-4 p-8 md:p-16"
+      >
         <p
           role="alert"
           className="text-center font-medium text-red-600 dark:text-red-400"
@@ -113,16 +111,37 @@ const StepResult = () => {
         <Button icon={<RotateCcw size={16} />} onClick={reset}>
           {t("action.startOver")}
         </Button>
-      </div>
+      </SectionCard>
     );
   }
 
   const dashOffset = GAUGE_CIRCUMFERENCE * (1 - data.overallScore / 100);
 
   return (
-    <div className="flex flex-col rounded-xl border border-slate-100 bg-white shadow-sm lg:h-full lg:overflow-hidden dark:border-slate-700/50 dark:bg-slate-800/50">
-      <div className="lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
-        <div className="flex flex-col items-center gap-6 border-b border-slate-100 bg-slate-50/50 p-4 md:flex-row md:gap-12 md:p-6 dark:border-slate-700/50 dark:bg-slate-900/30">
+    <SectionCard
+      fill
+      stickyFooter
+      className="h-full"
+      bodyClassName="p-0"
+      footer={
+        <>
+          <Button
+            type="text"
+            size="large"
+            icon={<RotateCcw size={16} />}
+            onClick={reset}
+            className="!text-muted"
+          >
+            {t("action.startOver")}
+          </Button>
+          <Button type="primary" size="large">
+            {t("action.saveReport")}
+          </Button>
+        </>
+      }
+    >
+      <>
+        <div className="flex flex-col items-center gap-6 border-b border-line bg-surface-subtle p-4 md:flex-row md:gap-12 md:p-6">
           <div className="relative size-32 shrink-0 md:size-40">
             <svg className="-rotate-90" viewBox="0 0 160 160">
               <circle
@@ -130,7 +149,7 @@ const StepResult = () => {
                 cy="80"
                 r={GAUGE_RADIUS}
                 fill="none"
-                className="stroke-slate-200 dark:stroke-slate-800"
+                className="stroke-line"
                 strokeWidth="8"
               />
               <circle
@@ -146,10 +165,10 @@ const StepResult = () => {
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-4xl font-bold text-slate-900 dark:text-white">
+              <span className="text-4xl font-bold text-body">
                 {data.overallScore}%
               </span>
-              <span className="text-xs font-semibold tracking-wider text-slate-400 uppercase dark:text-slate-500">
+              <span className="text-xs font-semibold tracking-wider text-faint uppercase">
                 {t("result.overall")}
               </span>
             </div>
@@ -209,40 +228,23 @@ const StepResult = () => {
             {data.report.suggestions.map((suggestion, index) => (
               <div
                 key={index}
-                className="flex items-start gap-3 rounded-xl border border-blue-100 bg-white p-4 shadow-sm dark:border-slate-700/30 dark:bg-slate-900/50"
+                className="flex items-start gap-3 rounded-xl border border-blue-100 bg-surface p-4 shadow-sm dark:border-indigo-500/20"
               >
                 <Lightbulb
                   className="mt-0.5 shrink-0 text-blue-600 dark:text-indigo-400"
                   size={16}
                 />
-                <p className="text-sm text-slate-700 dark:text-slate-300">
-                  {suggestion}
-                </p>
+                <p className="text-sm text-body">{suggestion}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <p className="px-4 pb-6 text-center text-xs text-slate-400 md:px-10 dark:text-slate-500">
+        <p className="px-4 pb-6 text-center text-xs text-faint md:px-10">
           {t("result.disclaimer")}
         </p>
-      </div>
-
-      <div className="sticky bottom-0 z-10 flex shrink-0 items-center justify-between border-t border-slate-100 bg-slate-50 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:p-6 lg:static lg:pb-6 dark:border-slate-700/50 dark:bg-slate-800 lg:dark:bg-slate-800/80">
-        <Button
-          type="text"
-          size="large"
-          icon={<RotateCcw size={16} />}
-          onClick={reset}
-          className="!text-slate-500 dark:!text-slate-300"
-        >
-          {t("action.startOver")}
-        </Button>
-        <Button type="primary" size="large">
-          {t("action.saveReport")}
-        </Button>
-      </div>
-    </div>
+      </>
+    </SectionCard>
   );
 };
 

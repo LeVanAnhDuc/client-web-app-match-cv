@@ -15,7 +15,7 @@ import "react-pdf/dist/Page/TextLayer.css";
 /** Plain parsed-text renderer — SSR-safe, no client-only library involved. */
 function TextPreview({ rawText }: { rawText: string }) {
   return (
-    <pre className="h-full overflow-auto p-4 text-sm break-words whitespace-pre-wrap text-slate-700 dark:text-slate-300">
+    <pre className="h-full overflow-auto p-4 text-sm break-words whitespace-pre-wrap text-body">
       {rawText}
     </pre>
   );
@@ -95,7 +95,7 @@ function PdfPreview({ docId }: { docId: string }) {
     return (
       <div
         data-testid="pdf-preview"
-        className="flex h-full items-center justify-center gap-2 p-8 text-slate-400 dark:text-slate-500"
+        className="flex h-full items-center justify-center gap-2 p-8 text-faint"
       >
         <Loader2 className="animate-spin" size={18} />
         <span className="text-sm">{t("preview.loading")}</span>
@@ -198,7 +198,7 @@ function DocxPreview({ docId }: { docId: string }) {
   return (
     <div data-testid="docx-preview" className="h-full overflow-auto p-4">
       {(!mounted || status === "loading") && (
-        <div className="flex items-center justify-center gap-2 p-8 text-slate-400 dark:text-slate-500">
+        <div className="flex items-center justify-center gap-2 p-8 text-faint">
           <Loader2 className="animate-spin" size={18} />
           <span className="text-sm">{t("preview.loading")}</span>
         </div>

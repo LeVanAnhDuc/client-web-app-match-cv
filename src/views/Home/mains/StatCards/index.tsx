@@ -1,6 +1,7 @@
-import { Card, Statistic } from "antd";
+import { Skeleton, Statistic } from "antd";
 import { Award, FileText, FileUser, Zap } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import SectionCard from "#/components/SectionCard";
 import { useSavedDocuments } from "#/hooks/useDocuments";
 import { useMatchHistory } from "#/hooks/useMatch";
 
@@ -21,27 +22,29 @@ function StatTile({
   loading: boolean;
 }) {
   return (
-    <Card
-      data-testid={testId}
-      loading={loading}
-      className="shadow-sm"
-      styles={{ body: { padding: 24 } }}
-    >
-      <div className="mb-4 rounded-lg bg-slate-100 p-2 text-slate-600 dark:bg-slate-900 dark:text-slate-400">
-        {icon}
-      </div>
-      <Statistic value={value} />
-      <div className="mt-1 flex items-center gap-1.5">
-        <span className="text-xs font-medium tracking-wider text-slate-400 uppercase dark:text-slate-500">
-          {label}
-        </span>
-        {subtext && (
-          <span className="text-xs text-slate-400 italic dark:text-slate-500">
-            {subtext}
-          </span>
+    <SectionCard className="h-full">
+      {/* testId sits on an always-rendered node so locators survive loading. */}
+      <div data-testid={testId}>
+        {loading ? (
+          <Skeleton active title={false} paragraph={{ rows: 2 }} />
+        ) : (
+          <>
+            <div className="mb-4 w-fit rounded-lg bg-surface-subtle p-2 text-muted">
+              {icon}
+            </div>
+            <Statistic value={value} />
+            <div className="mt-1 flex items-center gap-1.5">
+              <span className="text-xs font-semibold tracking-wider text-faint uppercase">
+                {label}
+              </span>
+              {subtext && (
+                <span className="text-xs text-faint italic">{subtext}</span>
+              )}
+            </div>
+          </>
         )}
       </div>
-    </Card>
+    </SectionCard>
   );
 }
 
