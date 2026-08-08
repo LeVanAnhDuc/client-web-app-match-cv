@@ -2,6 +2,7 @@ import { Button } from "antd";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import SectionCard from "#/components/SectionCard";
 import { useCreateDocument } from "#/hooks/useDocuments";
 import { FILE } from "#/constants";
 import type { DocumentKind } from "#/types/Documents";
@@ -135,17 +136,39 @@ const DocumentInputStep = ({
   }
 
   return (
-    <div className="flex flex-col rounded-xl border border-slate-100 bg-white shadow-sm lg:h-full lg:overflow-hidden dark:border-slate-700/50 dark:bg-slate-800/50">
-      <div className="shrink-0 border-b border-slate-100 p-4 md:p-6 dark:border-slate-700/50">
-        <h2 className="mb-2 text-xl font-semibold text-slate-900 dark:text-white">
-          {t(`${stepCopyKey}.title`)}
-        </h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          {t(`${stepCopyKey}.description`)}
-        </p>
-      </div>
-
-      <div className="p-4 md:p-6 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
+    <SectionCard
+      fill
+      stickyFooter
+      className="h-full"
+      title={t(`${stepCopyKey}.title`)}
+      description={t(`${stepCopyKey}.description`)}
+      footer={
+        <>
+          <Button
+            type="text"
+            size="large"
+            disabled={!onBack}
+            icon={<ArrowLeft size={16} />}
+            onClick={onBack}
+            className="!text-muted"
+          >
+            {t("action.back")}
+          </Button>
+          <Button
+            type="primary"
+            size="large"
+            disabled={!canSubmit}
+            loading={isSubmitting || createDocument.isPending}
+            onClick={() => void handleNext()}
+            iconPosition="end"
+            icon={<ArrowRight size={16} />}
+          >
+            {t("action.next")}
+          </Button>
+        </>
+      }
+    >
+      <>
         <UploadPasteTabs
           mode={mode}
           onModeChange={handleModeChange}
@@ -167,7 +190,7 @@ const DocumentInputStep = ({
         )}
 
         <div>
-          <h3 className="mb-4 text-sm font-bold tracking-wider text-slate-400 uppercase dark:text-slate-500">
+          <h3 className="mb-4 text-xs font-semibold tracking-wider text-faint uppercase">
             {t(`reuse.${reuseKey}.title`)}
           </h3>
           <SavedDocRadioList
@@ -185,34 +208,8 @@ const DocumentInputStep = ({
             {validationError}
           </p>
         )}
-      </div>
-
-      {/* Sticky below lg so the primary CTA stays reachable while the page
-          scrolls; static at lg where the shell locks to the viewport. */}
-      <div className="sticky bottom-0 z-10 flex shrink-0 items-center justify-between border-t border-slate-100 bg-slate-50 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:p-6 lg:static lg:bg-slate-50/50 lg:pb-6 dark:border-slate-700/50 dark:bg-slate-800 lg:dark:bg-slate-800/80">
-        <Button
-          type="text"
-          size="large"
-          disabled={!onBack}
-          icon={<ArrowLeft size={16} />}
-          onClick={onBack}
-          className="!text-slate-500 dark:!text-slate-300"
-        >
-          {t("action.back")}
-        </Button>
-        <Button
-          type="primary"
-          size="large"
-          disabled={!canSubmit}
-          loading={isSubmitting || createDocument.isPending}
-          onClick={() => void handleNext()}
-          iconPosition="end"
-          icon={<ArrowRight size={16} />}
-        >
-          {t("action.next")}
-        </Button>
-      </div>
-    </div>
+      </>
+    </SectionCard>
   );
 };
 

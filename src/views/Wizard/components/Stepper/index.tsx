@@ -40,7 +40,7 @@ function Dot({
           ? "bg-blue-600 text-white shadow-lg shadow-blue-200 dark:bg-indigo-600 dark:shadow-indigo-500/40"
           : isDone
             ? "border border-blue-200 bg-blue-100 text-blue-600 dark:border-indigo-600/50 dark:bg-indigo-600/20 dark:text-indigo-400"
-            : "border-2 border-slate-200 bg-white text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600"
+            : "border-2 border-line bg-surface text-faint"
       ].join(" ")}
     >
       <Icon size={18} />
@@ -64,9 +64,7 @@ const Stepper = ({ current }: { current: WizardStep }) => {
       // stays in the accessibility tree, so screen readers and role/text-based
       // tests still find it at mobile widths.
       "sr-only md:not-sr-only md:text-xs lg:text-sm",
-      isActive
-        ? "font-semibold text-slate-900 dark:text-white"
-        : "font-medium text-slate-500 dark:text-slate-400"
+      isActive ? "text-body font-semibold" : "text-muted font-medium"
     ].join(" ");
 
   return (
@@ -91,7 +89,7 @@ const Stepper = ({ current }: { current: WizardStep }) => {
                 className={`mx-2 h-[2px] flex-1 ${
                   s.step < current
                     ? "bg-blue-600 dark:bg-indigo-600"
-                    : "bg-slate-200 dark:bg-slate-700"
+                    : "bg-line"
                 }`}
               />
             )}

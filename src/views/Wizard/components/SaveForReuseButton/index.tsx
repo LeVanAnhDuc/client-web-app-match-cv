@@ -36,7 +36,7 @@ const SaveForReuseButton = ({
           size={16}
           className="shrink-0 text-green-600 dark:text-green-500"
         />
-        <span className="min-w-0 truncate text-sm text-slate-700 dark:text-slate-300">
+        <span className="min-w-0 truncate text-sm text-body">
           {t("save.saved", { title: savedTitle })}
         </span>
       </div>
@@ -80,9 +80,7 @@ const SaveForReuseButton = ({
           setError(null);
         }}
       >
-        <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
-          {t("save.modal.description")}
-        </p>
+        <p className="mb-4 text-sm text-muted">{t("save.modal.description")}</p>
         <Input
           // Moving focus into a dialog when it opens is the expected behaviour
           // — the rule targets autofocus on page load, not inside a modal.

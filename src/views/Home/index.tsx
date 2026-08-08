@@ -1,3 +1,4 @@
+import PageContainer from "#/components/PageContainer";
 import HeroCta from "./mains/HeroCta";
 import RecentMatches from "./mains/RecentMatches";
 import StatCards from "./mains/StatCards";
@@ -7,11 +8,11 @@ import StatCards from "./mains/StatCards";
  * history. Mock: docs/ui-designs/home-dashboard-library/home.html.
  */
 const Home = () => (
-  <div className="mx-auto max-w-6xl space-y-6 p-4 md:p-8">
+  <PageContainer className="space-y-6">
     <HeroCta />
     <StatCards />
     <RecentMatches />
-  </div>
+  </PageContainer>
 );
 
 export default Home;

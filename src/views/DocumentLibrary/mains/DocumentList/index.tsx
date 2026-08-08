@@ -3,6 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { SearchX } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import PageContainer from "#/components/PageContainer";
+import SectionCard from "#/components/SectionCard";
 import { ApiError } from "#/libs/api";
 import {
   useDeleteDocument,
@@ -72,15 +74,15 @@ const DocumentList = ({ kind }: { kind: DocumentKind }) => {
   const docs = savedQuery.data ?? [];
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6 p-4 md:p-8">
+    <PageContainer className="space-y-6">
       {contextHolder}
 
       <header>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+        <h1 className="text-2xl font-bold tracking-tight text-body">
           {t(`library.title.${kindKey}`)}
         </h1>
         {!savedQuery.isLoading && !savedQuery.isError && (
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-1 text-sm text-muted">
             {t("library.subtitle", { count: docs.length })}
           </p>
         )}
@@ -95,14 +97,12 @@ const DocumentList = ({ kind }: { kind: DocumentKind }) => {
       )}
 
       {!savedQuery.isLoading && !savedQuery.isError && docs.length === 0 && (
-        <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-slate-300 py-16 text-center dark:border-slate-700">
-          <SearchX className="text-slate-400" size={32} />
-          <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
+        <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-line py-16 text-center">
+          <SearchX className="text-faint" size={32} />
+          <p className="text-sm font-medium text-body">
             {t(`library.empty.${kindKey}`)}
           </p>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            {t("library.emptyHint")}
-          </p>
+          <p className="text-xs text-muted">{t("library.emptyHint")}</p>
           <Link to="/wizard">
             <Button type="primary">{t("library.emptyCta")}</Button>
           </Link>
@@ -110,18 +110,20 @@ const DocumentList = ({ kind }: { kind: DocumentKind }) => {
       )}
 
       {docs.length > 0 && (
-        <ul className="space-y-3">
-          {docs.map((doc) => (
-            <DocumentRow
-              key={doc.id}
-              doc={doc}
-              deleting={deletingId === doc.id}
-              onPreview={() => setPreviewId(doc.id)}
-              onRename={() => setRenameTarget(doc)}
-              onDelete={() => handleDelete(doc.id)}
-            />
-          ))}
-        </ul>
+        <SectionCard bodyClassName="p-0">
+          <ul className="divide-y divide-line">
+            {docs.map((doc) => (
+              <DocumentRow
+                key={doc.id}
+                doc={doc}
+                deleting={deletingId === doc.id}
+                onPreview={() => setPreviewId(doc.id)}
+                onRename={() => setRenameTarget(doc)}
+                onDelete={() => handleDelete(doc.id)}
+              />
+            ))}
+          </ul>
+        </SectionCard>
       )}
 
       <PreviewModal
@@ -138,7 +140,7 @@ const DocumentList = ({ kind }: { kind: DocumentKind }) => {
         onCancel={() => setRenameTarget(null)}
         onConfirm={handleRename}
       />
-    </div>
+    </PageContainer>
   );
 };
 

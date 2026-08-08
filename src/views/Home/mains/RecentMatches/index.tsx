@@ -1,8 +1,9 @@
 import { useNavigate } from "@tanstack/react-router";
-import { Button, Card, Table, Tag } from "antd";
+import { Button, Table, Tag } from "antd";
 import { Inbox, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { TableColumnsType } from "antd";
+import SectionCard from "#/components/SectionCard";
 import { useMatchHistory } from "#/hooks/useMatch";
 import { useWizardStore } from "#/stores";
 import type { MatchSummaryDto } from "#/types/Matching";
@@ -68,16 +69,16 @@ const RecentMatches = () => {
   ];
 
   return (
-    <Card
+    <SectionCard
       title={t("home.recent.title")}
-      className="shadow-sm"
+      bodyClassName="p-0"
       extra={
         history.length > RECENT_LIMIT ? (
           // No dedicated "all matches" page exists yet (out of scope for this
           // task, same kind of intentional follow-up gap as library
           // pagination) — rendered as muted, non-interactive text so it does
           // not read as a broken link.
-          <span className="text-sm font-medium text-slate-400 dark:text-slate-500">
+          <span className="text-sm font-medium text-faint">
             {t("home.recent.viewAll")}
           </span>
         ) : null
@@ -106,10 +107,8 @@ const RecentMatches = () => {
         locale={{
           emptyText: (
             <div className="flex flex-col items-center gap-3 py-10">
-              <Inbox className="text-slate-300 dark:text-slate-600" size={32} />
-              <p className="text-slate-400 dark:text-slate-500">
-                {t("home.recent.empty")}
-              </p>
+              <Inbox className="text-faint" size={32} />
+              <p className="text-muted">{t("home.recent.empty")}</p>
               <Button
                 type="primary"
                 icon={<Sparkles size={16} />}
@@ -121,7 +120,7 @@ const RecentMatches = () => {
           )
         }}
       />
-    </Card>
+    </SectionCard>
   );
 };
 

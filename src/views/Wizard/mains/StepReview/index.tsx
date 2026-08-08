@@ -3,6 +3,7 @@ import { ArrowLeft, Loader2, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import DocumentPreview from "#/components/DocumentPreview";
+import SectionCard from "#/components/SectionCard";
 import { useDocument } from "#/hooks/useDocuments";
 import { useRunMatch } from "#/hooks/useMatch";
 import { useWizardStore } from "#/stores";
@@ -51,17 +52,17 @@ const StepReview = () => {
   // and never resolves, so offer a way back instead of hanging on the spinner.
   if (!jdDocId || !cvDocId) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4 rounded-xl border border-slate-100 bg-white p-16 shadow-sm dark:border-slate-700/50 dark:bg-slate-800/50">
-        <p
-          role="alert"
-          className="font-medium text-slate-500 dark:text-slate-400"
-        >
+      <SectionCard
+        className="h-full"
+        bodyClassName="flex h-full flex-col items-center justify-center gap-4 p-8 md:p-16"
+      >
+        <p role="alert" className="font-medium text-muted">
           {t("review.missingDocs")}
         </p>
         <Button icon={<ArrowLeft size={16} />} onClick={goBack}>
           {t("action.back")}
         </Button>
-      </div>
+      </SectionCard>
     );
   }
 
@@ -70,35 +71,50 @@ const StepReview = () => {
 
   if (isLoadingDocs) {
     return (
-      <div className="flex h-full items-center justify-center gap-3 rounded-xl border border-slate-100 bg-white p-16 shadow-sm dark:border-slate-700/50 dark:bg-slate-800/50">
-        <Loader2
-          className="animate-spin text-slate-400 dark:text-slate-500"
-          size={20}
-        />
-        <p className="font-medium text-slate-400 dark:text-slate-500">
-          {t("review.loading")}
-        </p>
-      </div>
+      <SectionCard
+        className="h-full"
+        bodyClassName="flex h-full items-center justify-center gap-3 p-8 md:p-16"
+      >
+        <Loader2 className="animate-spin text-faint" size={20} />
+        <p className="font-medium text-faint">{t("review.loading")}</p>
+      </SectionCard>
     );
   }
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm dark:border-slate-700/50 dark:bg-slate-800/50">
-      <div className="shrink-0 border-b border-slate-100 p-6 dark:border-slate-700/50">
-        <h2 className="mb-1 text-xl font-semibold text-slate-900 dark:text-white">
-          {t("wizard.stepReview.title")}
-        </h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          {t("wizard.stepReview.description")}
-        </p>
-      </div>
-
-      <div className="grid min-h-0 flex-1 grid-cols-1 divide-y divide-slate-100 lg:grid-cols-2 lg:divide-x lg:divide-y-0 dark:divide-slate-700/50">
-        <section className="flex min-h-0 flex-col p-6">
-          <h3 className="mb-4 shrink-0 text-sm font-bold tracking-widest text-slate-400 uppercase dark:text-slate-500">
+    <SectionCard
+      fill
+      className="h-full"
+      title={t("wizard.stepReview.title")}
+      description={t("wizard.stepReview.description")}
+      bodyClassName="flex min-h-0 flex-1 flex-col p-0"
+      footer={
+        <>
+          <Button
+            type="text"
+            icon={<ArrowLeft size={16} />}
+            onClick={goBack}
+            className="!text-muted"
+          >
+            {t("action.back")}
+          </Button>
+          <Button
+            type="primary"
+            loading={isSubmitting}
+            onClick={() => void handleRunMatch()}
+            icon={<Sparkles size={16} />}
+          >
+            {t("action.runMatch")}
+          </Button>
+        </>
+      }
+    >
+      <div className="grid min-h-0 flex-1 grid-cols-1 divide-y divide-line lg:grid-cols-2 lg:divide-x lg:divide-y-0">
+        <section className="flex min-h-0 flex-col p-4 md:p-6">
+          <h3 className="mb-4 shrink-0 text-xs font-semibold tracking-wider text-faint uppercase">
             {t("step.cv")}
           </h3>
-          <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-slate-100 dark:border-slate-700/50">
+          <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-line">
             <DocumentPreview
               docId={cvDocId}
               sourceFormat={cvQuery.data.sourceFormat}
@@ -106,11 +122,11 @@ const StepReview = () => {
             />
           </div>
         </section>
-        <section className="flex min-h-0 flex-col p-6">
-          <h3 className="mb-4 shrink-0 text-sm font-bold tracking-widest text-slate-400 uppercase dark:text-slate-500">
+        <section className="flex min-h-0 flex-col p-4 md:p-6">
+          <h3 className="mb-4 shrink-0 text-xs font-semibold tracking-wider text-faint uppercase">
             {t("step.jd")}
           </h3>
-          <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-slate-100 dark:border-slate-700/50">
+          <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-line">
             <DocumentPreview
               docId={jdDocId}
               sourceFormat={jdQuery.data.sourceFormat}
@@ -123,31 +139,12 @@ const StepReview = () => {
       {error && (
         <p
           role="alert"
-          className="px-8 pb-6 text-sm text-red-600 dark:text-red-400"
+          className="shrink-0 px-4 pb-4 text-sm text-red-600 md:px-6 dark:text-red-400"
         >
           {error}
         </p>
       )}
-
-      <div className="flex shrink-0 items-center justify-between border-t border-slate-100 bg-slate-50/50 p-6 dark:border-slate-700/50 dark:bg-slate-800/80">
-        <Button
-          type="text"
-          icon={<ArrowLeft size={16} />}
-          onClick={goBack}
-          className="!text-slate-500 dark:!text-slate-300"
-        >
-          {t("action.back")}
-        </Button>
-        <Button
-          type="primary"
-          loading={isSubmitting}
-          onClick={() => void handleRunMatch()}
-          icon={<Sparkles size={16} />}
-        >
-          {t("action.runMatch")}
-        </Button>
-      </div>
-    </div>
+    </SectionCard>
   );
 };
 

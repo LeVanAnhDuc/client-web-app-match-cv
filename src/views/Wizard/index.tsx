@@ -1,3 +1,4 @@
+import PageContainer from "#/components/PageContainer";
 import { useWizardStore } from "#/stores";
 import Stepper from "./components/Stepper";
 import StepCV from "./mains/StepCV";
@@ -15,7 +16,7 @@ const Wizard = () => {
   const step = useWizardStore((s) => s.step);
 
   return (
-    <div className="mx-auto flex h-full max-w-5xl flex-col p-4 md:p-8">
+    <PageContainer className="flex h-full flex-col">
       <Stepper current={step} />
       <div className="flex min-h-0 flex-1 flex-col">
         {step === 1 && <StepJD />}
@@ -23,7 +24,7 @@ const Wizard = () => {
         {step === 3 && <StepReview />}
         {step === 4 && <StepResult />}
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

@@ -61,10 +61,10 @@ const UploadPasteTabs = ({
           className="mb-6 !rounded-xl !border-dashed md:mb-10"
         >
           <div className="flex flex-col items-center justify-center py-4 md:py-6">
-            <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 md:size-16 dark:bg-slate-900 dark:text-indigo-400">
+            <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 md:size-16 dark:bg-indigo-500/10 dark:text-indigo-400">
               <UploadCloud size={28} />
             </div>
-            <p className="mb-1 text-base font-medium text-slate-900 md:text-lg dark:text-white">
+            <p className="mb-1 text-base font-medium text-body md:text-lg">
               {file ? (
                 file.name
               ) : (
@@ -78,7 +78,7 @@ const UploadPasteTabs = ({
                 />
               )}
             </p>
-            <p className="text-sm text-slate-500 dark:text-slate-500">
+            <p className="text-sm text-muted">
               {t("dropzone.hint", { max: maxSizeLabel })}
             </p>
           </div>

@@ -29,23 +29,21 @@ const DocumentRow = ({
   const canDownload = doc.sourceFormat !== "text";
 
   return (
-    <li className="flex items-center gap-4 rounded-xl border border-slate-200 px-4 py-3 dark:border-slate-700">
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+    <li className="flex items-center gap-4 px-4 py-3 md:px-6">
+      <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface-subtle text-muted">
         <FileText size={18} />
       </span>
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <p className="truncate text-sm font-semibold text-slate-800 dark:text-slate-100">
+          <p className="truncate text-sm font-semibold text-body">
             {doc.title}
           </p>
           <Tag className="shrink-0" bordered={false}>
             {t(`format.${doc.sourceFormat}`)}
           </Tag>
         </div>
-        <p className="truncate text-xs text-slate-500 dark:text-slate-400">
-          {date}
-        </p>
+        <p className="truncate text-xs text-muted">{date}</p>
       </div>
 
       <div className="flex shrink-0 items-center gap-1">
