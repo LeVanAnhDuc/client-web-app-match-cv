@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppAiCredentialsRouteImport } from './routes/_app/ai-credentials'
 import { Route as AppCvRouteImport } from './routes/_app/cv'
 import { Route as AppJdRouteImport } from './routes/_app/jd'
 import { Route as AppWizardRouteImport } from './routes/_app/wizard'
@@ -22,6 +23,11 @@ const AppRoute = AppRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAiCredentialsRoute = AppAiCredentialsRouteImport.update({
+  id: '/ai-credentials',
+  path: '/ai-credentials',
   getParentRoute: () => AppRoute,
 } as any)
 const AppCvRoute = AppCvRouteImport.update({
@@ -42,11 +48,13 @@ const AppWizardRoute = AppWizardRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
+  '/ai-credentials': typeof AppAiCredentialsRoute
   '/cv': typeof AppCvRoute
   '/jd': typeof AppJdRoute
   '/wizard': typeof AppWizardRoute
 }
 export interface FileRoutesByTo {
+  '/ai-credentials': typeof AppAiCredentialsRoute
   '/cv': typeof AppCvRoute
   '/jd': typeof AppJdRoute
   '/wizard': typeof AppWizardRoute
@@ -55,6 +63,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
+  '/_app/ai-credentials': typeof AppAiCredentialsRoute
   '/_app/cv': typeof AppCvRoute
   '/_app/jd': typeof AppJdRoute
   '/_app/wizard': typeof AppWizardRoute
@@ -62,10 +71,17 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cv' | '/jd' | '/wizard'
+  fullPaths: '/' | '/ai-credentials' | '/cv' | '/jd' | '/wizard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/cv' | '/jd' | '/wizard' | '/'
-  id: '__root__' | '/_app' | '/_app/cv' | '/_app/jd' | '/_app/wizard' | '/_app/'
+  to: '/ai-credentials' | '/cv' | '/jd' | '/wizard' | '/'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/_app/ai-credentials'
+    | '/_app/cv'
+    | '/_app/jd'
+    | '/_app/wizard'
+    | '/_app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -86,6 +102,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/ai-credentials': {
+      id: '/_app/ai-credentials'
+      path: '/ai-credentials'
+      fullPath: '/ai-credentials'
+      preLoaderRoute: typeof AppAiCredentialsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/cv': {
@@ -113,6 +136,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppAiCredentialsRoute: typeof AppAiCredentialsRoute
   AppCvRoute: typeof AppCvRoute
   AppJdRoute: typeof AppJdRoute
   AppWizardRoute: typeof AppWizardRoute
@@ -120,6 +144,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAiCredentialsRoute: AppAiCredentialsRoute,
   AppCvRoute: AppCvRoute,
   AppJdRoute: AppJdRoute,
   AppWizardRoute: AppWizardRoute,

@@ -33,6 +33,10 @@ const matchResult: MatchResultDto = {
       'Quantify design impact with metrics like "Increased conversion by 15%."'
     ]
   },
+  credentialId: null,
+  provider: "openrouter",
+  chatModel: "openai/gpt-4o-mini",
+  embedModel: "openai/text-embedding-3-small",
   createdAt: "2023-10-12T00:00:00.000Z"
 };
 

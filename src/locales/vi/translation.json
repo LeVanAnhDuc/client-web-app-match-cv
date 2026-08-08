@@ -8,7 +8,8 @@
     "savedJds": "Mô tả công việc",
     "openMenu": "Mở menu",
     "collapse": "Thu gọn thanh bên",
-    "expand": "Mở thanh bên"
+    "expand": "Mở thanh bên",
+    "aiCredentials": "Credential AI"
   },
   "home": {
     "hero": {
@@ -181,5 +182,78 @@
     "parseFailed": "Không đọc được file này. Thử file khác.",
     "matchUnavailable": "Tính năng so khớp AI tạm thời không khả dụng. Vui lòng thử lại sau.",
     "matchFailed": "Không thể chạy so khớp. Vui lòng thử lại."
+  },
+  "credentials": {
+    "title": "Credential AI",
+    "subtitle": "Key AI của riêng bạn. So khớp sẽ chạy bằng key bạn chọn.",
+    "add": "Thêm credential",
+    "empty": "Chưa có credential nào",
+    "emptyHint": "Hiện so khớp đang chạy bằng key hệ thống. Thêm key của bạn để dùng tài khoản nhà cung cấp của mình.",
+    "fallbackNote": "Khi không chọn credential nào, so khớp sẽ chạy bằng key hệ thống có sẵn.",
+    "systemKey": "Key hệ thống",
+    "systemKeyTag": "dự phòng",
+    "defaultModel": "Mặc định",
+    "never": "—",
+    "chatLabel": "Chat",
+    "embedLabel": "Embeddings",
+    "form": {
+      "addTitle": "Thêm credential",
+      "editTitle": "Sửa credential",
+      "provider": "Nhà cung cấp",
+      "providerLocked": "Không đổi được nhà cung cấp. Hãy tạo credential khác nếu muốn chuyển.",
+      "label": "Tên gọi",
+      "labelPlaceholder": "Key OpenRouter của tôi",
+      "apiKey": "API key",
+      "apiKeyKeepHint": "Để trống để giữ key hiện tại",
+      "apiKeyStoredHint": "Được mã hoá khi lưu và không bao giờ hiển thị lại.",
+      "chatModel": "Model chat",
+      "embedModel": "Model embedding",
+      "modelHint": "Để trống để dùng mặc định của nhà cung cấp",
+      "save": "Lưu",
+      "testing": "Đang kiểm tra kết nối…",
+      "required": "Trường này bắt buộc",
+      "labelTooLong": "Tối đa 60 ký tự",
+      "keyTooShort": "Key phải có ít nhất 20 ký tự",
+      "keyTooLong": "Key tối đa 400 ký tự",
+      "noWhitespace": "Không được chứa khoảng trắng"
+    },
+    "status": {
+      "untested": "Chưa kiểm tra",
+      "ok": "Kết nối tốt",
+      "invalid_key": "Key không hợp lệ",
+      "no_quota": "Hết hạn mức",
+      "model_unavailable": "Model không khả dụng",
+      "unreachable": "Không kết nối được"
+    },
+    "actions": {
+      "test": "Kiểm tra",
+      "edit": "Sửa",
+      "delete": "Xoá"
+    },
+    "delete": {
+      "confirm": "Xoá credential này?",
+      "hint": "Các kết quả so khớp cũ vẫn giữ nhà cung cấp và model đã dùng.",
+      "success": "Đã xoá credential",
+      "failed": "Không xoá được credential"
+    },
+    "test": {
+      "success": "Đã kiểm tra kết nối",
+      "failed": "Không kiểm tra được credential"
+    },
+    "errors": {
+      "loadFailed": "Không tải được danh sách credential",
+      "notConfigured": "Máy chủ chưa cấu hình kho lưu credential.",
+      "labelTaken": "Bạn đã có credential trùng tên này",
+      "saveFailed": "Không lưu được credential"
+    },
+    "runWith": {
+      "title": "Chạy bằng",
+      "untestedWarning": "Credential này chưa được kiểm tra.",
+      "failedWarning": "Lần kiểm tra gần nhất của credential này không đạt.",
+      "testNow": "Kiểm tra ngay",
+      "privacy": "Nội dung CV và JD của bạn sẽ được gửi tới {{provider}}.",
+      "privacySystem": "Nội dung CV và JD của bạn sẽ được gửi tới OpenRouter bằng key hệ thống.",
+      "ranWith": "Chạy bằng"
+    }
   }
 }

@@ -56,6 +56,10 @@ const matchResult: MatchResultDto = {
   semanticScore: 88,
   keywordScore: 62,
   report: { strengths: [], gaps: [], suggestions: [] },
+  credentialId: null,
+  provider: "openrouter",
+  chatModel: "openai/gpt-4o-mini",
+  embedModel: "openai/text-embedding-3-small",
   createdAt: "2023-10-12T00:00:00.000Z"
 };
 
