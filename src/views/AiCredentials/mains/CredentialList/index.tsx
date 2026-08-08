@@ -78,8 +78,6 @@ const CredentialList = () => {
       </header>
 
       <SectionCard
-        title={t("credentials.title")}
-        description={t("credentials.fallbackNote")}
         extra={
           <Button
             type="primary"
@@ -142,6 +140,8 @@ const CredentialList = () => {
           </ul>
         )}
       </SectionCard>
+
+      <p className="text-sm text-muted">{t("credentials.fallbackNote")}</p>
 
       <CredentialFormModal
         open={addOpen}
