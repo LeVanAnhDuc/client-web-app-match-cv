@@ -1,12 +1,8 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
+import type { UseQueryResult } from "@tanstack/react-query";
 import "#/i18n/config";
-import {
-  useAiCredentials,
-  useProviders,
-  useTestCredential
-} from "#/hooks/useAiCredentials";
+import { useAiCredentials, useProviders } from "#/hooks/useAiCredentials";
 import type { AiCredentialDto, ProviderInfoDto } from "#/types/AiCredentials";
 import RunWithSelector from "../index";
 
@@ -56,10 +52,6 @@ const base: AiCredentialDto = {
 function mockCredentials(credentials: Array<AiCredentialDto>) {
   vi.mocked(useAiCredentials).mockReturnValue(asQuery(credentials));
   vi.mocked(useProviders).mockReturnValue(asQuery(providers));
-  vi.mocked(useTestCredential).mockReturnValue({
-    mutate: vi.fn(),
-    isPending: false
-  } as unknown as UseMutationResult<never, Error, string>);
 }
 
 describe("RunWithSelector", () => {
@@ -71,71 +63,107 @@ describe("RunWithSelector", () => {
       { ...base, id: "b", label: "Newer", lastUsedAt: "2026-08-05T00:00:00Z" }
     ]);
     const onChange = vi.fn();
-    render(<RunWithSelector value={null} onChange={onChange} />);
-    await waitFor(() => expect(onChange).toHaveBeenCalledWith("b"));
+    render(<RunWithSelector value={[]} onChange={onChange} />);
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith(["b"]));
   });
 
-  it("stays on the system key when the user has no credentials", async () => {
+  it("defaults to the system key when the user has no credentials", async () => {
     mockCredentials([]);
     const onChange = vi.fn();
-    render(<RunWithSelector value={null} onChange={onChange} />);
-    expect(await screen.findByText("System key")).toBeInTheDocument();
-    await waitFor(() => expect(onChange).toHaveBeenCalledWith(null));
+    render(<RunWithSelector value={[]} onChange={onChange} />);
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith([null]));
   });
 
-  it("falls back when the selected credential no longer exists", async () => {
+  it("drops a selection whose credential no longer exists", async () => {
     mockCredentials([{ ...base, id: "a" }]);
     const onChange = vi.fn();
-    render(<RunWithSelector value="deleted-id" onChange={onChange} />);
-    await waitFor(() => expect(onChange).toHaveBeenCalledWith("a"));
+    render(<RunWithSelector value={["a", "deleted-id"]} onChange={onChange} />);
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith(["a"]));
   });
 
-  it("warns without blocking when the selected credential is untested", () => {
-    mockCredentials([{ ...base, id: "a", lastTestStatus: null }]);
-    render(<RunWithSelector value="a" onChange={vi.fn()} />);
+  it("keeps an unchanged multi-selection alone", async () => {
+    mockCredentials([
+      { ...base, id: "a" },
+      { ...base, id: "b", label: "Second" }
+    ]);
+    const onChange = vi.fn();
+    render(<RunWithSelector value={["a", "b"]} onChange={onChange} />);
+    await waitFor(() => expect(screen.getByText("Second")).toBeInTheDocument());
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("adds a provider when its checkbox is ticked", async () => {
+    mockCredentials([
+      { ...base, id: "a" },
+      { ...base, id: "b", label: "Second" }
+    ]);
+    const onChange = vi.fn();
+    render(<RunWithSelector value={["a"]} onChange={onChange} />);
+
+    fireEvent.click(screen.getByRole("checkbox", { name: /Second/ }));
+    await waitFor(() =>
+      expect(onChange).toHaveBeenCalledWith(expect.arrayContaining(["a", "b"]))
+    );
+  });
+
+  it("offers the system key as its own choice", () => {
+    mockCredentials([{ ...base, id: "a" }]);
+    render(<RunWithSelector value={["a"]} onChange={vi.fn()} />);
     expect(
-      screen.getByText("This credential has not been tested yet.")
+      screen.getByRole("checkbox", { name: /System key/ })
     ).toBeInTheDocument();
   });
 
-  it("warns when the last test did not pass", () => {
-    mockCredentials([{ ...base, id: "a", lastTestStatus: "no_quota" }]);
-    render(<RunWithSelector value="a" onChange={vi.fn()} />);
-    expect(
-      screen.getByText("The last test for this credential did not pass.")
-    ).toBeInTheDocument();
-  });
+  it("names every selected provider in the privacy notice", () => {
+    mockCredentials([
+      { ...base, id: "a", provider: "gemini" },
+      { ...base, id: "b", provider: "openrouter", label: "Second" }
+    ]);
+    render(<RunWithSelector value={["a", "b", null]} onChange={vi.fn()} />);
 
-  it("stays quiet when the last test passed", () => {
-    mockCredentials([{ ...base, id: "a", lastTestStatus: "ok" }]);
-    render(<RunWithSelector value="a" onChange={vi.fn()} />);
-    expect(screen.queryByText(/has not been tested/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/did not pass/)).not.toBeInTheDocument();
-  });
-
-  it("names the provider the documents will be sent to", () => {
-    mockCredentials([{ ...base, id: "a", provider: "gemini" }]);
-    render(<RunWithSelector value="a" onChange={vi.fn()} />);
-    expect(
-      screen.getByText("Your CV and JD text will be sent to Google Gemini.")
-    ).toBeInTheDocument();
-  });
-
-  it("names the system key in the privacy notice when nothing is selected", () => {
-    mockCredentials([]);
-    render(<RunWithSelector value={null} onChange={vi.fn()} />);
     expect(
       screen.getByText(
-        "Your CV and JD text will be sent to OpenRouter using the system key."
+        "Your CV and JD text will be sent to: Google Gemini, OpenRouter, System key."
       )
     ).toBeInTheDocument();
   });
 
-  it("gives the select an accessible name", () => {
+  it("asks for a selection when nothing is ticked", () => {
     mockCredentials([{ ...base, id: "a" }]);
-    render(<RunWithSelector value="a" onChange={vi.fn()} />);
+    render(<RunWithSelector value={[]} onChange={vi.fn()} />);
     expect(
-      screen.getByRole("combobox", { name: "Run with" })
+      screen.getByText("Select at least one key to run the match.")
     ).toBeInTheDocument();
+  });
+
+  it("warns about untested selections without blocking them", () => {
+    mockCredentials([
+      { ...base, id: "a", lastTestStatus: null },
+      { ...base, id: "b", label: "Second", lastTestStatus: "no_quota" }
+    ]);
+    render(<RunWithSelector value={["a", "b"]} onChange={vi.fn()} />);
+
+    expect(
+      screen.getByText(
+        "2 selected credentials have not passed a connection test."
+      )
+    ).toBeInTheDocument();
+  });
+
+  it("stays quiet when every selection passed its test", () => {
+    mockCredentials([{ ...base, id: "a", lastTestStatus: "ok" }]);
+    render(<RunWithSelector value={["a"]} onChange={vi.fn()} />);
+    expect(
+      screen.queryByText(/have not passed a connection test/)
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/has not passed a connection test/)
+    ).not.toBeInTheDocument();
+  });
+
+  it("gives the group an accessible name", () => {
+    mockCredentials([{ ...base, id: "a" }]);
+    render(<RunWithSelector value={["a"]} onChange={vi.fn()} />);
+    expect(screen.getByLabelText("Run with")).toBeInTheDocument();
   });
 });

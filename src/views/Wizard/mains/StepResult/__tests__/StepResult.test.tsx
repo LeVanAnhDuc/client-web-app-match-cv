@@ -1,143 +1,245 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import "#/i18n/config";
-import { ApiError } from "#/libs/api";
-import * as matchHooks from "#/hooks/useMatch";
+import { useMatchRun, useRunMatch } from "#/hooks/useMatch";
+import { useProviders } from "#/hooks/useAiCredentials";
 import { useWizardStore } from "#/stores";
-import type { MatchResultDto } from "#/types/Matching";
+import type {
+  CreateMatchInput,
+  MatchResultDto,
+  MatchRunDetailDto
+} from "#/types/Matching";
+import type { ProviderInfoDto } from "#/types/AiCredentials";
 import StepResult from "../index";
 
-function renderStep() {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false }, mutations: { retry: false } }
-  });
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <StepResult />
-    </QueryClientProvider>
-  );
-}
+vi.mock("#/hooks/useMatch");
+vi.mock("#/hooks/useAiCredentials");
 
-const matchResult: MatchResultDto = {
+const RUN_ID = "run-1";
+const CV_ID = "cv-1";
+const JD_ID = "jd-1";
+
+const providers: Array<ProviderInfoDto> = [
+  {
+    id: "openrouter",
+    label: "OpenRouter",
+    defaultChatModel: "openai/gpt-4o-mini",
+    defaultEmbedModel: "openai/text-embedding-3-small"
+  },
+  {
+    id: "gemini",
+    label: "Google Gemini",
+    defaultChatModel: "gemini-2.5-flash",
+    defaultEmbedModel: "gemini-embedding-001"
+  }
+];
+
+const succeeded: MatchResultDto = {
   id: "match-1",
-  cvDocumentId: "cv-1",
-  jdDocumentId: "jd-1",
-  overallScore: 75,
-  semanticScore: 88,
-  keywordScore: 62,
+  cvDocumentId: CV_ID,
+  jdDocumentId: JD_ID,
+  overallScore: 82,
+  semanticScore: 90,
+  keywordScore: 74,
   report: {
-    strengths: ["Figma Mastery", "Cross-functional Collaboration"],
-    gaps: ["Accessibility Standards (WCAG)"],
-    suggestions: [
-      'Quantify design impact with metrics like "Increased conversion by 15%."'
-    ]
+    strengths: ["Strong backend background"],
+    gaps: ["No GraphQL experience"],
+    suggestions: ["Quantify API impact"]
   },
   credentialId: null,
+  runId: RUN_ID,
+  status: "succeeded",
+  errorCode: null,
   provider: "openrouter",
   chatModel: "openai/gpt-4o-mini",
   embedModel: "openai/text-embedding-3-small",
-  createdAt: "2023-10-12T00:00:00.000Z"
+  createdAt: "2026-08-08T00:00:00.000Z"
 };
+
+const failed: MatchResultDto = {
+  ...succeeded,
+  id: "match-2",
+  overallScore: 0,
+  semanticScore: 0,
+  keywordScore: 0,
+  report: { strengths: [], gaps: [], suggestions: [] },
+  status: "failed",
+  errorCode: "no_quota",
+  provider: "gemini",
+  chatModel: "gemini-2.5-flash"
+};
+
+function asQuery<T>(data: T | undefined, over = {}) {
+  return {
+    data,
+    isLoading: false,
+    isError: false,
+    isSuccess: data !== undefined,
+    error: null,
+    ...over
+  } as UseQueryResult<T>;
+}
+
+function mockRunMatch(behaviour: {
+  isPending?: boolean;
+  result?: MatchResultDto;
+}) {
+  const mutate = vi.fn(
+    (_input: unknown, opts?: { onSuccess?: (r: MatchResultDto) => void }) => {
+      if (behaviour.result) opts?.onSuccess?.(behaviour.result);
+    }
+  );
+  vi.mocked(useRunMatch).mockReturnValue({
+    mutate,
+    isPending: behaviour.isPending ?? false
+  } as unknown as UseMutationResult<MatchResultDto, Error, CreateMatchInput>);
+  return mutate;
+}
+
+function setStore(over: Record<string, unknown>) {
+  useWizardStore.setState({
+    step: 4,
+    cvDocId: CV_ID,
+    jdDocId: JD_ID,
+    runId: RUN_ID,
+    credentialIds: [],
+    pendingCredentialIds: [],
+    matchId: null,
+    ...over
+  });
+}
 
 describe("StepResult", () => {
   beforeEach(() => {
-    useWizardStore.setState({
-      step: 4,
-      jdDocId: "jd-1",
-      cvDocId: "cv-1",
-      matchId: "match-1"
+    vi.clearAllMocks();
+    vi.mocked(useProviders).mockReturnValue(asQuery(providers));
+    vi.mocked(useMatchRun).mockReturnValue(
+      asQuery<MatchRunDetailDto>(undefined)
+    );
+    useWizardStore.getState().reset();
+  });
+
+  it("renders one card per provider chosen for this run", () => {
+    setStore({ pendingCredentialIds: ["cred-a", null] });
+    mockRunMatch({ isPending: true });
+
+    render(<StepResult />);
+
+    expect(screen.getAllByRole("heading", { level: 2 })).toHaveLength(2);
+  });
+
+  it("fires exactly one request per card", () => {
+    setStore({ pendingCredentialIds: ["cred-a", "cred-b", null] });
+    const mutate = mockRunMatch({ isPending: true });
+
+    render(<StepResult />);
+
+    expect(mutate).toHaveBeenCalledTimes(3);
+    expect(mutate.mock.calls[2][0]).toMatchObject({
+      runId: RUN_ID,
+      credentialId: undefined
     });
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
+  it("shows the scores and the report once a card resolves", async () => {
+    setStore({ pendingCredentialIds: ["cred-a"] });
+    mockRunMatch({ result: succeeded });
+
+    render(<StepResult />);
+
+    expect(await screen.findByText("82%")).toBeInTheDocument();
+    expect(screen.getByText("90%")).toBeInTheDocument();
+    expect(screen.getByText("74%")).toBeInTheDocument();
+    // Sole card → the report is expanded rather than hidden behind a toggle.
+    expect(screen.getByText("Strong backend background")).toBeInTheDocument();
+    expect(screen.queryByText("Show full report")).not.toBeInTheDocument();
   });
 
-  it("renders overall/semantic/keyword scores and the three report lists", () => {
-    vi.spyOn(matchHooks, "useMatchResult").mockReturnValue({
-      data: matchResult,
-      isLoading: false,
-      isError: false,
-      error: null
-    } as unknown as ReturnType<typeof matchHooks.useMatchResult>);
+  it("collapses the report when several providers share the screen", async () => {
+    setStore({ pendingCredentialIds: ["cred-a", "cred-b"] });
+    mockRunMatch({ result: succeeded });
 
-    renderStep();
+    render(<StepResult />);
 
-    expect(screen.getByText("75%")).toBeInTheDocument();
-    expect(screen.getByText("88%")).toBeInTheDocument();
-    expect(screen.getByText("62%")).toBeInTheDocument();
-    expect(screen.getByText("Figma Mastery")).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getAllByText("Show full report").length).toBe(2)
+    );
+  });
+
+  it("names the provider and model that produced each card", async () => {
+    setStore({ pendingCredentialIds: ["cred-a"] });
+    mockRunMatch({ result: succeeded });
+
+    render(<StepResult />);
+
     expect(
-      screen.getByText("Accessibility Standards (WCAG)")
+      await screen.findByText("OpenRouter · openai/gpt-4o-mini")
     ).toBeInTheDocument();
+  });
+
+  it("renders a failed card as an error, never as a 0% score", async () => {
+    setStore({ pendingCredentialIds: ["cred-a"] });
+    mockRunMatch({ result: failed });
+
+    render(<StepResult />);
+
     expect(
-      screen.getByText(
-        'Quantify design impact with metrics like "Increased conversion by 15%."'
-      )
+      await screen.findByText("This key has no quota left with the provider.")
+    ).toBeInTheDocument();
+    expect(screen.queryByText("0%")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Try again" })
     ).toBeInTheDocument();
   });
 
-  it("scales the gauge down on mobile and pins the footer actions", () => {
-    vi.spyOn(matchHooks, "useMatchResult").mockReturnValue({
-      data: matchResult,
-      isLoading: false,
-      isError: false,
-      error: null
-    } as ReturnType<typeof matchHooks.useMatchResult>);
+  it("reads the run instead of firing when the page was reloaded", async () => {
+    setStore({ pendingCredentialIds: [] });
+    const mutate = mockRunMatch({});
+    vi.mocked(useMatchRun).mockReturnValue(
+      asQuery<MatchRunDetailDto>({
+        id: RUN_ID,
+        cvDocumentId: CV_ID,
+        jdDocumentId: JD_ID,
+        createdAt: "2026-08-08T00:00:00.000Z",
+        results: [succeeded]
+      })
+    );
 
-    renderStep();
+    render(<StepResult />);
 
-    const startOver = screen.getByRole("button", { name: /start over/i });
-    expect(startOver.className).toContain("ant-btn-lg");
-    expect(startOver.parentElement?.className).toContain("sticky");
-    expect(startOver.parentElement?.className).toContain("lg:static");
-
-    const gauge = document.querySelector("svg")?.parentElement;
-    expect(gauge?.className).toContain("size-32");
-    expect(gauge?.className).toContain("md:size-40");
+    expect(await screen.findByText("82%")).toBeInTheDocument();
+    // Re-firing would silently double the AI spend.
+    expect(mutate).not.toHaveBeenCalled();
   });
 
-  it("shows a loading state while the match result is pending", () => {
-    vi.spyOn(matchHooks, "useMatchResult").mockReturnValue({
-      data: undefined,
-      isLoading: true,
-      isError: false,
-      error: null
-    } as unknown as ReturnType<typeof matchHooks.useMatchResult>);
+  it("says so when a reloaded run has nothing in it yet", async () => {
+    setStore({ pendingCredentialIds: [] });
+    mockRunMatch({});
+    vi.mocked(useMatchRun).mockReturnValue(
+      asQuery<MatchRunDetailDto>({
+        id: RUN_ID,
+        cvDocumentId: CV_ID,
+        jdDocumentId: JD_ID,
+        createdAt: "2026-08-08T00:00:00.000Z",
+        results: []
+      })
+    );
 
-    renderStep();
+    render(<StepResult />);
 
-    expect(screen.getByText(/running the match/i)).toBeInTheDocument();
+    expect(await screen.findByText("Nothing finished yet")).toBeInTheDocument();
   });
 
-  it("shows a friendly error message on 503 (OpenRouter unavailable)", () => {
-    vi.spyOn(matchHooks, "useMatchResult").mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      isError: true,
-      error: new ApiError(503, "OpenRouter API is down")
-    } as unknown as ReturnType<typeof matchHooks.useMatchResult>);
+  it("offers a way out when there is no run at all", () => {
+    setStore({ runId: null, pendingCredentialIds: [] });
+    mockRunMatch({});
 
-    renderStep();
+    render(<StepResult />);
 
-    expect(screen.getByText(/temporarily unavailable/i)).toBeInTheDocument();
-  });
-
-  it('"Start over" resets the wizard store back to step 1', () => {
-    vi.spyOn(matchHooks, "useMatchResult").mockReturnValue({
-      data: matchResult,
-      isLoading: false,
-      isError: false,
-      error: null
-    } as unknown as ReturnType<typeof matchHooks.useMatchResult>);
-
-    renderStep();
-
-    fireEvent.click(screen.getByRole("button", { name: /start over/i }));
-
-    expect(useWizardStore.getState().step).toBe(1);
-    expect(useWizardStore.getState().jdDocId).toBeNull();
-    expect(useWizardStore.getState().matchId).toBeNull();
+    expect(screen.getByRole("alert")).toHaveTextContent("No run to show");
+    expect(
+      screen.getByRole("button", { name: /Start over/i })
+    ).toBeInTheDocument();
   });
 });

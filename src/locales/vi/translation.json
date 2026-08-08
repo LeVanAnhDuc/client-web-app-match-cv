@@ -162,7 +162,9 @@
     "cancel": "Huỷ",
     "runMatch": "Chạy so khớp",
     "startOver": "Làm lại",
-    "saveReport": "Lưu báo cáo"
+    "saveReport": "Lưu báo cáo",
+    "runMatchCount": "Chạy so khớp · {{count}} provider",
+    "tryAgain": "Thử lại"
   },
   "result": {
     "overall": "Mức khớp tổng",
@@ -172,7 +174,21 @@
     "gaps": "Điểm thiếu",
     "suggestions": "Cách cải thiện CV",
     "loading": "Đang chạy so khớp…",
-    "disclaimer": "Nội dung AI tạo. CV/JD được gửi tới OpenRouter để phân tích — hãy tự kiểm chứng kết quả."
+    "disclaimer": "Nội dung AI tạo. CV/JD được gửi tới OpenRouter để phân tích — hãy tự kiểm chứng kết quả.",
+    "missingRun": "Không có lần chạy nào để hiện. Hãy bắt đầu một lần so khớp mới.",
+    "emptyRun": "Chưa có kết quả nào",
+    "emptyRunHint": "Lần chạy này chưa có kết quả. Những provider còn đang chạy lúc bạn tải lại trang sẽ không được chạy tiếp.",
+    "card": {
+      "pendingTitle": "Đang chạy…",
+      "showReport": "Xem báo cáo đầy đủ"
+    },
+    "error": {
+      "invalid_key": "Nhà cung cấp từ chối API key này.",
+      "no_quota": "Key này đã hết hạn mức ở nhà cung cấp.",
+      "model_unavailable": "Nhà cung cấp không có model đó.",
+      "timeout": "Nhà cung cấp phản hồi quá lâu.",
+      "unreachable": "Không kết nối được tới nhà cung cấp."
+    }
   },
   "err": {
     "saveFailed": "Không lưu được. Vui lòng thử lại.",
@@ -253,7 +269,11 @@
       "testNow": "Kiểm tra ngay",
       "privacy": "Nội dung CV và JD của bạn sẽ được gửi tới {{provider}}.",
       "privacySystem": "Nội dung CV và JD của bạn sẽ được gửi tới OpenRouter bằng key hệ thống.",
-      "ranWith": "Chạy bằng"
+      "ranWith": "Chạy bằng",
+      "untestedCount_one": "{{count}} credential đã chọn chưa kiểm tra kết nối thành công.",
+      "untestedCount_other": "{{count}} credential đã chọn chưa kiểm tra kết nối thành công.",
+      "privacyNone": "Chọn ít nhất một key để chạy so khớp.",
+      "privacyList": "Nội dung CV và JD của bạn sẽ được gửi tới: {{providers}}."
     }
   }
 }

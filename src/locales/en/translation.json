@@ -162,7 +162,9 @@
     "cancel": "Cancel",
     "runMatch": "Run match",
     "startOver": "Start over",
-    "saveReport": "Save report"
+    "saveReport": "Save report",
+    "runMatchCount": "Run match · {{count}} providers",
+    "tryAgain": "Try again"
   },
   "result": {
     "overall": "Overall match",
@@ -172,7 +174,21 @@
     "gaps": "Gaps / Missing",
     "suggestions": "How to improve your CV",
     "loading": "Running the match…",
-    "disclaimer": "AI-generated. CV/JD content is sent to OpenRouter for analysis — verify results independently."
+    "disclaimer": "AI-generated. CV/JD content is sent to OpenRouter for analysis — verify results independently.",
+    "missingRun": "No run to show. Start a new match.",
+    "emptyRun": "Nothing finished yet",
+    "emptyRunHint": "This run has no results. Providers that were still running when you reloaded are not resumed.",
+    "card": {
+      "pendingTitle": "Running…",
+      "showReport": "Show full report"
+    },
+    "error": {
+      "invalid_key": "That API key was rejected by the provider.",
+      "no_quota": "This key has no quota left with the provider.",
+      "model_unavailable": "The provider does not offer that model.",
+      "timeout": "The provider took too long to answer.",
+      "unreachable": "Could not reach the provider."
+    }
   },
   "err": {
     "saveFailed": "Couldn't save. Please try again.",
@@ -253,7 +269,11 @@
       "testNow": "Test now",
       "privacy": "Your CV and JD text will be sent to {{provider}}.",
       "privacySystem": "Your CV and JD text will be sent to OpenRouter using the system key.",
-      "ranWith": "Run with"
+      "ranWith": "Run with",
+      "untestedCount_one": "{{count}} selected credential has not passed a connection test.",
+      "untestedCount_other": "{{count}} selected credentials have not passed a connection test.",
+      "privacyNone": "Select at least one key to run the match.",
+      "privacyList": "Your CV and JD text will be sent to: {{providers}}."
     }
   }
 }
