@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import DocumentPreview from "#/components/DocumentPreview";
 import SectionCard from "#/components/SectionCard";
 import { useDocument } from "#/hooks/useDocuments";
-import { useRunMatch } from "#/hooks/useMatch";
+import { useCreateMatchRun } from "#/hooks/useMatch";
 import { useWizardStore } from "#/stores";
 import RunWithSelector from "../../components/RunWithSelector";
 
@@ -20,15 +20,15 @@ const StepReview = () => {
   const { t } = useTranslation();
   const jdDocId = useWizardStore((s) => s.jdDocId);
   const cvDocId = useWizardStore((s) => s.cvDocId);
-  const setMatchId = useWizardStore((s) => s.setMatchId);
-  const credentialId = useWizardStore((s) => s.credentialId);
-  const setCredentialId = useWizardStore((s) => s.setCredentialId);
+  const credentialIds = useWizardStore((s) => s.credentialIds);
+  const setCredentialIds = useWizardStore((s) => s.setCredentialIds);
+  const startRun = useWizardStore((s) => s.startRun);
   const goNext = useWizardStore((s) => s.goNext);
   const goBack = useWizardStore((s) => s.goBack);
 
   const jdQuery = useDocument(jdDocId);
   const cvQuery = useDocument(cvDocId);
-  const runMatch = useRunMatch();
+  const createRun = useCreateMatchRun();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -38,13 +38,13 @@ const StepReview = () => {
     setError(null);
     setIsSubmitting(true);
     try {
-      const result = await runMatch.mutateAsync({
+      // Open the run first so step 4 has an id to render skeletons against;
+      // the per-provider requests are fired by the cards themselves.
+      const run = await createRun.mutateAsync({
         cvDocumentId: cvDocId,
-        jdDocumentId: jdDocId,
-        // Absent (not null) means "run on the system key" in the API contract.
-        credentialId: credentialId ?? undefined
+        jdDocumentId: jdDocId
       });
-      setMatchId(result.id);
+      startRun(run.id, credentialIds);
       goNext();
     } catch (err) {
       setError(err instanceof Error ? err.message : t("err.matchFailed"));
@@ -106,15 +106,18 @@ const StepReview = () => {
           <Button
             type="primary"
             loading={isSubmitting}
+            disabled={credentialIds.length === 0}
             onClick={() => void handleRunMatch()}
             icon={<Sparkles size={16} />}
           >
-            {t("action.runMatch")}
+            {credentialIds.length > 1
+              ? t("action.runMatchCount", { count: credentialIds.length })
+              : t("action.runMatch")}
           </Button>
         </>
       }
     >
-      <RunWithSelector value={credentialId} onChange={setCredentialId} />
+      <RunWithSelector value={credentialIds} onChange={setCredentialIds} />
 
       <div className="grid min-h-0 flex-1 grid-cols-1 divide-y divide-line lg:grid-cols-2 lg:divide-x lg:divide-y-0">
         <section className="flex min-h-0 flex-col p-4 md:p-6">

@@ -135,13 +135,13 @@ test.describe("ai-credentials failure states", () => {
     );
     expect(deleted.status).toBe(204);
 
-    await page.getByRole("button", { name: "Run match" }).click();
+    await page.getByRole("button", { name: /Run match/ }).click();
 
-    // The wizard must report the failure and stay on step 3 — never advance to
-    // a result page with nothing behind it.
+    // Reconciled for multi-provider-compare: opening the run still succeeds, so
+    // the wizard advances and the dead credential fails on ITS OWN card. That
+    // is the point of partial success — one bad provider must not block the
+    // others — and the card is where the user can retry it.
     await expect(page.getByRole("alert")).toBeVisible({ timeout: 30000 });
-    await expect(
-      page.getByRole("heading", { name: "Review documents" })
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
   });
 });

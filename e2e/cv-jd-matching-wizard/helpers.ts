@@ -101,6 +101,9 @@ export const STUB_MATCH_RESULT: MatchResultDto = {
     ]
   },
   credentialId: null,
+  runId: null,
+  status: "succeeded",
+  errorCode: null,
   provider: "openrouter",
   chatModel: "openai/gpt-4o-mini",
   embedModel: "openai/text-embedding-3-small",

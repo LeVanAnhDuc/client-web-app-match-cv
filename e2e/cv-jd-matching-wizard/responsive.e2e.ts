@@ -106,8 +106,13 @@ test.describe("wizard responsive layout", () => {
 
     await expect(page.getByText("Overall match")).toBeVisible();
     expect(await hasHorizontalScroll(page)).toBe(false);
-    await expect(
-      page.getByRole("button", { name: "Start over" })
-    ).toBeInViewport();
+    // Reconciled for multi-provider-compare: step 4 became a scrollable list of
+    // result cards with the actions below it, rather than one card with a
+    // sticky footer. Reachable now means "scrolls into view", not "always on
+    // screen" — pinning a footer above N cards would cost more room than it
+    // saves once several providers are compared.
+    const startOver = page.getByRole("button", { name: "Start over" });
+    await startOver.scrollIntoViewIfNeeded();
+    await expect(startOver).toBeInViewport();
   });
 });

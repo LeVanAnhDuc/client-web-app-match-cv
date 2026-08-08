@@ -5,7 +5,13 @@ export {
   useRenameDocument,
   useDeleteDocument
 } from "./useDocuments";
-export { useRunMatch, useMatchResult, useMatchHistory } from "./useMatch";
+export {
+  useRunMatch,
+  useMatchResult,
+  useMatchHistory,
+  useCreateMatchRun,
+  useMatchRun
+} from "./useMatch";
 export {
   useAiCredentials,
   useProviders,

@@ -18,6 +18,10 @@ export async function cleanDocuments(): Promise<void> {
     // match row survives fails with a FK violation and takes globalSetup — and
     // therefore the whole run — down with it. Clear the child table first.
     await client.query('DELETE FROM "MatchResult"');
+    // MatchRun references Document with the Prisma default onDelete: Restrict
+    // too, so it has to go before the documents it points at — same reason
+    // MatchResult does.
+    await client.query('DELETE FROM "MatchRun"');
     await client.query('DELETE FROM "Document"');
   } finally {
     await client.end();

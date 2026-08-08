@@ -109,14 +109,18 @@ test.describe("ai-credentials happy path", () => {
       page.getByRole("heading", { name: "Review documents" })
     ).toBeVisible();
 
-    // The selector defaults to the newest lastUsedAt, not the newest row.
-    const runWith = page.getByRole("combobox", { name: "Run with" });
-    await expect(runWith).toBeVisible();
-    await expect(page.getByText("E2E newer key")).toBeVisible();
-
-    // Privacy notice must name the provider the documents go to.
+    // Reconciled for multi-provider-compare: the Select became a checkbox
+    // group, and the notice lists every selected provider.
+    await expect(page.getByLabel("Run with")).toBeVisible();
     await expect(
-      page.getByText("Your CV and JD text will be sent to OpenRouter.")
+      page.getByRole("checkbox", { name: /E2E newer key/ })
+    ).toBeChecked();
+    await expect(
+      page.getByRole("checkbox", { name: /E2E older key/ })
+    ).not.toBeChecked();
+
+    await expect(
+      page.getByText("Your CV and JD text will be sent to: OpenRouter.")
     ).toBeVisible();
   });
 
@@ -137,8 +141,10 @@ test.describe("ai-credentials happy path", () => {
 
     await page.getByRole("button", { name: "Run match" }).click();
 
-    await expect(
-      page.getByText("Run with: OpenRouter · openai/gpt-4o-mini")
-    ).toBeVisible({ timeout: 30000 });
+    // Attribution moved onto each result card's title once step 4 became a
+    // list of cards, one per provider.
+    await expect(page.getByText("OpenRouter · openai/gpt-4o-mini")).toBeVisible(
+      { timeout: 30000 }
+    );
   });
 });

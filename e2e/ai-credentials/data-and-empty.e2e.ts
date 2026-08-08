@@ -91,22 +91,17 @@ test.describe("ai-credentials rendering", () => {
       page.getByRole("heading", { name: "Review documents" })
     ).toBeVisible();
 
-    // "System key" appears both as the selected value and as the dropdown
-    // option. antd puts the selected label in `.ant-select-selection-item`
-    // (role="combobox" is the empty inner search input), so assert on that.
+    // Reconciled for multi-provider-compare: the single Select became a
+    // checkbox list, so the system key is now a checked checkbox.
     await expect(
-      page
-        .locator(".ant-select-selection-item")
-        .filter({ hasText: "System key" })
+      page.getByRole("checkbox", { name: /System key/ })
+    ).toBeChecked();
+    await expect(
+      page.getByText("Your CV and JD text will be sent to: System key.")
     ).toBeVisible();
+    // Only the system key is selected, so no credential warning should appear.
     await expect(
-      page.getByText(
-        "Your CV and JD text will be sent to OpenRouter using the system key."
-      )
-    ).toBeVisible();
-    // Nothing is selected, so no untested warning should appear.
-    await expect(
-      page.getByText("This credential has not been tested yet.")
+      page.getByText(/has not passed a connection test/)
     ).toBeHidden();
   });
 });

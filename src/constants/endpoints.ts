@@ -10,6 +10,8 @@ export const ENDPOINTS = {
   match: "/match",
   matchById: (id: string) => `/match/${id}`,
   matchHistory: "/match",
+  matchRuns: "/match/runs",
+  matchRunById: (id: string) => `/match/runs/${encodeURIComponent(id)}`,
   aiCredentials: "/ai-credentials",
   aiCredentialById: (id: string) => `/ai-credentials/${encodeURIComponent(id)}`,
   aiCredentialTest: (id: string) =>

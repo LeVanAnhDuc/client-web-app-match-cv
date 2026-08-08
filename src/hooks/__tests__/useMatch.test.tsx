@@ -29,6 +29,9 @@ const sampleResult: MatchResultDto = {
     suggestions: ["Quantify design impact with metrics."]
   },
   credentialId: null,
+  runId: null,
+  status: "succeeded",
+  errorCode: null,
   provider: "openrouter",
   chatModel: "openai/gpt-4o-mini",
   embedModel: "openai/text-embedding-3-small",
