@@ -25,11 +25,11 @@ async function changeLanguage(page: Page, lng: "en" | "vi"): Promise<void> {
 test.describe("i18n", () => {
   test("defaults to EN copy", async ({ page }) => {
     await gotoWizard(page);
-    await expect(page.getByText("Step 1 of 4")).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "Input Job Description" })
     ).toBeVisible();
     await expect(page.getByText("No saved job descriptions yet")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Next" })).toBeVisible();
   });
 
   test("switching to VI renders VI copy for stepper, step title, and empty state", async ({
@@ -38,7 +38,6 @@ test.describe("i18n", () => {
     await gotoWizard(page);
     await changeLanguage(page, "vi");
 
-    await expect(page.getByText("Bước 1/4")).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "Nhập mô tả công việc" })
     ).toBeVisible();
@@ -54,10 +53,11 @@ test.describe("i18n", () => {
   }) => {
     await gotoWizard(page);
     await changeLanguage(page, "vi");
-    await expect(page.getByText("Bước 1/4")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Nhập mô tả công việc" })
+    ).toBeVisible();
 
     await changeLanguage(page, "en");
-    await expect(page.getByText("Step 1 of 4")).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "Input Job Description" })
     ).toBeVisible();

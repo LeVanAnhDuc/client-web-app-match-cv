@@ -53,9 +53,9 @@ test.describe("happy path — paste JD then paste CV", () => {
     await expect(nextButton(page)).toBeEnabled();
     await nextButton(page).click();
 
-    // Step 3 (Review, Plan 2): both panes prefilled from the just-created docs.
+    // Step 3 (Review): both original documents rendered read-only.
     await expect(
-      page.getByRole("heading", { name: "Review Parsed Data" })
+      page.getByRole("heading", { name: "Review documents" })
     ).toBeVisible();
     await expect(stepperStep(page, 3)).toHaveAttribute("data-status", "active");
     await expect(stepperStep(page, 4)).toHaveAttribute("data-status", "idle");
