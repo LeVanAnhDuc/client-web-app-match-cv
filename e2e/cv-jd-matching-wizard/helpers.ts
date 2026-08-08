@@ -100,6 +100,10 @@ export const STUB_MATCH_RESULT: MatchResultDto = {
       "Highlight any API design work with concrete, quantified impact."
     ]
   },
+  credentialId: null,
+  provider: "openrouter",
+  chatModel: "openai/gpt-4o-mini",
+  embedModel: "openai/text-embedding-3-small",
   createdAt: "2026-07-24T00:00:00.000Z"
 };
 

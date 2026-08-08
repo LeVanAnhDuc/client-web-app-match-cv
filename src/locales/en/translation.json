@@ -8,7 +8,8 @@
     "savedJds": "Job Descriptions",
     "openMenu": "Open menu",
     "collapse": "Collapse sidebar",
-    "expand": "Expand sidebar"
+    "expand": "Expand sidebar",
+    "aiCredentials": "AI credentials"
   },
   "home": {
     "hero": {
@@ -181,5 +182,78 @@
     "parseFailed": "We couldn't read this file. Try another.",
     "matchUnavailable": "AI matching is temporarily unavailable. Please try again in a moment.",
     "matchFailed": "We couldn't run the match. Please try again."
+  },
+  "credentials": {
+    "title": "AI credentials",
+    "subtitle": "Your own provider keys. Matching runs on the one you pick.",
+    "add": "Add credential",
+    "empty": "No credentials yet",
+    "emptyHint": "Matching currently runs on the system key. Add your own to use your provider account.",
+    "fallbackNote": "When no credential is selected, matching falls back to the built-in system key.",
+    "systemKey": "System key",
+    "systemKeyTag": "fallback",
+    "defaultModel": "Default",
+    "never": "—",
+    "chatLabel": "Chat",
+    "embedLabel": "Embeddings",
+    "form": {
+      "addTitle": "Add credential",
+      "editTitle": "Edit credential",
+      "provider": "Provider",
+      "providerLocked": "Provider cannot be changed. Create another credential to switch.",
+      "label": "Name",
+      "labelPlaceholder": "My OpenRouter key",
+      "apiKey": "API key",
+      "apiKeyKeepHint": "Leave blank to keep the current key",
+      "apiKeyStoredHint": "Encrypted at rest. It is never shown again.",
+      "chatModel": "Chat model",
+      "embedModel": "Embedding model",
+      "modelHint": "Leave blank to use the provider default",
+      "save": "Save",
+      "testing": "Testing connection…",
+      "required": "This field is required",
+      "labelTooLong": "Use at most 60 characters",
+      "keyTooShort": "The key must be at least 20 characters",
+      "keyTooLong": "The key must be at most 400 characters",
+      "noWhitespace": "No spaces allowed"
+    },
+    "status": {
+      "untested": "Not tested",
+      "ok": "Tested OK",
+      "invalid_key": "Invalid key",
+      "no_quota": "No quota",
+      "model_unavailable": "Model unavailable",
+      "unreachable": "Unreachable"
+    },
+    "actions": {
+      "test": "Test",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "delete": {
+      "confirm": "Delete this credential?",
+      "hint": "Past match results keep the provider and model they ran with.",
+      "success": "Credential deleted",
+      "failed": "Could not delete the credential"
+    },
+    "test": {
+      "success": "Connection tested",
+      "failed": "Could not test the credential"
+    },
+    "errors": {
+      "loadFailed": "Could not load your credentials",
+      "notConfigured": "Credential storage is not configured on the server.",
+      "labelTaken": "You already have a credential with this name",
+      "saveFailed": "Could not save the credential"
+    },
+    "runWith": {
+      "title": "Run with",
+      "untestedWarning": "This credential has not been tested yet.",
+      "failedWarning": "The last test for this credential did not pass.",
+      "testNow": "Test now",
+      "privacy": "Your CV and JD text will be sent to {{provider}}.",
+      "privacySystem": "Your CV and JD text will be sent to OpenRouter using the system key.",
+      "ranWith": "Run with"
+    }
   }
 }

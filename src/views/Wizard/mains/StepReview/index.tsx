@@ -7,6 +7,7 @@ import SectionCard from "#/components/SectionCard";
 import { useDocument } from "#/hooks/useDocuments";
 import { useRunMatch } from "#/hooks/useMatch";
 import { useWizardStore } from "#/stores";
+import RunWithSelector from "../../components/RunWithSelector";
 
 /**
  * Wizard step 3 — Review. Renders the ORIGINAL CV and JD files read-only
@@ -20,6 +21,8 @@ const StepReview = () => {
   const jdDocId = useWizardStore((s) => s.jdDocId);
   const cvDocId = useWizardStore((s) => s.cvDocId);
   const setMatchId = useWizardStore((s) => s.setMatchId);
+  const credentialId = useWizardStore((s) => s.credentialId);
+  const setCredentialId = useWizardStore((s) => s.setCredentialId);
   const goNext = useWizardStore((s) => s.goNext);
   const goBack = useWizardStore((s) => s.goBack);
 
@@ -37,7 +40,9 @@ const StepReview = () => {
     try {
       const result = await runMatch.mutateAsync({
         cvDocumentId: cvDocId,
-        jdDocumentId: jdDocId
+        jdDocumentId: jdDocId,
+        // Absent (not null) means "run on the system key" in the API contract.
+        credentialId: credentialId ?? undefined
       });
       setMatchId(result.id);
       goNext();
@@ -109,6 +114,8 @@ const StepReview = () => {
         </>
       }
     >
+      <RunWithSelector value={credentialId} onChange={setCredentialId} />
+
       <div className="grid min-h-0 flex-1 grid-cols-1 divide-y divide-line lg:grid-cols-2 lg:divide-x lg:divide-y-0">
         <section className="flex min-h-0 flex-col p-4 md:p-6">
           <h3 className="mb-4 shrink-0 text-xs font-semibold tracking-wider text-faint uppercase">

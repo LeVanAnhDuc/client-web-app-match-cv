@@ -9,5 +9,10 @@ export const ENDPOINTS = {
     `/documents/${encodeURIComponent(id)}/file${download ? "?download=1" : ""}`,
   match: "/match",
   matchById: (id: string) => `/match/${id}`,
-  matchHistory: "/match"
+  matchHistory: "/match",
+  aiCredentials: "/ai-credentials",
+  aiCredentialById: (id: string) => `/ai-credentials/${encodeURIComponent(id)}`,
+  aiCredentialTest: (id: string) =>
+    `/ai-credentials/${encodeURIComponent(id)}/test`,
+  aiProviders: "/ai-credentials/providers"
 } as const;

@@ -1,6 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { Tooltip } from "antd";
-import { FileText, FileUser, LayoutDashboard, Sparkles } from "lucide-react";
+import {
+  FileText,
+  FileUser,
+  KeyRound,
+  LayoutDashboard,
+  Sparkles
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ComponentType } from "react";
 
@@ -16,7 +22,8 @@ const NAV_ITEMS: Array<NavItem> = [
   { to: "/", icon: LayoutDashboard, labelKey: "nav.home", exact: true },
   { to: "/wizard", icon: Sparkles, labelKey: "nav.match" },
   { to: "/cv", icon: FileUser, labelKey: "nav.savedCvs" },
-  { to: "/jd", icon: FileText, labelKey: "nav.savedJds" }
+  { to: "/jd", icon: FileText, labelKey: "nav.savedJds" },
+  { to: "/ai-credentials", icon: KeyRound, labelKey: "nav.aiCredentials" }
 ];
 
 // All four items share one class string — the ONLY visual difference is the

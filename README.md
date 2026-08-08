@@ -10,7 +10,9 @@ cp .env.example .env   # fill in values, .env is git-ignored
 yarn dev                # http://localhost:5300
 ```
 
-The matching wizard is at **`/wizard`** — all 4 steps: 1 JD · 2 CV · 3 Review · 4 Result. Needs the API server running (see `server/`); **step 4 (match) requires `GEMINI_API_KEY` set on the server** (else 503).
+**Pages**: `/` home dashboard · `/wizard` the 4-step matching wizard (1 JD · 2 CV · 3 Review · 4 Result) · `/cv` and `/jd` saved-document libraries · `/ai-credentials` your own AI provider keys.
+
+All of them need the API server running (see `server/`). Running a match needs an AI key: either a credential you added at `/ai-credentials`, or `OPENROUTER_API_KEY` set on the server as the fallback (else 503). Managing credentials also needs `CREDENTIAL_ENCRYPTION_KEY` on the server (else 503).
 
 **Env vars** — see `.env.example`:
 
@@ -18,6 +20,9 @@ The matching wizard is at **`/wizard`** — all 4 steps: 1 JD · 2 CV · 3 Revie
 - `VITE_DEFAULT_LOCALE` — default i18n locale (`en` | `vi`)
 - `E2E_DATABASE_URL` — Postgres URL used by the Playwright DB cleanup (real value in `.env`, gitignored)
 - `E2E_BASE_URL` — optional; base URL the Playwright suite targets (defaults to `http://localhost:5300`)
+- `E2E_API_BASE` — optional; API base the Playwright suite seeds through (defaults to `http://localhost:5200/api/v1`). Set it together with `E2E_BASE_URL` when running from a worktree on other ports.
+
+Unit tests run **serially** (`fileParallelism: false` in `vitest.config.ts`): rendering antd through jsdom is CPU-bound, and parallel files starved each other enough that form-validation and router specs failed their `waitFor` windows while passing in isolation.
 
 **Scripts**: `yarn dev` · `yarn build` · `yarn preview` · `yarn test` (Vitest unit) · `yarn type-check` · `yarn lint` (check-only) · `yarn lint:fix` · `yarn format` · `yarn format:check`
 
@@ -27,7 +32,8 @@ The matching wizard is at **`/wizard`** — all 4 steps: 1 JD · 2 CV · 3 Revie
 
 ```bash
 npx playwright install chromium   # first time
-npx playwright test               # e2e/cv-jd-matching-wizard/*.e2e.ts (serial)
+npx playwright test               # every e2e/<feature>/*.e2e.ts (serial)
+npx playwright test e2e/ai-credentials/   # one feature only
 npx playwright test --project=mobile   # one viewport only
 ```
 

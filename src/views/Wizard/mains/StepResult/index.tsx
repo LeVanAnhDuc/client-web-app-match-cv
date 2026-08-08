@@ -9,6 +9,7 @@ import {
 import { useTranslation } from "react-i18next";
 import SectionCard from "#/components/SectionCard";
 import { useMatchResult } from "#/hooks/useMatch";
+import { useProviders } from "#/hooks/useAiCredentials";
 import { ApiError } from "#/libs/api";
 import { useWizardStore } from "#/stores";
 
@@ -78,6 +79,7 @@ const StepResult = () => {
   const reset = useWizardStore((s) => s.reset);
 
   const { data, isLoading, isError, error } = useMatchResult(matchId);
+  const providersQuery = useProviders();
 
   if (isLoading) {
     return (
@@ -116,6 +118,11 @@ const StepResult = () => {
   }
 
   const dashOffset = GAUGE_CIRCUMFERENCE * (1 - data.overallScore / 100);
+  // Attribution comes from the result row, not from the credential list: the
+  // credential may have been deleted or re-pointed since this match ran.
+  const providerLabel =
+    providersQuery.data?.find((p) => p.id === data.provider)?.label ??
+    data.provider;
 
   return (
     <SectionCard
@@ -173,6 +180,11 @@ const StepResult = () => {
               </span>
             </div>
           </div>
+
+          <p className="w-full text-center text-sm text-muted lg:text-left">
+            {t("credentials.runWith.ranWith")}: {providerLabel} ·{" "}
+            {data.chatModel}
+          </p>
 
           <div className="w-full flex-1 space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">

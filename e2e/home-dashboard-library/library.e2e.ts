@@ -51,9 +51,12 @@ async function insertMatch(cvId: string, jdId: string): Promise<void> {
   await client.connect();
   try {
     await client.query(
+      // provider/chatModel/embedModel are NOT NULL with no default since the
+      // add_ai_credential migration: a match row records which AI produced it.
       `INSERT INTO "MatchResult"
-       (id,"userId","cvDocumentId","jdDocumentId","overallScore","semanticScore","keywordScore",report,"createdAt")
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,now())`,
+       (id,"userId","cvDocumentId","jdDocumentId","overallScore","semanticScore","keywordScore",report,
+        provider,"chatModel","embedModel","createdAt")
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'openrouter','openai/gpt-4o-mini','openai/text-embedding-3-small',now())`,
       [
         randomUUID(),
         STUB_USER_ID,
