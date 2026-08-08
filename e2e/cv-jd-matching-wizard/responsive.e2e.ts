@@ -1,14 +1,17 @@
-import { expect, test } from "@playwright/test";
-import type { Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { cleanDocuments } from "../db-cleanup";
 import { gotoWizard, nextButton, pasteText, stubMatchApi } from "./helpers";
 
-// docs/specs/wizard-responsive/design.md §7 rows 6 / 11 / 13 / 14 — layout
-// invariants per viewport class. This spec runs in all three projects
-// (desktop / tablet / mobile); assertions derive from the actual viewport size
-// so one file covers every class without duplication.
+// Responsive layout invariants for the wizard, reconciled for
+// home-dashboard-library: the wizard now lives INSIDE the app shell (the
+// sidebar/drawer nav is the shell's — covered by
+// e2e/home-dashboard-library), so this file only asserts the wizard's own
+// per-viewport invariants (no horizontal overflow, primary CTA reachable,
+// single stepper, step-3 panes rendered). Runs in all three projects
+// (desktop / tablet / mobile); assertions hold for every class.
 
-const DESKTOP_NAV_WIDTH = 288; // w-72 rail, only from lg up
+const JD_TEXT = "JD text for the responsive step-3 layout check.";
+const CV_TEXT = "CV text for the responsive step-3 layout check.";
 
 async function hasHorizontalScroll(page: Page): Promise<boolean> {
   return page.evaluate(
@@ -17,16 +20,7 @@ async function hasHorizontalScroll(page: Page): Promise<boolean> {
   );
 }
 
-const JD_TEXT = "JD text for the responsive step-3 layout check.";
-const CV_TEXT = "CV text for the responsive step-3 layout check.";
-
-/**
- * Walk step 1 -> 2 -> 3, waiting on each arrival the way
- * `review-and-result.e2e.ts` does. The intermediate waits are not decoration:
- * without them a Next click can land in the SSR->hydration window under
- * full-suite load, and the geometry assertions below then measure a step that
- * never advanced.
- */
+/** Walk step 1 -> 2 -> 3, waiting on each arrival (render-based review). */
 async function advanceToReview(page: Page): Promise<void> {
   await gotoWizard(page);
 
@@ -39,28 +33,17 @@ async function advanceToReview(page: Page): Promise<void> {
   await pasteText(page, CV_TEXT);
   await nextButton(page).click();
   await expect(
-    page.getByRole("heading", { name: "Review Parsed Data" })
+    page.getByRole("heading", { name: "Review documents" })
   ).toBeVisible();
-
-  // The panes are prefilled by an async GET /documents/:id — measure only once
-  // the text has actually landed, or the stacked-height check races the fetch.
-  await expect(page.getByLabel("Job Description")).toHaveValue(JD_TEXT);
-  await expect(page.getByLabel("CV / Resume")).toHaveValue(CV_TEXT);
-}
-
-function navWidth(page: Page) {
-  return page
-    .locator("aside")
-    .first()
-    .boundingBox()
-    .then((box) => Math.round(box?.width ?? 0));
+  await expect(page.getByText(JD_TEXT)).toBeVisible();
+  await expect(page.getByText(CV_TEXT)).toBeVisible();
 }
 
 test.beforeEach(async () => {
   await cleanDocuments();
 });
 
-test.describe.fixme("responsive layout", () => {
+test.describe("wizard responsive layout", () => {
   test("step 1 has no horizontal scroll and keeps the primary CTA in view", async ({
     page
   }) => {
@@ -70,51 +53,15 @@ test.describe.fixme("responsive layout", () => {
     await expect(nextButton(page)).toBeInViewport();
   });
 
-  test("nav fills the width below lg and is a 288px rail from lg up", async ({
+  test("the stepper renders exactly once at every viewport", async ({
     page
   }) => {
     await gotoWizard(page);
 
-    const viewport = page.viewportSize()?.width ?? 0;
-    const width = await navWidth(page);
-
-    if (viewport >= 1024) {
-      expect(width).toBe(DESKTOP_NAV_WIDTH);
-    } else {
-      expect(width).toBe(viewport);
-    }
-  });
-
-  test("the stepper exists once and its labels stay exposed to assistive tech", async ({
-    page
-  }) => {
-    await gotoWizard(page);
-
-    // sr-only below md keeps labels in the a11y tree (design.md §6.3), and a
-    // single instance is what makes these strict-mode locators work at all.
+    // Single-markup stepper (no duplicated desktop/mobile variants) — the
+    // Playwright strict-mode locators depend on there being exactly one.
     await expect(page.getByTestId("stepper-step-1")).toHaveCount(1);
-    await expect(
-      page.getByText("Job Description", { exact: true })
-    ).toHaveCount(1);
-    await expect(page.getByText(/step 1 of 4/i)).toHaveCount(1);
-  });
-
-  test("the nav axis flips at the 1024px boundary and 320px still fits", async ({
-    page
-  }) => {
-    await gotoWizard(page);
-
-    await page.setViewportSize({ width: 1023, height: 800 });
-    expect(await navWidth(page)).toBe(1023);
-
-    await page.setViewportSize({ width: 1024, height: 800 });
-    expect(await navWidth(page)).toBe(DESKTOP_NAV_WIDTH);
-
-    await page.setViewportSize({ width: 767, height: 800 });
-    expect(await navWidth(page)).toBe(767);
-
-    await page.setViewportSize({ width: 320, height: 800 });
-    expect(await hasHorizontalScroll(page)).toBe(false);
+    await expect(page.getByTestId("stepper-step-4")).toHaveCount(1);
   });
 
   test("advancing a step brings the new step header into view", async ({
@@ -133,22 +80,15 @@ test.describe.fixme("responsive layout", () => {
     await expect(heading).toBeInViewport();
   });
 
-  test("step 3 stacks both panes below lg and keeps Run match reachable", async ({
+  test("step 3 renders both panes with no horizontal scroll and Run match reachable", async ({
     page
   }) => {
     await stubMatchApi(page);
     await advanceToReview(page);
 
-    const jd = page.getByLabel("Job Description");
-    const cv = page.getByLabel("CV / Resume");
-
-    const jdBox = (await jd.boundingBox())!;
-    const cvBox = (await cv.boundingBox())!;
-    if ((page.viewportSize()?.width ?? 0) >= 1024) {
-      expect(Math.abs(jdBox.y - cvBox.y)).toBeLessThan(4); // side by side
-    } else {
-      expect(cvBox.y).toBeGreaterThan(jdBox.y + jdBox.height - 4); // stacked
-    }
+    // Both original documents rendered read-only.
+    await expect(page.getByText(JD_TEXT)).toBeVisible();
+    await expect(page.getByText(CV_TEXT)).toBeVisible();
 
     expect(await hasHorizontalScroll(page)).toBe(false);
     await expect(

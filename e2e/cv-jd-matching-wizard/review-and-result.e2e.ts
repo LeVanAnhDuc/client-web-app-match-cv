@@ -7,21 +7,18 @@ import {
   pasteText,
   stepperStep,
   STUB_MATCH_RESULT,
-  stubMatchApi,
-  switchToPasteTab,
-  turnSaveOff
+  stubMatchApi
 } from "./helpers";
 
 // design.md §7 (Plan 2 extension) — step 3 (Review) + step 4 (Result).
-// `POST /match` and `GET /match/:id` are route-stubbed throughout this file:
-// the matching engine calls OpenRouter and no OPENROUTER_API_KEY is configured
-// here (and there is no runtime mock by design), so a real call would either
-// fail (503) or cost real API credits. Step 1-2 document creation still hits
-// the REAL backend (no OpenRouter dependency there), giving StepReview real
-// jdDocId/cvDocId to fetch via GET /documents/:id.
+// Reconciled for home-dashboard-library: step 3 now renders the ORIGINAL
+// documents READ-ONLY (DocumentPreview) instead of editable textareas, and the
+// wizard lives inside the app shell. Paste-text docs render as parsed text.
 //
-// LIVE (real-OpenRouter) smoke of this same flow is a deferred gate-B item,
-// pending OPENROUTER_API_KEY — see e2e.md "Deferred / notes".
+// `POST /match` and `GET /match/:id` are route-stubbed throughout (the matching
+// engine calls OpenRouter and no OPENROUTER_API_KEY is configured here).
+// Step 1-2 document creation still hits the REAL backend, giving StepReview
+// real jdDocId/cvDocId to fetch via GET /documents/:id.
 test.beforeEach(async () => {
   await cleanDocuments();
 });
@@ -35,37 +32,26 @@ const CV_TEXT =
 async function advanceToReview(page: Page): Promise<void> {
   await gotoWizard(page);
 
-  await switchToPasteTab(page);
   await pasteText(page, JD_TEXT);
-  await turnSaveOff(page);
   await nextButton(page).click();
-
   await expect(
     page.getByRole("heading", { name: "Candidate CV / Resume" })
   ).toBeVisible();
-  await switchToPasteTab(page);
-  await pasteText(page, CV_TEXT);
-  await turnSaveOff(page);
-  await nextButton(page).click();
 
+  await pasteText(page, CV_TEXT);
+  await nextButton(page).click();
   await expect(
-    page.getByRole("heading", { name: "Review Parsed Data" })
+    page.getByRole("heading", { name: "Review documents" })
   ).toBeVisible();
-  // Wait for the async GET /documents/:id prefill to actually land in the
-  // textareas before returning — clicking "Run match" while a pane is still
-  // '' would make StepReview treat it as user-edited and POST a fresh (empty)
-  // document instead of reusing jdDocId/cvDocId, which is not what these
-  // tests exercise.
-  await expect(
-    page.getByRole("textbox", { name: "Job Description" })
-  ).toHaveValue(JD_TEXT);
-  await expect(page.getByRole("textbox", { name: "CV / Resume" })).toHaveValue(
-    CV_TEXT
-  );
+
+  // Panes are prefilled by an async GET /documents/:id and rendered read-only
+  // (DocumentPreview → parsed text for paste docs). Wait for the text to land.
+  await expect(page.getByText(JD_TEXT)).toBeVisible();
+  await expect(page.getByText(CV_TEXT)).toBeVisible();
 }
 
-test.describe.fixme("step 3 — Review", () => {
-  test("renders both review panes prefilled with the entered text; stepper marks step 3 active; Back returns to step 2", async ({
+test.describe("step 3 — Review", () => {
+  test("renders both documents READ-ONLY (no editable textbox); stepper marks step 3 active; Back returns to step 2", async ({
     page
   }) => {
     await advanceToReview(page);
@@ -74,10 +60,10 @@ test.describe.fixme("step 3 — Review", () => {
     await expect(stepperStep(page, 1)).toHaveAttribute("data-status", "done");
     await expect(stepperStep(page, 2)).toHaveAttribute("data-status", "done");
 
-    const jdPane = page.getByRole("textbox", { name: "Job Description" });
-    const cvPane = page.getByRole("textbox", { name: "CV / Resume" });
-    await expect(jdPane).toHaveValue(JD_TEXT);
-    await expect(cvPane).toHaveValue(CV_TEXT);
+    // Review renders the original files read-only — no editable textareas.
+    await expect(page.getByRole("textbox")).toHaveCount(0);
+    await expect(page.getByText(JD_TEXT)).toBeVisible();
+    await expect(page.getByText(CV_TEXT)).toBeVisible();
 
     await backButton(page).click();
     await expect(
@@ -87,7 +73,7 @@ test.describe.fixme("step 3 — Review", () => {
   });
 });
 
-test.describe.fixme("step 3 -> 4 — Run match (route-stubbed)", () => {
+test.describe("step 3 -> 4 — Run match (route-stubbed)", () => {
   test("Run match advances to step 4 and renders the stubbed result report", async ({
     page
   }) => {
@@ -96,14 +82,12 @@ test.describe.fixme("step 3 -> 4 — Run match (route-stubbed)", () => {
 
     await page.getByRole("button", { name: "Run match" }).click();
 
-    // Step 4 (Result).
     await expect(
-      page.getByRole("heading", { name: "Review Parsed Data" })
+      page.getByRole("heading", { name: "Review documents" })
     ).toBeHidden();
     await expect(stepperStep(page, 4)).toHaveAttribute("data-status", "active");
     await expect(stepperStep(page, 3)).toHaveAttribute("data-status", "done");
 
-    // Overall % gauge + sub-scores (design.md / StepResult.tsx).
     await expect(
       page.getByText(`${STUB_MATCH_RESULT.overallScore}%`)
     ).toBeVisible();
@@ -117,7 +101,6 @@ test.describe.fixme("step 3 -> 4 — Run match (route-stubbed)", () => {
       page.getByText(`${STUB_MATCH_RESULT.keywordScore}%`)
     ).toBeVisible();
 
-    // Strengths / gaps / suggestions lists from the stubbed report.
     await expect(page.getByText("Matched strengths")).toBeVisible();
     for (const strength of STUB_MATCH_RESULT.report.strengths) {
       await expect(page.getByText(strength)).toBeVisible();
