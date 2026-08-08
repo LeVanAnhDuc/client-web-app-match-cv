@@ -2,11 +2,13 @@
   "appName": "Match CV",
   "start": "Start",
   "nav": {
-    "home": "Home",
-    "match": "Match CV↔JD",
-    "savedCvs": "Saved CVs",
-    "savedJds": "Saved JDs",
-    "openMenu": "Open menu"
+    "home": "Dashboard",
+    "match": "CV ↔ JD Matching",
+    "savedCvs": "Curriculum Vitae",
+    "savedJds": "Job Descriptions",
+    "openMenu": "Open menu",
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar"
   },
   "home": {
     "hero": {
@@ -15,8 +17,8 @@
       "cta": "Start matching now"
     },
     "stat": {
-      "savedCvs": "Saved CVs",
-      "savedJds": "Saved JDs",
+      "savedCvs": "Curriculum Vitae",
+      "savedJds": "Job Descriptions",
       "totalMatches": "Total matches",
       "highest": "Highest score",
       "avg": "avg {{value}}%"
@@ -92,8 +94,8 @@
   },
   "library": {
     "title": {
-      "cv": "Saved CVs",
-      "jd": "Saved JDs"
+      "cv": "Curriculum Vitae",
+      "jd": "Job Descriptions"
     },
     "subtitle": "{{count}} saved",
     "empty": {

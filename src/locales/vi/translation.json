@@ -2,11 +2,13 @@
   "appName": "Ghép CV",
   "start": "Bắt đầu",
   "nav": {
-    "home": "Trang chủ",
-    "match": "Ghép CV↔JD",
-    "savedCvs": "CV đã lưu",
-    "savedJds": "JD đã lưu",
-    "openMenu": "Mở menu"
+    "home": "Tổng quan",
+    "match": "Đối chiếu CV ↔ JD",
+    "savedCvs": "Sơ yếu lý lịch",
+    "savedJds": "Mô tả công việc",
+    "openMenu": "Mở menu",
+    "collapse": "Thu gọn thanh bên",
+    "expand": "Mở thanh bên"
   },
   "home": {
     "hero": {
@@ -15,8 +17,8 @@
       "cta": "Bắt đầu ghép ngay"
     },
     "stat": {
-      "savedCvs": "CV đã lưu",
-      "savedJds": "JD đã lưu",
+      "savedCvs": "Sơ yếu lý lịch",
+      "savedJds": "Mô tả công việc",
       "totalMatches": "Tổng số lần ghép",
       "highest": "Điểm cao nhất",
       "avg": "TB {{value}}%"
@@ -92,8 +94,8 @@
   },
   "library": {
     "title": {
-      "cv": "CV đã lưu",
-      "jd": "JD đã lưu"
+      "cv": "Sơ yếu lý lịch",
+      "jd": "Mô tả công việc"
     },
     "subtitle": "{{count}} đã lưu",
     "empty": {
