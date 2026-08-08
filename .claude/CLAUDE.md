@@ -38,24 +38,25 @@ Thư mục `.claude/skills/` chứa các file hướng dẫn coding convention. 
 
 `project-rules` điều hướng tới `.claude/rules/*.md` theo `paths` frontmatter. Đọc rule khớp target path **1 lần ở đầu task**:
 
-| Rule               | Paths                                                                             |
-| ------------------ | --------------------------------------------------------------------------------- |
-| `component-folder` | `src/**/*.tsx` — mỗi component = folder + `index.tsx`, arrow fn, `export default` |
-| `components`       | `src/components/**` — shared, no business logic                                   |
-| `views`            | `src/views/**` — `index.tsx` + `mains/` + `components/` (+ `ghosts/`)             |
-| `ghosts`           | `src/ghosts/**` — side-effect-only, `return null`                                 |
-| `types`            | `src/types/**` — type dùng chung theo `<Domain>/`; props inline                   |
-| `utils`            | `src/utils/**` — pure fn                                                          |
-| `constants`        | `src/constants/**` — `CONSTANTS` object                                           |
-| `hooks`            | `src/hooks/**` — `useXxx.ts` + barrel; React Query hooks                          |
-| `requests`         | `src/requests/**` — API fn thuần qua `apiFetch`                                   |
-| `stores`           | `src/stores/**` — Zustand + `slices/`                                             |
-| `forms`            | `src/forms/**` — antd `Form`                                                      |
-| `datasources`      | `src/dataSources/**` — static UI data                                             |
-| `mocks`            | `src/mocks/**` — dummy data                                                       |
-| `locales`          | `src/locales/**` — i18next JSON `en/`+`vi/`                                       |
-| `imports`          | `src/**` — alias `#/`, TanStack Router nav, `import type`                         |
-| `jsx`              | `src/**/*.tsx` — ưu tiên antd cho interactive element                             |
+| Rule                | Paths                                                                             |
+| ------------------- | --------------------------------------------------------------------------------- |
+| `component-folder`  | `src/**/*.tsx` — mỗi component = folder + `index.tsx`, arrow fn, `export default` |
+| `components`        | `src/components/**` — shared, no business logic                                   |
+| `views`             | `src/views/**` — `index.tsx` + `mains/` + `components/` (+ `ghosts/`)             |
+| `ghosts`            | `src/ghosts/**` — side-effect-only, `return null`                                 |
+| `types`             | `src/types/**` — type dùng chung theo `<Domain>/`; props inline                   |
+| `utils`             | `src/utils/**` — pure fn                                                          |
+| `constants`         | `src/constants/**` — `CONSTANTS` object                                           |
+| `hooks`             | `src/hooks/**` — `useXxx.ts` + barrel; React Query hooks                          |
+| `requests`          | `src/requests/**` — API fn thuần qua `apiFetch`                                   |
+| `stores`            | `src/stores/**` — Zustand + `slices/`                                             |
+| `forms`             | `src/forms/**` — antd `Form`                                                      |
+| `datasources`       | `src/dataSources/**` — static UI data                                             |
+| `mocks`             | `src/mocks/**` — dummy data                                                       |
+| `locales`           | `src/locales/**` — i18next JSON `en/`+`vi/`                                       |
+| `imports`           | `src/**` — alias `#/`, TanStack Router nav, `import type`                         |
+| `jsx`               | `src/**/*.tsx` — ưu tiên antd cho interactive element                             |
+| `layout-primitives` | `src/**/*.tsx` — `PageContainer`/`SectionCard`, semantic token, thang chữ         |
 
 ## Commands
 
@@ -91,15 +92,16 @@ i18n: src/i18n/config.ts init i18next (side-effect import trong __root)
 - **API base**: mọi request qua `apiFetch<T>` (`src/libs/api.ts`); base `VITE_API_BASE_URL`. KHÔNG hard-code URL BE.
 - **Routing**: file-based (`src/routes/`). Route file chỉ wiring `createFileRoute(...)({ component })`, UI thật nằm ở `src/views/`.
 - **Locales**: `en` (default) + `vi` qua i18next; JSON ở `src/locales/{en,vi}/translation.json`.
+- **Design token**: `src/styles.css` khai báo semantic color token bằng Tailwind 4 `@theme` + override `@media (prefers-color-scheme: dark)` (`bg-surface`, `border-line`, `text-body/muted/faint`, `bg-primary`, `text-accent`). Mọi UI dùng utility này thay cho cặp `slate-*` + `dark:slate-*` — xem rule `layout-primitives`.
 
 ## Folder Conventions
 
 - `src/views/<View>/` — 1 trang: `index.tsx` (shell/entry) + `mains/` (organism, import bởi index) + `components/` (molecule view-local) + optional `ghosts/`. VD `views/Wizard/`.
-- `src/components/` — component dùng chung ≥2 view, no business logic.
+- `src/components/` — component dùng chung ≥2 view, no business logic. Gồm 2 layout primitive bắt buộc: `PageContainer` (khung trang) + `SectionCard` (card duy nhất của app).
 - `src/requests/` — fn gọi API thuần (1 file/domain) + query-key factory; dùng `apiFetch` + `#/constants`.
 - `src/hooks/` — React Query hook (`useXxx.ts`) gọi `requests/` + barrel `index.ts`.
 - `src/types/<Domain>/` — MỌI type dùng chung; props component viết **inline** tại tham số, KHÔNG `type Props`.
-- `src/stores/` — Zustand: `index.ts` barrel + `slices/<name>.ts`; ngoài React dùng `useXStore.getState()`.
+- `src/stores/` — Zustand: `index.ts` barrel + `slices/<name>.ts` (`wizard`, `ui`); ngoài React dùng `useXStore.getState()`. Slice `ui` giữ trạng thái thu/mở sidebar, persist `localStorage` key `ui.sidebarCollapsed`, hydrate sau mount (AppShell) để không vỡ SSR.
 - `src/constants/` — `CONSTANTS` object (endpoints, file constraints, keys).
 - `src/libs/` — `api.ts` (apiFetch/ApiError), `query-client.ts` (getContext), `query-devtools.tsx`.
 - `src/contexts/` — provider (AntdProvider…).
